@@ -2,37 +2,43 @@ package releasethekraken;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ReleaseTheKraken extends ApplicationAdapter
 {
-
-    SpriteBatch batch;
-    Texture img;
+    //TODO: Move this to an asset loader
+    public static Texture img;
+    
+    private GameWorld world;
+    private GameRenderer renderer;
 
     @Override
     public void create()
     {
-        System.out.println("Test message: Application Created");
-        batch = new SpriteBatch();
+        Gdx.app.log(this.getClass().getSimpleName(), "Application Starting!");
+        
+        //TODO: Move this to an asset loader
         img = new Texture("badlogic.jpg");
+        
+        //Create game world and game renderer
+        this.world = new GameWorld();
+        this.renderer = new GameRenderer(this.world);
     }
 
     @Override
-    public void render()
+    public void render() //This gets called 60 times a second.  Consider this the game loop.
     {
-        /*
-            The game loop goes here.  This method gets called 60 times
-            a second.
-        */
+        this.world.update();
+        this.renderer.render();
+    }
+    
+    @Override
+    public void dispose() 
+    {
+        Gdx.app.log(this.getClass().getSimpleName(), "Application Closing!");
         
-        //Default LibGDX logo
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(img, 0, 0);
-        batch.end();
+        //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
+        this.world.dispose();
+        this.renderer.dispose();
     }
 }
