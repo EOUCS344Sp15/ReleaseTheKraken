@@ -2,23 +2,23 @@ package releasethekraken;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 
 public class ReleaseTheKraken extends ApplicationAdapter
-{
-    //TODO: Move this to an asset loader
-    public static Texture img;
-    
+{    
     private GameWorld world;
     private GameRenderer renderer;
+    private GameAssets gameAssets;
 
     @Override
     public void create()
     {
         Gdx.app.log(this.getClass().getSimpleName(), "Application Starting!");
         
-        //TODO: Move this to an asset loader
-        img = new Texture("badlogic.jpg");
+        /*
+            Create a class to load and handle assets.  All game assets will have
+            been loaded beyond this point.
+        */
+        this.gameAssets = new GameAssets();
         
         //Create game world and game renderer
         this.world = new GameWorld();
@@ -40,5 +40,6 @@ public class ReleaseTheKraken extends ApplicationAdapter
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
         this.world.dispose();
         this.renderer.dispose();
+        this.gameAssets.dispose();
     }
 }

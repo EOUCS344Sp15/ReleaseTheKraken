@@ -20,7 +20,7 @@ public class GameRenderer implements Disposable
 {
     //The Game Renderer's reference to the game world it should be rendering
     private GameWorld world;
-    
+        
     private SpriteBatch uiSpriteBatch; //SpriteBatch to render UI sprites
     private SpriteBatch worldSpriteBatch; //SpriteBatch to render world sprites
     private ShapeRenderer uiShapeRenderer; //ShapeRenderer to render UI shapes
@@ -47,7 +47,7 @@ public class GameRenderer implements Disposable
         
         //Draws LibGDX logo
         this.uiSpriteBatch.begin();
-        this.uiSpriteBatch.draw(ReleaseTheKraken.img, 0, 0);
+        this.uiSpriteBatch.draw(GameAssets.texBadlogic, 0, 0);
         this.uiSpriteBatch.end();
     }
     
