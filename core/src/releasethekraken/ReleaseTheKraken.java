@@ -15,6 +15,7 @@ public class ReleaseTheKraken extends ApplicationAdapter
     @Override
     public void create()
     {
+        System.out.println("Test message: Application Created");
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
     }
