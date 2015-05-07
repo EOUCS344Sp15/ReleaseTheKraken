@@ -35,6 +35,7 @@ public class ReleaseTheKraken extends ApplicationAdapter
     @Override
     public void dispose() 
     {
+        super.dispose();
         Gdx.app.log(this.getClass().getSimpleName(), "Application Closing!");
         
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
