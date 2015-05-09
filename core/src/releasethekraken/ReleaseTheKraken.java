@@ -8,6 +8,7 @@ public class ReleaseTheKraken extends ApplicationAdapter
     private GameWorld world;
     private GameRenderer renderer;
     private GameAssets gameAssets;
+    private InputHandler inputHandler;
 
     @Override
     public void create()
@@ -19,15 +20,21 @@ public class ReleaseTheKraken extends ApplicationAdapter
             been loaded beyond this point.
         */
         this.gameAssets = new GameAssets();
-        
+                
         //Create game world and game renderer
         this.world = new GameWorld();
         this.renderer = new GameRenderer(this.world);
+        
+        //Creates a class to handle user input. Tells LibGDX about it.
+        this.inputHandler = new InputHandler(this.world, this.renderer);
+        Gdx.input.setInputProcessor(this.inputHandler);
     }
 
     @Override
     public void render() //This gets called 60 times a second.  Consider this the game loop.
     {
+        this.inputHandler.update();
+        
         this.world.update();
         this.renderer.render();
     }

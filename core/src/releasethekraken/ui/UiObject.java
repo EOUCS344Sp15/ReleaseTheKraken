@@ -29,14 +29,13 @@ public class UiObject implements Disposable
     //Constructor
     public UiObject()
     {
-        this(0.0F, 0.0F);
+        this(0.0F, 0.0F, 0.0F, 0.0F);
     }
     
     //Constructor
     public UiObject(float x, float y)
     {
-        this.x = x;
-        this.y = y;
+        this(x, y, 0.0F, 0.0F);
     }
     
     //Constructor

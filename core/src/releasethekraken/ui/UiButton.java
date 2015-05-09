@@ -13,10 +13,10 @@ import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 
 /**
- *
+ * Represents a UI button.  Most of the code was taken from Dalton's CS 310 Android App
  * @author Dalton
  */
-public class UiButton extends UiObject
+public class UiButton extends InteractiveUiObject
 {
     protected String text; //The button's text
     protected long lastClickTime; //The time when the button was last clicked   
@@ -35,17 +35,16 @@ public class UiButton extends UiObject
         
         this.defaultColors = new Color[][]
         {
-            {Color.valueOf("333333"), Color.valueOf("444444"), Color.valueOf("111111")},
-            {Color.valueOf("999999"), Color.valueOf("AAAAAA"), Color.valueOf("777777")},
-            {Color.valueOf("666666"), Color.valueOf("777777"), Color.valueOf("444444")},
-            {Color.valueOf("AAAAAA"), Color.valueOf("BBBBBB"), Color.valueOf("888888")}
+            /*Default Color           Clicked/Held Color       Hover Color              Disabled Color   */
+            {Color.valueOf("333333"), Color.valueOf("4C4C4C"), Color.valueOf("404040"), Color.valueOf("111111")}, //Bottom
+            {Color.valueOf("999999"), Color.valueOf("B1B1B1"), Color.valueOf("A0A0A0"), Color.valueOf("777777")}, //Front
+            {Color.valueOf("666666"), Color.valueOf("7D7D7D"), Color.valueOf("707070"), Color.valueOf("444444")}  //Top
         };
     }
     
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
-    {
-        //Code taken from Dalton's App        
+    {     
         float borderWidth = 0.0025F*Gdx.graphics.getWidth();
 
         shapeRenderer.setColor(this.defaultColors[0][this.currentColorIndex]);
@@ -72,6 +71,8 @@ public class UiButton extends UiObject
     @Override
     public void update(GameWorld world)
     {
+        super.update(world);
+        
         if (this.state == ButtonState.PRESSED && world.getWorldTime() - this.lastClickTime > 5) //Unpress the button
         {
             this.state = ButtonState.UNPRESSED;
@@ -79,14 +80,11 @@ public class UiButton extends UiObject
         }
     }
     
-    /**
-     * Called when the button is clicked
-     * 
-     * @param mouseButton The mouse button that was clicked.  TODO: which button?
-     * @param world The game world
-     */
+    @Override
     public void onClick(int mouseButton, GameWorld world)
     {
+        super.onClick(mouseButton, world);
+        
         if (this.state != ButtonState.DISABLED)
         {
             this.lastClickTime = world.getWorldTime();
@@ -95,55 +93,53 @@ public class UiButton extends UiObject
         }
     }
     
-    /**
-     * Called when the button is no longer being clicked.
-     * @param world The game world
-     */
+    @Override
+    public void onClickHeld(int mouseButton, GameWorld world)
+    {
+        super.onClickHeld(mouseButton, world);
+        //Gdx.app.log("UiButton", "onClickHeld() called!");
+        
+        if (this.state != ButtonState.DISABLED)
+        {
+            this.lastClickTime = world.getWorldTime();
+            this.state = ButtonState.PRESSED;
+            this.currentColorIndex = 1; //Change colors to pressed colors
+        }
+    }
+    
+    @Override
     public void onStoppedClicking(GameWorld world)
     {
+        super.onStoppedClicking(world);
+        
         if (this.state != ButtonState.DISABLED)
         {
             this.currentColorIndex = 0; //Reset colors back to normal
         }
     }
     
-    /**
-     * Called when the mouse is hovering over the button
-     * 
-     * @param x The x coordinate of the mouse
-     * @param y The y coordinate of the mouse
-     */
+    @Override
     public void onHover(float x, float y)
     {
+        super.onHover(x, y);
+        
+        //Gdx.app.log("UiButton", "onHover() called!");
+        
         if (this.state != ButtonState.DISABLED && this.state != ButtonState.PRESSED)
         {
             this.currentColorIndex = 2;
         }
     }
     
-    /**
-     * Called when the mouse leaves the button
-     */
+    @Override
     public void onLeaveHover()
     {
+        super.onLeaveHover();
+        
         if (this.state != ButtonState.DISABLED)
         {
             this.currentColorIndex = 0;
         }
-    }
-    
-    /**
-     * Returns whether the coordinates are within the button's bounds.
-     * @param clickX The X position clicked/touched
-     * @param clickY The Y position clicked/touched
-     * @return Whether the position is within the button
-     */
-    public boolean isInBounds(float clickX, float clickY)
-    {
-        clickY = Gdx.graphics.getHeight() - clickY;
-
-        return clickX >= this.x && clickX <= this.x + this.width
-            && clickY >= this.y && clickY <= this.y + this.height;
     }
     
     @Override

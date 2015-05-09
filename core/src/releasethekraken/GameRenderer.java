@@ -29,7 +29,7 @@ public class GameRenderer implements Disposable
     private ShapeRenderer uiShapeRenderer; //ShapeRenderer to render UI shapes
     private ShapeRenderer worldShapeRenderer; //ShapeRenderer to render world shapes
     
-    private Array<UiObject> uiObjects; //The array of UiObjects
+    public Array<UiObject> uiObjects; //The array of UiObjects
     
     //Constructor
     public GameRenderer(GameWorld world)
@@ -45,7 +45,15 @@ public class GameRenderer implements Disposable
         this.uiObjects.add(new UiButton(
                 Gdx.graphics.getWidth()-0.075F*Gdx.graphics.getWidth(), 
                 Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
-                0.075F, 0.05F, "Pause"));
+                0.075F, 0.05F, "Pause")
+                {
+                    @Override
+                    public void onClick(int mouseButton, GameWorld world)
+                    {
+                        super.onClick(mouseButton, world);
+                        Gdx.app.log("Pause Button", "onClick() called!");
+                    }
+                });
     }
     
     /**
