@@ -9,7 +9,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import releasethekraken.ui.UiButton;
+import releasethekraken.ui.UiObject;
 
 /**
  * This class renders the Game World.
@@ -26,6 +29,8 @@ public class GameRenderer implements Disposable
     private ShapeRenderer uiShapeRenderer; //ShapeRenderer to render UI shapes
     private ShapeRenderer worldShapeRenderer; //ShapeRenderer to render world shapes
     
+    private Array<UiObject> uiObjects; //The array of UiObjects
+    
     //Constructor
     public GameRenderer(GameWorld world)
     {
@@ -34,6 +39,13 @@ public class GameRenderer implements Disposable
         this.worldSpriteBatch = new SpriteBatch();
         this.uiShapeRenderer = new ShapeRenderer();
         this.worldShapeRenderer = new ShapeRenderer();
+        
+        this.uiObjects = new Array<UiObject>();
+        
+        this.uiObjects.add(new UiButton(
+                Gdx.graphics.getWidth()-0.075F*Gdx.graphics.getWidth(), 
+                Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
+                0.075F, 0.05F, "Pause"));
     }
     
     /**
@@ -45,9 +57,26 @@ public class GameRenderer implements Disposable
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        //Draws LibGDX logo
+        //Updates UI objects
+        for (UiObject obj : this.uiObjects)
+            obj.update(this.world);
+        
+        //Draws UI Shapes
+        this.uiShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        
+        for (UiObject obj : this.uiObjects)
+            obj.renderShapes(this.uiShapeRenderer);
+        
+        this.uiShapeRenderer.end();
+        
+        //Draws UI Sprites
         this.uiSpriteBatch.begin();
-        this.uiSpriteBatch.draw(GameAssets.texBadlogic, 0, 0);
+        
+        for (UiObject obj : this.uiObjects)
+            obj.renderSprites(this.uiSpriteBatch);
+        
+        this.uiSpriteBatch.draw(GameAssets.texBadlogic, 0, 0); //Draws LibGDX logo
+        
         this.uiSpriteBatch.end();
     }
     
