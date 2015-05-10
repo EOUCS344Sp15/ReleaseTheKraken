@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import releasethekraken.ui.Sidebar;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiObject;
 
@@ -54,6 +55,10 @@ public class GameRenderer implements Disposable
                         Gdx.app.log("Pause Button", "onClick() called!");
                     }
                 });
+        
+        this.uiObjects.add(new Sidebar(this)); //Add the sidebar
+        
+        this.uiObjects.sort(); //Sort the UI objects so that they render in the order of their render depths
     }
     
     /**
@@ -83,7 +88,7 @@ public class GameRenderer implements Disposable
         for (UiObject obj : this.uiObjects)
             obj.renderSprites(this.uiSpriteBatch);
         
-        this.uiSpriteBatch.draw(GameAssets.texBadlogic, 0, 0); //Draws LibGDX logo
+        this.uiSpriteBatch.draw(GameAssets.texBadlogic, Gdx.graphics.getWidth() - GameAssets.texBadlogic.getWidth(), 0); //Draws LibGDX logo
         
         this.uiSpriteBatch.end();
     }

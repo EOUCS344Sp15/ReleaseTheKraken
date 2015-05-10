@@ -16,15 +16,17 @@ import releasethekraken.GameWorld;
  * 
  * @author Dalton
  */
-public class UiObject implements Disposable
+public class UiObject implements Disposable, Comparable<UiObject>
 {
-    //X and Y percentage coordinates on the screen
+    //X and Y coordinates on the screen
     protected float x;
     protected float y;
     
     //Width and height, in percent of the screen
     protected float width;
     protected float height;
+    
+    protected int depth; //The depth that the UI Object will be rendered at.  Can be negative
     
     //Constructor
     public UiObject()
@@ -45,6 +47,7 @@ public class UiObject implements Disposable
         this.y = y;
         this.width = width*Gdx.graphics.getWidth();
         this.height = height*Gdx.graphics.getHeight();
+        this.depth = 0;
     }
     
     /**
@@ -71,6 +74,7 @@ public class UiObject implements Disposable
     
     /**
      * Updates the UI object's logic
+     * @param world The game world the UI is for
      */
     public void update(GameWorld world)
     {
@@ -81,5 +85,11 @@ public class UiObject implements Disposable
     public void dispose()
     {
         
+    }
+
+    @Override //UI Objects are comparable based on their render depth
+    public int compareTo(UiObject other)
+    {
+        return other.depth - this.depth;
     }
 }
