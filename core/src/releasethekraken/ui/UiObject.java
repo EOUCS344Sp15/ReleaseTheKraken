@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import releasethekraken.GameRenderer;
 import releasethekraken.GameWorld;
 
 /**
@@ -16,8 +17,10 @@ import releasethekraken.GameWorld;
  * 
  * @author Dalton
  */
-public class UiObject implements Disposable, Comparable<UiObject>
+public class UiObject implements Disposable, Renderable, Comparable<UiObject>
 {
+    protected GameRenderer renderer; //The game renderer that this belongs to
+    
     //X and Y coordinates on the screen
     protected float x;
     protected float y;
@@ -29,44 +32,35 @@ public class UiObject implements Disposable, Comparable<UiObject>
     protected int depth; //The depth that the UI Object will be rendered at.  Can be negative
     
     //Constructor
-    public UiObject()
+    public UiObject(GameRenderer renderer)
     {
-        this(0.0F, 0.0F, 0.0F, 0.0F);
+        this(renderer, 0.0F, 0.0F, 0.0F, 0.0F);
     }
     
     //Constructor
-    public UiObject(float x, float y)
+    public UiObject(GameRenderer renderer, float x, float y)
     {
-        this(x, y, 0.0F, 0.0F);
+        this(renderer, x, y, 0.0F, 0.0F);
     }
     
     //Constructor
-    public UiObject(float x, float y, float width, float height)
+    public UiObject(GameRenderer renderer, float x, float y, float width, float height)
     {
         this.x = x;
         this.y = y;
         this.width = width*Gdx.graphics.getWidth();
         this.height = height*Gdx.graphics.getHeight();
         this.depth = 0;
+        this.renderer = renderer;
     }
     
-    /**
-     * Renders the UI object's shape layer.  Assumes that ShapeRenderer.begin()
-     * has already been called.  Doesn't call ShapeRenderer.end()
-     * 
-     * @param shapeRenderer The ShapeRenderer to render with
-     */
+    @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
         
     }
     
-    /**
-     * Renders the UI object's sprite layer.  Assumes that SpriteBatch.begin()
-     * has already been called.  Doesn't call SpriteBatch.end()
-     * 
-     * @param batch The SpriteBatch to render with
-     */
+    @Override
     public void renderSprites(SpriteBatch batch)
     {
         

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.GameRenderer;
+import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
  * Represents the side bar for the game
@@ -26,7 +27,7 @@ public class Sidebar extends UiObject
     //Constructor
     public Sidebar(GameRenderer renderer)
     {
-        super(0, 0, 0.2F, 1.0F);
+        super(renderer, 0, 0, 0.2F, 1.0F);
         
         this.color = Color.valueOf("3173DE");
         this.depth = 1; //Set the render depth so that it renders under its contents
@@ -55,7 +56,7 @@ public class Sidebar extends UiObject
             buttonX = 0.006F*scrWidth + xOffset;
             buttonY = 0.75F*scrHeight - yOffset;
             
-            this.unitButtons.add(new UiButton(buttonX, buttonY, buttonWidth, 
+            this.unitButtons.add(new UiButton(renderer, buttonX, buttonY, buttonWidth, 
                     buttonHeight, "Unit " + (i + 1)));
         }
         
@@ -69,12 +70,13 @@ public class Sidebar extends UiObject
             buttonX = 0.006F*scrWidth + xOffset;
             buttonY = 0.4F*scrHeight - yOffset;
             
-            this.powerupButtons.add(new UiButton(buttonX, buttonY, buttonWidth, 
+            this.powerupButtons.add(new UiButton(renderer, buttonX, buttonY, buttonWidth, 
                     buttonHeight, "Power\nUp " + (i + 1)));
         }
         
         //Create the Release the Kraken button
-        this.krakenButton = new UiButton(0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN");
+        this.krakenButton = new UiButton(renderer, 0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN");
+        this.krakenButton.setToolTip(new TextToolTip(renderer, "Test ToolTip")); //Just for testing tooltips
         
         //Add the UI objects to the global list
         for (UiButton button : this.unitButtons)

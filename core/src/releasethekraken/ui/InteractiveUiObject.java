@@ -6,7 +6,11 @@
 package releasethekraken.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import releasethekraken.GameRenderer;
 import releasethekraken.GameWorld;
+import releasethekraken.ui.tooltip.ToolTip;
 
 /**
  * This is a normal UiObject that is designed for user interaction.  For example,
@@ -16,23 +20,24 @@ import releasethekraken.GameWorld;
 public class InteractiveUiObject extends UiObject
 {
     protected boolean hoverActive = false; //True if a pointer is hovering over this
+    protected ToolTip toolTip = null; //The UI object's tooltip.  Can be null.
     
     //Constructor
-    public InteractiveUiObject()
+    public InteractiveUiObject(GameRenderer renderer)
     {
-        this(0.0F, 0.0F, 0.0F, 0.0F);
+        this(renderer, 0.0F, 0.0F, 0.0F, 0.0F);
     }
     
     //Constructor
-    public InteractiveUiObject(float x, float y)
+    public InteractiveUiObject(GameRenderer renderer, float x, float y)
     {
-        this(x, y, 0.0F, 0.0F);
+        this(renderer, x, y, 0.0F, 0.0F);
     }
     
     //Constructor
-    public InteractiveUiObject(float x, float y, float width, float height)
+    public InteractiveUiObject(GameRenderer renderer, float x, float y, float width, float height)
     {
-        super(x, y, width, height);
+        super(renderer, x, y, width, height);
     }
     
     /**
@@ -75,6 +80,8 @@ public class InteractiveUiObject extends UiObject
     public void onHover(float x, float y)
     {
         this.hoverActive = true;
+        if (this.toolTip != null)
+            this.toolTip.setVisible(true);
     }
     
     /**
@@ -83,6 +90,8 @@ public class InteractiveUiObject extends UiObject
     public void onLeaveHover()
     {
         this.hoverActive = false;
+        if (this.toolTip != null)
+            this.toolTip.setVisible(false);
     }
     
     /**
@@ -105,5 +114,22 @@ public class InteractiveUiObject extends UiObject
     public boolean isHoverActive()
     {
         return this.hoverActive;
+    }
+    
+    /**
+     * Sets the Interactive UI Object's ToolTip
+     * @param toolTip The new ToolTip
+     */
+    public void setToolTip(ToolTip toolTip)
+    {
+        if (this.toolTip != null)
+        {
+            this.toolTip.dispose();
+            this.renderer.uiObjects.removeValue(this.toolTip, true); //Remove tooltip from the list
+        }
+        
+        this.toolTip = toolTip;
+        if (!this.renderer.uiObjects.contains(toolTip, true))
+            this.renderer.uiObjects.add(toolTip); //Add tooltip to the list
     }
 }

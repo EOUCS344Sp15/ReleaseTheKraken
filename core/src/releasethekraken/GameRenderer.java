@@ -44,6 +44,7 @@ public class GameRenderer implements Disposable
         this.uiObjects = new Array<UiObject>();
         
         this.uiObjects.add(new UiButton(
+                this,
                 Gdx.graphics.getWidth()-0.075F*Gdx.graphics.getWidth(), 
                 Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
                 0.075F, 0.05F, "Pause")

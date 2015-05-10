@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
+import releasethekraken.GameRenderer;
 import releasethekraken.GameWorld;
 
 /**
@@ -25,9 +26,9 @@ public class UiButton extends InteractiveUiObject
     private int currentColorIndex; //The index of the current button color
     
     //Constructor
-    public UiButton(float x, float y, float width, float height, String text)
+    public UiButton(GameRenderer renderer, float x, float y, float width, float height, String text)
     {
-        super(x, y, width, height);
+        super(renderer, x, y, width, height);
         this.text = text;
         this.lastClickTime = 0L;
         this.state = ButtonState.UNPRESSED;
@@ -44,7 +45,8 @@ public class UiButton extends InteractiveUiObject
     
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
-    {     
+    {
+        super.renderShapes(shapeRenderer);
         float borderWidth = 0.0025F*Gdx.graphics.getWidth();
 
         shapeRenderer.setColor(this.defaultColors[0][this.currentColorIndex]);
@@ -60,9 +62,12 @@ public class UiButton extends InteractiveUiObject
     @Override
     public void renderSprites(SpriteBatch batch)
     {
+        super.renderSprites(batch);
+        int lines = this.text.split("\n").length; //Count the number of lines
+        
         GameAssets.fontMain.draw(batch, this.text,
                 this.x,
-                this.y + this.height/2 + GameAssets.fontMain.getCapHeight()/2,
+                this.y + this.height/2 + GameAssets.fontMain.getCapHeight()*lines/2,
                 this.width,
                 1,
                 false); //Render text
