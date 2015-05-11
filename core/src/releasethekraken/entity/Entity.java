@@ -27,6 +27,8 @@ import releasethekraken.ui.Renderable;
  *  -update() - used to update (move, add/remove health/stats)
  *  -dispose() - overriden from the Disposable class
  * 
+ * -implemented Renderable
+ * 
  * --5/10/15--
  * -added variables
  *  -float xVel - X Velocity
@@ -48,8 +50,6 @@ import releasethekraken.ui.Renderable;
  *      -takes GameWorld and the x/y coordinates as arguments
  *  -constructor
  *      -takes GameWorld and RectangleMapObject as arguments
- * 
- * -implemented Renderable
  * 
  * @author Lucas Schuetz
  */
