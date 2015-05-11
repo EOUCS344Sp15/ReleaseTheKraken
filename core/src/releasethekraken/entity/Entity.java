@@ -16,6 +16,10 @@ import releasethekraken.ui.Renderable;
  * 
  * changelog:
  * 
+ * --5/11/15--
+ * -fixed more documentation
+ * -Added default implementation for the constructors
+ * 
  * --5/9/15--
  * -added variables
  *  -xLoc - X Location
@@ -55,10 +59,13 @@ import releasethekraken.ui.Renderable;
  */
 public class Entity implements Disposable, Renderable
 {
-    protected GameWorld world;
+    protected GameWorld world; //The game world that the entity is in
     
+    //The X and Y coordinates of the entity
     protected float xLoc;
     protected float yLoc;
+    
+    //The X and Y velocity of the entity
     protected float xVel;
     protected float yVel;
     
@@ -71,18 +78,25 @@ public class Entity implements Disposable, Renderable
      */
     public Entity(GameWorld world, float xLocation, float yLocation)
     {
-        
+        this.world = world;
+        this.xLoc = xLocation;
+        this.yLoc = yLocation;
+        this.xVel = 0;
+        this.yVel = 0;
     }
     
     /**
-     * Constructor that takes the game world and a RectangleMapObject
+     * Constructs an Entity from a RectangleMapObject that represents it in a
+     * level file.  
      * 
      * @param world
      * @param mapObject
      */
     public Entity(GameWorld world, RectangleMapObject mapObject)
     {
+        this.world = world;
         
+        //Override this to parse data from the entity's node in the map format
     }
     
     @Override
