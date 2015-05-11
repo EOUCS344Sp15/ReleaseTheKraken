@@ -76,7 +76,7 @@ public class Sidebar extends UiObject
         
         //Create the Release the Kraken button
         this.krakenButton = new UiButton(renderer, 0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN");
-        this.krakenButton.setToolTip(new TextToolTip(renderer, "Test ToolTip")); //Just for testing tooltips
+        this.krakenButton.setToolTip(new TextToolTip(renderer, "Test ToolTip 1")); //Just for testing tooltips
         
         //Add the UI objects to the global list
         for (UiButton button : this.unitButtons)

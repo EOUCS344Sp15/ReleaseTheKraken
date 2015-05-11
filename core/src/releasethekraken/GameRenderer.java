@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.ui.Sidebar;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiObject;
+import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
  * This class renders the Game World.
@@ -42,8 +43,8 @@ public class GameRenderer implements Disposable
         this.worldShapeRenderer = new ShapeRenderer();
         
         this.uiObjects = new Array<UiObject>();
-        
-        this.uiObjects.add(new UiButton(
+              
+        UiButton pauseButton = new UiButton(
                 this,
                 Gdx.graphics.getWidth()-0.075F*Gdx.graphics.getWidth(), 
                 Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
@@ -55,7 +56,10 @@ public class GameRenderer implements Disposable
                         super.onClick(mouseButton, world);
                         Gdx.app.log("Pause Button", "onClick() called!");
                     }
-                });
+                };
+        pauseButton.setToolTip(new TextToolTip(this, "Test ToolTip 2"));
+        
+        this.uiObjects.add(pauseButton);
         
         this.uiObjects.add(new Sidebar(this)); //Add the sidebar
         
