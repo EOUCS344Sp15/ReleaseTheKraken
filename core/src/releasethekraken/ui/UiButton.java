@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
-import releasethekraken.GameRenderer;
 import releasethekraken.GameWorld;
 
 /**

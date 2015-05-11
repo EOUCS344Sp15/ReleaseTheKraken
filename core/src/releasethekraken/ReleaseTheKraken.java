@@ -1,5 +1,6 @@
 package releasethekraken;
 
+import releasethekraken.ui.GameRenderer;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 

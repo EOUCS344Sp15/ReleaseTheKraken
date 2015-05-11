@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
-import releasethekraken.GameRenderer;
+import releasethekraken.ui.GameRenderer;
 
 /**
  * Represents a ToolTip that displays text.

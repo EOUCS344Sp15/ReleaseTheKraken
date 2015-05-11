@@ -7,7 +7,7 @@ package releasethekraken.ui.tooltip;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import releasethekraken.GameRenderer;
+import releasethekraken.ui.GameRenderer;
 import releasethekraken.ui.UiObject;
 
 /**

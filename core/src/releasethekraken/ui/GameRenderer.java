@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package releasethekraken;
+package releasethekraken.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,9 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import releasethekraken.ui.Sidebar;
-import releasethekraken.ui.UiButton;
-import releasethekraken.ui.UiObject;
+import releasethekraken.GameAssets;
+import releasethekraken.GameWorld;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
