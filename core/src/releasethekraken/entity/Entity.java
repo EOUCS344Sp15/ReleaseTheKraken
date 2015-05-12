@@ -123,5 +123,6 @@ public class Entity implements Disposable, Renderable
     public void dispose()
     {
         //dispose of the entity
+        this.world.removeEntity(this);
     }
 }

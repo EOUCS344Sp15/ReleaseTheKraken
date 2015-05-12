@@ -27,6 +27,7 @@ public class DebugOverlay extends UiObject
     private static final DebugEntry nativeHeap; //DebugEntry to hold the Native Heap
     private static final DebugEntry worldStats1; //DebugEntry to hold the world stats
     private static final DebugEntry worldStats2; //DebugEntry to hold the world stats
+    private static final DebugEntry worldStats3; //DebugEntry to hold the world stats
     
     static //Initialize debug info list
     {
@@ -43,6 +44,7 @@ public class DebugOverlay extends UiObject
         debugData.add(nativeHeap = new DebugEntry());
         debugData.add(worldStats1 = new DebugEntry());
         debugData.add(worldStats2 = new DebugEntry());
+        debugData.add(worldStats3 = new DebugEntry());
     }
     
     public DebugOverlay(GameRenderer renderer)
@@ -81,6 +83,7 @@ public class DebugOverlay extends UiObject
             nativeHeap.data = String.format("%-12.12s : %-6.3f MB", "Native Heap", Gdx.app.getNativeHeap()/1024F/1024F);
             worldStats1.data = "Level: " + world.getName();
             worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
+            worldStats3.data = String.format("%-12.12s : %-6s", "Entities", world.getEntitites().size);
         }
     }
     
