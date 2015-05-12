@@ -53,6 +53,6 @@ public class GameAssets extends AssetManager
         fontMain.getData().setScale(0.5F);
         
         fontDebug = (BitmapFont) this.get(fontDebugDesc);
-        fontDebug.getData().setScale(1.0F);
+        fontDebug.getData().setScale(0.25F);
     }
 }

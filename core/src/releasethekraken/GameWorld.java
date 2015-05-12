@@ -16,9 +16,13 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameWorld implements Disposable
 {    
     private long worldTime = 0L; //The world time, in ticks
+    private String name; //The world's name
     
     //Constructor
-    public GameWorld() {}
+    public GameWorld()
+    {
+        this.name = "HardCodeLand";
+    }
     
     /**
      * Updates the state of the game world
@@ -36,6 +40,15 @@ public class GameWorld implements Disposable
     public long getWorldTime()
     {
         return this.worldTime;
+    }
+    
+    /**
+     * Gets the world name
+     * @return String: the world's name
+     */
+    public String getName()
+    {
+        return this.name;
     }
 
     @Override

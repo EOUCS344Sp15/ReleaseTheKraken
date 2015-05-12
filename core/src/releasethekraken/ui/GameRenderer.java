@@ -34,6 +34,7 @@ public class GameRenderer implements Disposable
     
     //Whether the debug screen is visible or not
     public boolean debugScreenVisible = false;
+    private DebugOverlay debugOverlay;
     
     //Constructor
     public GameRenderer(GameWorld world)
@@ -45,6 +46,9 @@ public class GameRenderer implements Disposable
         this.worldShapeRenderer = new ShapeRenderer();
         
         this.uiObjects = new Array<UiObject>();
+        
+        this.debugOverlay = new DebugOverlay(this);
+        this.uiObjects.add(this.debugOverlay);
               
         UiButton pauseButton = new UiButton(
                 this,
