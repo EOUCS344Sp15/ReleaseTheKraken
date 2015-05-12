@@ -75,7 +75,7 @@ public class TextToolTip extends ToolTip
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             
             //Render tooltip background
-            shapeRenderer.setColor(this.color.cpy().sub(0, 0, 0, 0.5F)); //Make the color transparent
+            shapeRenderer.setColor(this.color.cpy().sub(0, 0, 0, 0.35F)); //Make the color transparent
             shapeRenderer.rect(boxX, boxY - boxHeight, boxWidth, boxHeight); //Tooltip background
             shapeRenderer.triangle(mouseX,
                     Gdx.graphics.getHeight() - mouseY,

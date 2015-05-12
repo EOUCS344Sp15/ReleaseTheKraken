@@ -35,10 +35,17 @@ public class UiButton extends InteractiveUiObject
         
         this.defaultColors = new Color[][]
         {
-            /*Default Color           Clicked/Held Color       Hover Color              Disabled Color   */
+            //Old colors
+            /*Default Color           Clicked/Held Color       Hover Color              Disabled Color   *//*
             {Color.valueOf("333333"), Color.valueOf("4C4C4C"), Color.valueOf("404040"), Color.valueOf("111111")}, //Bottom
             {Color.valueOf("999999"), Color.valueOf("B1B1B1"), Color.valueOf("A0A0A0"), Color.valueOf("777777")}, //Front
             {Color.valueOf("666666"), Color.valueOf("7D7D7D"), Color.valueOf("707070"), Color.valueOf("444444")}  //Top
+            */
+                
+            /*Default Color           Clicked/Held Color       Hover Color              Disabled Color   */
+            {Color.valueOf("333333"), Color.valueOf("AAAAAA"), Color.valueOf("404040"), Color.valueOf("111111")}, //Bottom
+            {Color.valueOf("999999"), Color.valueOf("4C4C4C"), Color.valueOf("A0A0A0"), Color.valueOf("777777")}, //Front
+            {Color.valueOf("666666"), Color.valueOf("666666"), Color.valueOf("707070"), Color.valueOf("444444")}  //Top
         };
     }
     

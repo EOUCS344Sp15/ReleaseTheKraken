@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Disposable;
  * @author Dalton
  */
 public class GameWorld implements Disposable
-{
+{    
     private long worldTime = 0L; //The world time, in ticks
     
     //Constructor

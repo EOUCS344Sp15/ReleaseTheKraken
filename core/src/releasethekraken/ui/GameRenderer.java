@@ -32,6 +32,9 @@ public class GameRenderer implements Disposable
     
     public Array<UiObject> uiObjects; //The array of UiObjects
     
+    //Whether the debug screen is visible or not
+    public boolean debugScreenVisible = false;
+    
     //Constructor
     public GameRenderer(GameWorld world)
     {
@@ -59,6 +62,24 @@ public class GameRenderer implements Disposable
         pauseButton.setToolTip(new TextToolTip(this, "Test ToolTip 2"));
         
         this.uiObjects.add(pauseButton);
+        
+        UiButton debugMenuButton = new UiButton(
+                this,
+                Gdx.graphics.getWidth()-0.2323F*Gdx.graphics.getWidth(), 
+                Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
+                0.157F, 0.05F, "Debug Screen")
+                {
+                    @Override
+                    public void onClick(int mouseButton, GameWorld world)
+                    {
+                        super.onClick(mouseButton, world);
+                        this.renderer.debugScreenVisible = !this.renderer.debugScreenVisible; //Toggle visibility
+                        Gdx.app.log("Debug Menu Button", "Debug screen " + (this.renderer.debugScreenVisible ? "ON" : "OFF"));
+                    }
+                };
+        debugMenuButton.setToolTip(new TextToolTip(this, "Show/Hide Debug Screen"));
+        
+        this.uiObjects.add(debugMenuButton);
         
         this.uiObjects.add(new Sidebar(this)); //Add the sidebar
         

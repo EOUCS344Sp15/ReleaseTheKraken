@@ -22,6 +22,7 @@ public class GameAssets extends AssetManager
     public static Texture texBadlogic;
     
     public static BitmapFont fontMain;
+    public static BitmapFont fontDebug;
     
     //Constructor
     public GameAssets()
@@ -37,9 +38,12 @@ public class GameAssets extends AssetManager
     {
         AssetDescriptor fontMainDesc = new AssetDescriptor(
                 Gdx.files.internal("data/GameFont.fnt"), BitmapFont.class);
+        AssetDescriptor fontDebugDesc = new AssetDescriptor(
+                Gdx.files.internal("data/DebugFont.fnt"), BitmapFont.class);
         
         this.load("badlogic.jpg", Texture.class);
         this.load(fontMainDesc);
+        this.load(fontDebugDesc);
         
         this.finishLoading(); //Waits until all assets are loaded
         
@@ -47,5 +51,8 @@ public class GameAssets extends AssetManager
         
         fontMain = (BitmapFont) this.get(fontMainDesc);
         fontMain.getData().setScale(0.5F);
+        
+        fontDebug = (BitmapFont) this.get(fontDebugDesc);
+        fontDebug.getData().setScale(1.0F);
     }
 }
