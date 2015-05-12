@@ -7,6 +7,7 @@ package releasethekraken;
 
 import releasethekraken.ui.GameRenderer;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -46,6 +47,26 @@ class InputHandler implements InputProcessor
     @Override
     public boolean keyDown(int keycode)
     {
+        switch (keycode)
+        {
+            case Input.Keys.UP:
+            case Input.Keys.W:
+                Gdx.app.log("InputHandler", "Up button pressed");
+                break;
+            case Input.Keys.DOWN:
+            case Input.Keys.S:
+                Gdx.app.log("InputHandler", "Down button pressed");
+                break;
+            case Input.Keys.LEFT:
+            case Input.Keys.A:
+                Gdx.app.log("InputHandler", "Left button pressed");
+                break;
+            case Input.Keys.RIGHT:
+            case Input.Keys.D:
+                Gdx.app.log("InputHandler", "Right button pressed");
+                break;
+                
+        }
         return false;
     }
 
