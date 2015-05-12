@@ -16,6 +16,8 @@ public class BasicGun extends Pirate {
 
     public BasicGun(GameWorld world, float xLocation, float yLocation) {
         super(world, xLocation, yLocation);
+        health = 10;
+        maxHealth = 10;
     }
     
     @Override
