@@ -9,5 +9,8 @@ package releasethekraken.creature;
  * @author mwinburn
  */
 public class Creature {
+    private int health;
+    private int attack;
+    
     
 }
