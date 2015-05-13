@@ -20,14 +20,21 @@ public class GameWorld implements Disposable
 {    
     private long worldTime = 0L; //The world time, in ticks
     private String name; //The world's name
-    private Array<Entity> entities;
+    private Array<Entity> entities; //The entities in the world
+    
+    //The width and height of the world
+    public final float width;
+    public final float height;
      
     //Constructor
-    public GameWorld()
+    public GameWorld(String name, float width, float height)
     {
         this.entities = new Array<Entity>();
-        this.name = "HardCodeLand";
+        this.name = name;
+        this.width = width;
+        this.height = height;
         
+        //Add a new powerup, for testing purposes
         this.entities.add(new PowerUp(this, 0, 0, PowerUp.Ability.ATTACKUP, 20));
     }
     
@@ -37,11 +44,10 @@ public class GameWorld implements Disposable
     public void update()
     {
         this.worldTime++;
-        //TODO
+        
+        //Update world entities
         for(Entity entity : this.entities)
-        {
             entity.update();
-        }
     }
     
     /**
@@ -65,9 +71,16 @@ public class GameWorld implements Disposable
     @Override
     public void dispose()
     {
+        //Dispose of all entities in the world
+        for (Entity entity : this.entities)
+            entity.dispose();
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
     }
     
+    /**
+     * Adds an entity to the world
+     * @param entity The entity to add
+     */
     public void addEntity(Entity entity)
     {
         if (this.entities.contains(entity, true) == false)
@@ -75,10 +88,21 @@ public class GameWorld implements Disposable
             this.entities.add(entity);
         }
     }
+    
+    /**
+     * Removes an entity from the world
+     * @param entity The entity to remove
+     */
     public void removeEntity(Entity entity)
     {
         this.entities.removeValue(entity, true);
     }
+    
+    /**
+     * Gets the array of entities, for rendering purposes.  
+     * TODO: Is there a way to have this only visible to GameRenderer?
+     * @return The array of entities
+     */
     public Array<Entity> getEntitites()
     {
         return this.entities;

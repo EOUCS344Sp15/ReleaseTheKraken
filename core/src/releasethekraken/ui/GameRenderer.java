@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.Entity;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
@@ -63,7 +64,7 @@ public class GameRenderer implements Disposable
                         Gdx.app.log("Pause Button", "onClick() called!");
                     }
                 };
-        pauseButton.setToolTip(new TextToolTip(this, "Test ToolTip 2"));
+        pauseButton.setToolTip(new TextToolTip(this, "Pause the game"));
         
         this.uiObjects.add(pauseButton);
         
@@ -98,6 +99,22 @@ public class GameRenderer implements Disposable
         //Clears screen buffer
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        
+        //Draws Entity Shapes
+        for (Entity entity : this.world.getEntitites())
+            entity.renderShapes(this.worldShapeRenderer);
+        
+        this.worldShapeRenderer.end();
+        
+        //Draws Entity Sprites
+        for (Entity entity : this.world.getEntitites())
+            entity.renderSprites(this.worldSpriteBatch);
+        
+        this.worldSpriteBatch.begin();
+        
+        this.worldSpriteBatch.end();
         
         //Updates UI objects
         for (UiObject obj : this.uiObjects)

@@ -23,7 +23,7 @@ public class ReleaseTheKraken extends ApplicationAdapter
         this.gameAssets = new GameAssets();
                 
         //Create game world and game renderer
-        this.world = new GameWorld();
+        this.world = new GameWorld("HardCodeLand", 200, 100);
         this.renderer = new GameRenderer(this.world);
         
         //Creates a class to handle user input. Tells LibGDX about it.

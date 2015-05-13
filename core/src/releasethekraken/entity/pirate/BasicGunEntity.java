@@ -3,77 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package releasethekraken.entity.pirate;
 
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import releasethekraken.GameWorld;
 
 /**
  *
  * @author tyang
  */
-public class BasicGunEntity extends PirateEntity {
+public class BasicGunEntity extends PirateEntity
+{
 
-    public BasicGunEntity(GameWorld world, float xLocation, float yLocation) {
+    //Primary constructor
+    public BasicGunEntity(GameWorld world, float xLocation, float yLocation)
+    {
         super(world, xLocation, yLocation);
-        health = 10;
-        maxHealth = 10;
+        
+        //Override variables for this type of entity
+        this.health = 10;
+        this.maxHealth = 10;
     }
     
+    //Secondary constructor
+    public BasicGunEntity(GameWorld world, RectangleMapObject mapObject)
+    {
+        super(world, mapObject);
+        //This will be implemented when the level loader is written
+    }
+
     @Override
     public void update()
     {
         super.update();
-        if (this.health <= 0)
-            this.onDeath();
-    }
-    
-    /**
-     * Handles damage passed to the entity.  Returns true if the damage was taken,
-     * false otherwise.
-     * @param damage
-     * @return 
-     */
-    public boolean onDamage(int damage)
-    {
-        if (damage > 0) //Take damage if there is damage to take
-        {
-            this.health -= damage;
-            if (this.health <= 0) //If the damage killed the entity, call onDeath()
-                this.onDeath();
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Called when the entity dies
-     */
-    public void onDeath()
-    {
-        this.dispose();
-    }
-    
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-        //dispose of the entity
-    }
-    
-    /**
-     * @return The entity's health
-     */
-    public int getHealth()
-    {
-        return health;
-    }
-
-    /**
-     * @return The entity's max health
-     */
-    public int getMaxHealth()
-    {
-        return maxHealth;
     }
 }
