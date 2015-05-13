@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package releasethekraken.creature;
+package releasethekraken.entity.pirate;
 
 import releasethekraken.GameWorld;
 
@@ -12,9 +12,9 @@ import releasethekraken.GameWorld;
  *
  * @author tyang
  */
-public class BasicGun extends Pirate {
+public class BasicGunEntity extends PirateEntity {
 
-    public BasicGun(GameWorld world, float xLocation, float yLocation) {
+    public BasicGunEntity(GameWorld world, float xLocation, float yLocation) {
         super(world, xLocation, yLocation);
         health = 10;
         maxHealth = 10;

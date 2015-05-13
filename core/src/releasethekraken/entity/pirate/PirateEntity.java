@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package releasethekraken.creature;
+package releasethekraken.entity.pirate;
 
 import releasethekraken.GameWorld;
 import releasethekraken.entity.LivingEntity;
@@ -13,9 +13,9 @@ import releasethekraken.entity.LivingEntity;
  *
  * @author tyang
  */
-public class pirate extends LivingEntity {
+public class PirateEntity extends LivingEntity {
 
-    public pirate(GameWorld world, float xLocation, float yLocation) {
+    public PirateEntity(GameWorld world, float xLocation, float yLocation) {
         super(world, xLocation, yLocation);
     }
     
