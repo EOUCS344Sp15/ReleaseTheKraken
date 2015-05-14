@@ -11,16 +11,16 @@ import releasethekraken.entity.LivingEntity;
  *
  * @author mwinburn
  */
-public class SeaCreatureEntitiy extends LivingEntity
+public class SeaCreatureEntity extends LivingEntity
 {
     //Primary constructor
-    public SeaCreatureEntitiy(GameWorld world, float xLocation, float yLocation)
+    public SeaCreatureEntity(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
     }
     
     //Secondary constructor
-    public SeaCreatureEntitiy(GameWorld world, RectangleMapObject mapObject)
+    public SeaCreatureEntity(GameWorld world, RectangleMapObject mapObject)
     {
         super(world, mapObject);
         //This will be implemented when the level loader is written
