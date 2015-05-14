@@ -134,6 +134,13 @@ public class UiButton extends InteractiveUiObject
     {
         super.onHover(x, y);
         
+        //Override tooltip displaying so that it only displays if the button is active
+        if (this.toolTip != null)
+            if (this.state != ButtonState.DISABLED)
+                this.toolTip.setVisible(true);
+            else
+                this.toolTip.setVisible(false);
+        
         //Gdx.app.log("UiButton", "onHover() called!");
         
         if (this.state != ButtonState.DISABLED && this.state != ButtonState.PRESSED)

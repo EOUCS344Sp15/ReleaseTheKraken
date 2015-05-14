@@ -15,6 +15,7 @@ import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.Entity;
 import releasethekraken.ui.tooltip.TextToolTip;
+import releasethekraken.ui.tooltip.ToolTip;
 
 /**
  * This class renders the Game World.
@@ -50,7 +51,7 @@ public class GameRenderer implements Disposable
         
         this.debugOverlay = new DebugOverlay(this);
         this.uiObjects.add(this.debugOverlay);
-              
+          
         UiButton pauseButton = new UiButton(
                 this,
                 Gdx.graphics.getWidth()-0.075F*Gdx.graphics.getWidth(), 
@@ -95,7 +96,7 @@ public class GameRenderer implements Disposable
      * Renders the game world
      */
     public void render()
-    {
+    {        
         //Clears screen buffer
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -124,7 +125,8 @@ public class GameRenderer implements Disposable
         this.uiShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         
         for (UiObject obj : this.uiObjects)
-            obj.renderShapes(this.uiShapeRenderer);
+            if (!(obj instanceof ToolTip))
+                obj.renderShapes(this.uiShapeRenderer);
         
         this.uiShapeRenderer.end();
         
@@ -132,10 +134,29 @@ public class GameRenderer implements Disposable
         this.uiSpriteBatch.begin();
         
         for (UiObject obj : this.uiObjects)
-            obj.renderSprites(this.uiSpriteBatch);
+            if (!(obj instanceof ToolTip))
+                obj.renderSprites(this.uiSpriteBatch);
         
         this.uiSpriteBatch.draw(GameAssets.texBadlogic, Gdx.graphics.getWidth() - GameAssets.texBadlogic.getWidth(), 0); //Draws LibGDX logo
         
+        this.uiSpriteBatch.end();
+        
+        //Draws UI ToolTip Shapes
+        this.uiShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        
+        for (UiObject obj : this.uiObjects)
+            if (obj instanceof ToolTip)
+                obj.renderShapes(this.uiShapeRenderer);
+        
+        this.uiShapeRenderer.end();
+        
+        //Draws UI ToolTip Sprites
+        this.uiSpriteBatch.begin();
+        
+        for (UiObject obj : this.uiObjects)
+            if (obj instanceof ToolTip)
+                obj.renderSprites(this.uiSpriteBatch);
+
         this.uiSpriteBatch.end();
     }
     
