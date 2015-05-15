@@ -5,8 +5,10 @@
  */
 package releasethekraken.entity.pirate;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.seacreature.SeaCreatureEntity;
 
 /**
  *
@@ -36,5 +38,13 @@ public class BasicGunEntity extends PirateEntity
     public void update()
     {
         super.update();
+        
+        //Code for testing the getClosestTarget method
+        if (this.world.getWorldTime() % (5*60) == 0)
+        {
+            SeaCreatureEntity target = this.world.getClosestTarget(this, SeaCreatureEntity.class);
+            
+            Gdx.app.log(this.toString(), "Closest target: " + target);
+        }
     }
 }

@@ -19,6 +19,10 @@ public class BasicFishEntity extends SeaCreatureEntity
     public BasicFishEntity(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
+        
+        //TODO: Change these
+        this.health = 10;
+        this.maxHealth = 10;
     }
     
     //Secondary constructor

@@ -8,6 +8,7 @@ package releasethekraken.entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
 import releasethekraken.ui.Renderable;
@@ -59,15 +60,14 @@ import releasethekraken.ui.Renderable;
  */
 public class Entity implements Disposable, Renderable
 {
-    protected GameWorld world; //The game world that the entity is in
+    /** The game world that the entity is in */
+    protected GameWorld world;
     
-    //The X and Y coordinates of the entity
-    protected float xLoc;
-    protected float yLoc;
+    /** The position of the entity */
+    protected Vector2 pos;
     
-    //The X and Y velocity of the entity
-    protected float xVel;
-    protected float yVel;
+    /** The velocity of the entity */
+    protected Vector2 vel;
     
     /**
      *  Default constructor
@@ -79,10 +79,8 @@ public class Entity implements Disposable, Renderable
     public Entity(GameWorld world, float xLocation, float yLocation)
     {
         this.world = world;
-        this.xLoc = xLocation;
-        this.yLoc = yLocation;
-        this.xVel = 0;
-        this.yVel = 0;
+        this.pos = new Vector2(xLocation, yLocation);
+        this.vel = new Vector2(0, 0);
     }
     
     /**
@@ -124,5 +122,27 @@ public class Entity implements Disposable, Renderable
     {
         //dispose of the entity
         this.world.removeEntity(this);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getClass().getSimpleName() + "[" + this.pos.x + ", " + this.pos.y + "]";
+    }
+
+    /**
+     * @return The entity's position
+     */
+    public Vector2 getPos()
+    {
+        return pos;
+    }
+
+    /**
+     * @return The entity's velocity
+     */
+    public Vector2 getVel()
+    {
+        return vel;
     }
 }

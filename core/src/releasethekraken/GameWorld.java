@@ -5,10 +5,14 @@
  */
 package releasethekraken;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.PowerUp;
+import releasethekraken.entity.pirate.BasicGunEntity;
+import releasethekraken.entity.seacreature.BasicFishEntity;
+import releasethekraken.util.EntityDistanceComparator;
 
 /**
  * This class represents the game world.  When a new level is loaded, a new
@@ -34,8 +38,12 @@ public class GameWorld implements Disposable
         this.width = width;
         this.height = height;
         
-        //Add a new powerup, for testing purposes
+        //Add entities, for testing purposes
         this.entities.add(new PowerUp(this, 0, 0, PowerUp.Ability.ATTACKUP, 20));
+        this.entities.add(new BasicFishEntity(this, 10, 10));
+        this.entities.add(new BasicGunEntity(this, 50, 50));
+        this.entities.add(new BasicFishEntity(this, 100, 100));
+        this.entities.add(new BasicFishEntity(this, 75, 75));
     }
     
     /**
@@ -45,9 +53,14 @@ public class GameWorld implements Disposable
     {
         this.worldTime++;
         
-        //Update world entities
-        for(Entity entity : this.entities)
-            entity.update();
+        /*
+        Update world entities
+        Uses the lame way, since LibGDX Arrays reuse their Iterators, which
+        causes problems when an entity iterates over all entites while being
+        updated (see GameWorld.getClosestTarget())
+        */
+        for(int i=0; i<this.entities.size; i++)
+            this.entities.get(i).update();
     }
     
     /**
@@ -106,5 +119,35 @@ public class GameWorld implements Disposable
     public Array<Entity> getEntitites()
     {
         return this.entities;
+    }
+    
+    /**
+     * Finds the closest entity of type E, relative to the source entity.
+     * 
+     * To use: <br><br>
+     * <code>SeaCreatureEntity target = this.world.getClosestTarget(this, SeaCreatureEntity.class);</code>
+     * 
+     * @param <E> Specify this with the target class. This is the entity type you are searching for
+     * @param source The entity to find the closest target from
+     * @param targetType The target entity class
+     * @return The closest entity of type E, or null if none exists
+     */
+    public <E extends Entity> E getClosestTarget(Entity source, Class<E> targetType)
+    {
+        E target = null;
+        
+        Array<E> targets = new Array<E>(); //Set up an array to hold all potential targets
+        
+        //Find potential entities and add them to the array
+        for (Entity ent : this.entities)           
+            if (targetType.isAssignableFrom(ent.getClass()))
+                targets.add((E)ent);
+        
+        targets.sort(new EntityDistanceComparator<E>(source)); //Sort the array of entities based on distance
+        
+        if (targets.size > 0 && targets.get(0) != null) //Return the closest target
+            target = targets.get(0);
+        
+        return target;
     }
 }
