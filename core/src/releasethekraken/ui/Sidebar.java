@@ -56,7 +56,7 @@ public class Sidebar extends UiObject
             buttonY = 0.75F*scrHeight - yOffset;
             
             this.unitButtons.add(new UiButton(renderer, buttonX, buttonY, buttonWidth, 
-                    buttonHeight, "Unit " + (i + 1)));
+                    buttonHeight, "Unit " + (i + 1), Color.BLUE.cpy().sub(0.1F, 0.1F, 0.1F, 0)));
         }
         
         for (int i=0; i<4; i++) //Temporary, until we get actual powerups to represent
@@ -70,11 +70,11 @@ public class Sidebar extends UiObject
             buttonY = 0.4F*scrHeight - yOffset;
             
             this.powerupButtons.add(new UiButton(renderer, buttonX, buttonY, buttonWidth, 
-                    buttonHeight, "Power\nUp " + (i + 1)));
+                    buttonHeight, "Power\nUp " + (i + 1), Color.PURPLE.cpy().sub(0.1F, 0.1F, 0.1F, 0)));
         }
         
         //Create the Release the Kraken button
-        this.krakenButton = new UiButton(renderer, 0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN");
+        this.krakenButton = new UiButton(renderer, 0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN", Color.GREEN.cpy().sub(0.5F, 0.5F, 0.5F, 0));
         this.krakenButton.setToolTip(new TextToolTip(renderer, "Click to RELEASE THE KRAKEN!")); //Just for testing tooltips
         //this.krakenButton.setDisabled(true);
         

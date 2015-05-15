@@ -6,6 +6,7 @@
 package releasethekraken.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -56,7 +57,7 @@ public class GameRenderer implements Disposable
                 this,
                 Gdx.graphics.getWidth()-0.075F*Gdx.graphics.getWidth(), 
                 Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
-                0.075F, 0.05F, "Pause")
+                0.075F, 0.05F, "Pause", Color.GRAY.cpy().sub(0.1F, 0.1F, 0.1F, 0))
                 {
                     @Override
                     public void onClick(int mouseButton, GameWorld world)
@@ -73,7 +74,7 @@ public class GameRenderer implements Disposable
                 this,
                 Gdx.graphics.getWidth()-0.2323F*Gdx.graphics.getWidth(), 
                 Gdx.graphics.getHeight()-0.05F*Gdx.graphics.getHeight(), 
-                0.157F, 0.05F, "Debug Screen")
+                0.157F, 0.05F, "Debug Screen", Color.GRAY.cpy().sub(0.1F, 0.1F, 0.1F, 0))
                 {
                     @Override
                     public void onClick(int mouseButton, GameWorld world)

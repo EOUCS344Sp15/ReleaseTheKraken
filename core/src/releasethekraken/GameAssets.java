@@ -49,10 +49,13 @@ public class GameAssets extends AssetManager
         
         texBadlogic = this.get("badlogic.jpg", Texture.class);
         
+        //The multiplier to determine the scale for the text
+        float textScaleMultiplier = Gdx.graphics.getWidth()/1280.0F;
+        
         fontMain = (BitmapFont) this.get(fontMainDesc);
-        fontMain.getData().setScale(0.5F);
+        fontMain.getData().setScale(0.5F*textScaleMultiplier);
         
         fontDebug = (BitmapFont) this.get(fontDebugDesc);
-        fontDebug.getData().setScale(0.25F);
+        fontDebug.getData().setScale(0.25F*textScaleMultiplier);
     }
 }

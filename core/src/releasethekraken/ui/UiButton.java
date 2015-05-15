@@ -21,32 +21,51 @@ public class UiButton extends InteractiveUiObject
     protected String text; //The button's text
     protected long lastClickTime; //The time when the button was last clicked   
     protected ButtonState state;
+    protected Color baseColor;
     protected final Color[][] defaultColors; //Index 0 is background, 1 is triangular highlight, 2 is foreground.  First array is normal colors, second is pressed colors.
     private int currentColorIndex; //The index of the current button color
     
-    //Constructor
-    public UiButton(GameRenderer renderer, float x, float y, float width, float height, String text)
+    /**
+     * Constructs a new UI button.
+     * @param renderer The GameRenderer instance
+     * @param x The X coordinate, in pixels, on the screen
+     * @param y The Y coordinate, in pixels, on the screen
+     * @param width The width of the button, in percentage of screen width
+     * @param height The height of the button, in percentage of screen height
+     * @param text The text displayed on the button
+     * @param color The color of the button.  <strong>IMPORTANT:</strong> The button won't display properly if the color is highly saturated!
+     */
+    public UiButton(GameRenderer renderer, float x, float y, float width, float height, String text, Color color)
     {
         super(renderer, x, y, width, height);
         this.text = text;
         this.lastClickTime = 0L;
         this.state = ButtonState.UNPRESSED;
         this.currentColorIndex = 0;
+        this.baseColor = color;
         
-        this.defaultColors = new Color[][]
-        {
-            //Old colors
-            /*Default Color           Clicked/Held Color       Hover Color              Disabled Color   *//*
-            {Color.valueOf("333333"), Color.valueOf("4C4C4C"), Color.valueOf("404040"), Color.valueOf("111111")}, //Bottom
-            {Color.valueOf("999999"), Color.valueOf("B1B1B1"), Color.valueOf("A0A0A0"), Color.valueOf("777777")}, //Front
-            {Color.valueOf("666666"), Color.valueOf("7D7D7D"), Color.valueOf("707070"), Color.valueOf("444444")}  //Top
-            */
-                
-            /*Default Color           Clicked/Held Color       Hover Color              Disabled Color   */
-            {Color.valueOf("333333"), Color.valueOf("AAAAAA"), Color.valueOf("404040"), Color.valueOf("111111")}, //Bottom
-            {Color.valueOf("999999"), Color.valueOf("4C4C4C"), Color.valueOf("A0A0A0"), Color.valueOf("777777")}, //Front
-            {Color.valueOf("666666"), Color.valueOf("666666"), Color.valueOf("707070"), Color.valueOf("444444")}  //Top
-        };
+        //Calculate colors from the base color
+        this.defaultColors = new Color[3][4];
+        
+        //Normal Colors
+        this.defaultColors[0][0] = this.baseColor.cpy().sub(0.2F, 0.2F, 0.2F, 0); //Bottom & Right
+        this.defaultColors[1][0] = this.baseColor.cpy().add(0.2F, 0.2F, 0.2F, 0); //Top & Left
+        this.defaultColors[2][0] = this.baseColor;                                //Front
+        
+        //Clicked Colors
+        this.defaultColors[0][1] = this.defaultColors[1][0].cpy();
+        this.defaultColors[1][1] = this.defaultColors[0][0].cpy();
+        this.defaultColors[2][1] = this.defaultColors[2][0].cpy().sub(0.05F, 0.05F, 0.05F, 0);
+        
+        //Hover Colors
+        this.defaultColors[0][2] = this.defaultColors[0][0].cpy().add(0.07F, 0.07F, 0.07F, 0);
+        this.defaultColors[1][2] = this.defaultColors[1][0].cpy().add(0.07F, 0.07F, 0.07F, 0);
+        this.defaultColors[2][2] = this.defaultColors[2][0].cpy().add(0.07F, 0.07F, 0.07F, 0);
+        
+        //Disabled Colors
+        this.defaultColors[0][3] = this.defaultColors[0][0].cpy().sub(0.3F, 0.3F, 0.3F, 0);
+        this.defaultColors[1][3] = this.defaultColors[1][0].cpy().sub(0.3F, 0.3F, 0.3F, 0);
+        this.defaultColors[2][3] = this.defaultColors[2][0].cpy().sub(0.3F, 0.3F, 0.3F, 0);
     }
     
     @Override
