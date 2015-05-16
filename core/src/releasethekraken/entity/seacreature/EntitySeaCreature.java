@@ -4,23 +4,24 @@
 package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
-import releasethekraken.entity.LivingEntity;
+import releasethekraken.entity.EntityLiving;
 
 /**
  *
  * @author mwinburn
  */
-public class SeaCreatureEntity extends LivingEntity
+public class EntitySeaCreature extends EntityLiving
 {
     //Primary constructor
-    public SeaCreatureEntity(GameWorld world, float xLocation, float yLocation)
+    public EntitySeaCreature(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
     }
     
     //Secondary constructor
-    public SeaCreatureEntity(GameWorld world, RectangleMapObject mapObject)
+    public EntitySeaCreature(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
         //This will be implemented when the level loader is written

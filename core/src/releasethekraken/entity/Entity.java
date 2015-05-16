@@ -8,6 +8,7 @@ package releasethekraken.entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
@@ -84,17 +85,17 @@ public class Entity implements Disposable, Renderable
     }
     
     /**
-     * Constructs an Entity from a RectangleMapObject that represents it in a
+     * Constructs an Entity from a TextureMapObject that represents it in a
      * level file.  
      * 
      * @param world
      * @param mapObject
      */
-    public Entity(GameWorld world, RectangleMapObject mapObject)
+    public Entity(GameWorld world, TextureMapObject mapObject)
     {
         this.world = world;
-        
-        //Override this to parse data from the entity's node in the map format
+        this.pos = new Vector2(mapObject.getX(), mapObject.getY());
+        this.vel = new Vector2(0, 0);
     }
     
     @Override

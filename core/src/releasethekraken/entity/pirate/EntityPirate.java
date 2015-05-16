@@ -3,30 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package releasethekraken.entity.seacreature;
+package releasethekraken.entity.pirate;
 
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityLiving;
 
 /**
  *
- * @author sbartlett
+ * @author tyang
  */
-public class BasicFishEntity extends SeaCreatureEntity
+public class EntityPirate extends EntityLiving
 {
     //Primary constructor
-    public BasicFishEntity(GameWorld world, float xLocation, float yLocation)
+    public EntityPirate(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
-        
-        //TODO: Change these
-        this.health = 10;
-        this.maxHealth = 10;
     }
     
     //Secondary constructor
-    public BasicFishEntity(GameWorld world, RectangleMapObject mapObject)
+    public EntityPirate(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
         //This will be implemented when the level loader is written

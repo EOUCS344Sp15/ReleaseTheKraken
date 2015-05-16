@@ -7,14 +7,14 @@ package releasethekraken.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
 
 /**
  *
  * @author tarstarkes
  */
-public class PowerUp extends Entity
+public class EntityPowerUp extends Entity
 {
     protected String name; //The name of the powerup
     protected String description; //detailed description of the power up
@@ -30,18 +30,18 @@ public class PowerUp extends Entity
      * @param ptype The type of power up
      * @param seconds The amount of seconds that the power up will exist
      */
-    public PowerUp(GameWorld world, float xLocation, float yLocation, Ability ptype, int seconds)
+    public EntityPowerUp(GameWorld world, float xLocation, float yLocation, Ability ptype, int seconds)
     {
         super(world, xLocation, yLocation);
         this.type = ptype;
         this.despawnTimer = seconds*60;
     }
     
-    public PowerUp(GameWorld world, RectangleMapObject mapObject)
+    public EntityPowerUp(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
-        
-        //TODO: implement this constructor when the level loader is made
+        this.type = Ability.valueOf(mapObject.getProperties().get("PowerupType", String.class));
+        this.despawnTimer = mapObject.getProperties().get("Despawn", Integer.class);
     }
     
     @Override

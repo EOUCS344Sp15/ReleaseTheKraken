@@ -3,6 +3,11 @@ package releasethekraken;
 import releasethekraken.ui.GameRenderer;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import java.util.HashMap;
+import releasethekraken.entity.Entity;
+import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityGunTower;
+import releasethekraken.entity.seacreature.EntityFish;
 
 public class ReleaseTheKraken extends ApplicationAdapter
 {    
@@ -10,6 +15,18 @@ public class ReleaseTheKraken extends ApplicationAdapter
     private GameRenderer renderer;
     private GameAssets gameAssets;
     private InputHandler inputHandler;
+    
+    /** The HashMap to store registered entities */
+    private static HashMap<String, Class<? extends Entity>> entityMap = new HashMap<String, Class<? extends Entity>>();
+    
+    //Register game objects
+    static
+    {
+        //Register entities
+        registerEntity("EntityPowerup", EntityPowerUp.class);
+        registerEntity("EntityFish", EntityFish.class);
+        registerEntity("EntityGunTower", EntityGunTower.class);
+    }
 
     @Override
     public void create()
@@ -21,9 +38,14 @@ public class ReleaseTheKraken extends ApplicationAdapter
             been loaded beyond this point.
         */
         this.gameAssets = new GameAssets();
-                
-        //Create game world and game renderer
-        this.world = new GameWorld("HardCodeLand", 200, 100);
+        
+        String levelName = "TestLevel";
+        
+        //Load the world
+        LevelLoader levelLoader = new LevelLoader(levelName);
+        this.world = levelLoader.loadWorld();
+        
+        //Create game renderer for the world
         this.renderer = new GameRenderer(this.world);
         
         //Creates a class to handle user input. Tells LibGDX about it.
@@ -50,5 +72,29 @@ public class ReleaseTheKraken extends ApplicationAdapter
         this.world.dispose();
         this.renderer.dispose();
         this.gameAssets.dispose();
+    }
+    
+    /**
+     * Registers the entity with the game. The entity must have a "codename" to
+     * be represented in XML, regardless if it is able to be loaded from XML or not.
+     * 
+     * @param name The name of the entity, in valid XML attribute format
+     * @param entity The entity class being registered
+     */
+    public static void registerEntity(String name, Class<? extends Entity> entity)
+    {
+        entityMap.put(name, entity);
+    }
+    
+    /**
+     * Gets the Entity class registered for the given name, or null if none were
+     * found.
+     * 
+     * @param name The entity name to search for
+     * @return The entity class, or null
+     */
+    public static Class<? extends Entity> getEntityFromName(String name)
+    {
+        return entityMap.get(name);
     }
 }

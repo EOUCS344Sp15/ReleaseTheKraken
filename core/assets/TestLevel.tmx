@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="4">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="17">
  <properties>
-  <property name="level_name" value="Test Level"/>
+  <property name="levelname" value="Test Level"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
   <image source="Tileset.png" width="256" height="96"/>
@@ -29,14 +29,47 @@
   <tile id="20" terrain="1,1,0,0"/>
   <tile id="21" terrain="1,0,0,0"/>
  </tileset>
- <layer name="Terrain" width="50" height="50">
+ <tileset firstgid="25" name="Entities" tilewidth="32" tileheight="32">
+  <image source="entities.png" width="128" height="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="EntityPlayer"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="EntityFish"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="EntityGunTower"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="terrain" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztWdFOwzAMzMY2unUCAYP9/5+SSj3hHU5qp2lTCR5OnaosuXNsJ3YvIYTLP0w4RLxHHCNOG+BTyv8j4h7xGnFuzOVE7yx2vY7cgV3EVyMdvbL+zchnGLeP+BzRSoOHM6NryNnrN2tr8OSLYewQl63iMYfBxxFrL4ax3ng8jDaCrZbKrx4dV8MY5v8RHvPSgLcFtEgdU/5iiWuN/z381lLbNz06Su2v6dmiDsR/ij9rWOLMkzpK/NaiYelzW+Pg2ROvBksuKYG849yd65RoWGsvPDr4nrclDVYd8v9aTm2lwZMPrf6EOdfeB+uavRiLe/dTYq79DA3y3iefqL3m7j3iAv73HJapibzx543vPvzWIc+gGhpKcqF3bXA+K2vWioWSvfCuDR3D2c++aj1Dpe9Lvz8qc1rzifdO1WfmtOQ6L88cf6BExzU82sGTX3M2KOVf6s89zemZBz0SLU/L+ebEhbX+H7jIM6PEFtzzYV0pPfLMwnNuXgGXGvkptU87odW71tS+LNl7gh5gyd5cNwJ17JZ6y1qf1mI7+Ce0tdYhz7Zcj4l7iZ141xEuYX19Wl7XzpU+PNbwXfjpBbEOK2rq4HyRyqW3cQy0WHi01JPLE6zFOnfpfi1pA2hJ3fWtPfk19oZ54U4KfhwrctwWevKaLWU9AO6aDyIXt/6+BC7Mgeua1rYuxVo6pP/yNxPrOa3FQEpH7e8Xll59zn7yW5Gcg/OQVi/X0uLpKbCOqfqSdaTquDk9Z2+NK89m5KKp+pJ1YzzXN3P2JNUTSdVQkhNy0VRfZcqvanxXstTqqKOQ37lW4NqU/8d596aMnetb4CDrW/6t8ci9t9S6XKvVqo//8ffwDcNYbGo=
   </data>
  </layer>
- <objectgroup name="Paths">
+ <objectgroup name="paths">
   <object id="3" x="522" y="1652">
    <polyline points="0,0 50,-272 268,-392 530,-424 830,-414 904,-466 898,-538 766,-636 454,-620 334,-646 66,-714 0,-794 14,-882 134,-982 338,-1078 476,-1190 556,-1296"/>
   </object>
+ </objectgroup>
+ <objectgroup name="entities">
+  <object id="4" gid="25" x="477" y="1467" width="32" height="32"/>
+  <object id="5" gid="26" x="602" y="1538" width="32" height="32"/>
+  <object id="6" gid="26" x="469" y="1381" width="32" height="32"/>
+  <object id="7" gid="27" x="907" y="1389" width="32" height="32"/>
+  <object id="8" gid="27" x="1031" y="1373" width="32" height="32"/>
+  <object id="9" gid="27" x="1026" y="861" width="32" height="32"/>
+  <object id="10" gid="27" x="799" y="831.333" width="32" height="32"/>
+  <object id="11" gid="27" x="1186" y="709" width="32" height="32"/>
+  <object id="12" gid="27" x="1394.67" y="1389.33" width="32" height="32"/>
+  <object id="13" gid="27" x="1452" y="1053.33" width="32" height="32"/>
+  <object id="14" gid="27" x="1322.67" y="608" width="32" height="32"/>
+  <object id="15" gid="27" x="562.667" y="534.667" width="32" height="32"/>
+  <object id="16" gid="27" x="382.667" y="654.667" width="32" height="32"/>
  </objectgroup>
 </map>

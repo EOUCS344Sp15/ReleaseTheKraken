@@ -5,13 +5,10 @@
  */
 package releasethekraken;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.entity.Entity;
-import releasethekraken.entity.PowerUp;
-import releasethekraken.entity.pirate.BasicGunEntity;
-import releasethekraken.entity.seacreature.BasicFishEntity;
 import releasethekraken.util.EntityDistanceComparator;
 
 /**
@@ -22,28 +19,30 @@ import releasethekraken.util.EntityDistanceComparator;
  */
 public class GameWorld implements Disposable
 {    
-    private long worldTime = 0L; //The world time, in ticks
-    private String name; //The world's name
-    private Array<Entity> entities; //The entities in the world
+    /** The world time, in ticks */
+    private long worldTime = 0L;
+    /** The world's TiledMap */
+    private TiledMap tiledMap;
+    /** The TiledMap's unit scale */
+    private float tiledMapUnitScale;
+    /** The world's name */
+    private String name;
+    /** The array of entities in the world */
+    private Array<Entity> entities;
     
     //The width and height of the world
-    public final float width;
-    public final float height;
+    public float width;
+    public float height;
      
-    //Constructor
-    public GameWorld(String name, float width, float height)
+    /**
+     * Constructs a new GameWorld
+     */
+    public GameWorld()
     {
         this.entities = new Array<Entity>();
-        this.name = name;
-        this.width = width;
-        this.height = height;
-        
-        //Add entities, for testing purposes
-        this.entities.add(new PowerUp(this, 0, 0, PowerUp.Ability.ATTACKUP, 20));
-        this.entities.add(new BasicFishEntity(this, 10, 10));
-        this.entities.add(new BasicGunEntity(this, 50, 50));
-        this.entities.add(new BasicFishEntity(this, 100, 100));
-        this.entities.add(new BasicFishEntity(this, 75, 75));
+        this.name = "DefaultWorldName";
+        this.width = 0;
+        this.height = 0;
     }
     
     /**
@@ -79,6 +78,87 @@ public class GameWorld implements Disposable
     public String getName()
     {
         return this.name;
+    }
+
+    /**
+     * Sets the world's name
+     * @param name The new name
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
+     * Gets the world's width, in pixels
+     * @return float: the width, in pixels
+     */
+    public float getWidth()
+    {
+        return width;
+    }
+
+    /**
+     * Sets the world's width, in pixels
+     * @param width The new width, in pixels
+     */
+    public void setWidth(float width)
+    {
+        this.width = width;
+    }
+
+    /**
+     * Gets the world's height, in pixels
+     * @return float: the height, in pixels
+     */
+    public float getHeight()
+    {
+        return height;
+    }
+
+    /**
+     * Sets the world's height, in pixels
+     * @param height The new height, in pixels
+     */
+    public void setHeight(float height)
+    {
+        this.height = height;
+    }
+
+    /**
+     * Gets the world's TiledMap
+     * @return the world's TiledMap
+     */
+    public TiledMap getTiledMap()
+    {
+        return tiledMap;
+    }
+
+    /**
+     * Sets the world's TiledMap
+     * @param tiledMap the new TiledMap
+     */
+    public void setTiledMap(TiledMap tiledMap)
+    {
+        this.tiledMap = tiledMap;
+    }
+
+    /**
+     * Gets the TiledMap unit scale
+     * @return the TiledMap unit scale
+     */
+    public float getTiledMapUnitScale()
+    {
+        return tiledMapUnitScale;
+    }
+
+    /**
+     * Sets the TiledMap unit scale
+     * @param tiledMapUnitScale the new TiledMap unit scale
+     */
+    public void setTiledMapUnitScale(float tiledMapUnitScale)
+    {
+        this.tiledMapUnitScale = tiledMapUnitScale;
     }
 
     @Override
@@ -133,7 +213,7 @@ public class GameWorld implements Disposable
      * @return The closest entity of type E, or null if none exists
      */
     public <E extends Entity> E getClosestTarget(Entity source, Class<E> targetType)
-    {
+    {        
         E target = null;
         
         Array<E> targets = new Array<E>(); //Set up an array to hold all potential targets

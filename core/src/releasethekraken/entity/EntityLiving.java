@@ -5,17 +5,19 @@
  */
 package releasethekraken.entity;
 
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
 
 /**
  * Represents a living entity with health that can die.
  * @author Dalton
  */
-public class LivingEntity extends Entity
+public class EntityLiving extends Entity
 {
-    protected int health; //The entity's health
-    protected int maxHealth; //The entity's max health
+    /** The entity's health */
+    protected int health;
+    /** The entity's maximum health */
+    protected int maxHealth;
     
     /**
      *  Default constructor
@@ -24,19 +26,19 @@ public class LivingEntity extends Entity
      * @param xLocation The initial x coordinate
      * @param yLocation The initial y coordinate
      */
-    public LivingEntity(GameWorld world, float xLocation, float yLocation)
+    public EntityLiving(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
     }
     
     /**
-     * Constructs an Entity from a RectangleMapObject that represents it in a
+     * Constructs an Entity from a TextureMapObject that represents it in a
      * level file.  
      * 
      * @param world
      * @param mapObject
      */
-    public LivingEntity(GameWorld world, RectangleMapObject mapObject)
+    public EntityLiving(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
         
