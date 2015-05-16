@@ -20,17 +20,26 @@ import releasethekraken.ui.UiObject;
  * 
  * @author Dalton
  */
-class InputHandler implements InputProcessor
+public class InputHandler implements InputProcessor
 {
     //The input handler's private references to the game world and renderer
     private GameWorld world;
     private GameRenderer renderer;
+    
+    /** 
+     * A debugging position that is controllable with the numberpad 8 4 5 6 keys.
+     * Use as an offset for positioning UI stuff.
+     */
+    public static final Vector2 DEV_POS = new Vector2(0, 0);
     
     //The array of screen activePointerLocations.  For a mouse, only the first one will be active
     private Array<Vector2> activePointerLocations;
     
     //The array of screen pointer locations.  For a mouse, only the first one will be active
     private Array<Vector2> pointerLocations;
+    
+    /** An array of held keys.  Keycode = index */
+    private boolean[] heldKeys;
     
     public InputHandler(GameWorld world, GameRenderer renderer)
     {
@@ -42,37 +51,39 @@ class InputHandler implements InputProcessor
         this.pointerLocations = new Array<Vector2>();
         for (int i=0; i<20; i++)
             this.pointerLocations.add(new Vector2());
+        
+        this.heldKeys = new boolean[256];
     }
     
     @Override
     public boolean keyDown(int keycode)
     {
-        switch (keycode)
+        this.heldKeys[keycode] = true; //The key is now pressed
+        
+        switch(keycode)
         {
-            case Input.Keys.UP:
-            case Input.Keys.W:
-                Gdx.app.log("InputHandler", "Up button pressed");
-                break;
-            case Input.Keys.DOWN:
-            case Input.Keys.S:
-                Gdx.app.log("InputHandler", "Down button pressed");
-                break;
-            case Input.Keys.LEFT:
-            case Input.Keys.A:
-                Gdx.app.log("InputHandler", "Left button pressed");
-                break;
-            case Input.Keys.RIGHT:
-            case Input.Keys.D:
-                Gdx.app.log("InputHandler", "Right button pressed");
-                break;
-                
+        case Input.Keys.NUMPAD_8:
+            DEV_POS.add(0, 1);
+            break;
+        case Input.Keys.NUMPAD_4:
+            DEV_POS.add(-1, 0);
+            break;
+        case Input.Keys.NUMPAD_5:
+            DEV_POS.add(0, -1);
+            break;
+        case Input.Keys.NUMPAD_6:
+            DEV_POS.add(1, 0);
+            break;
         }
+        
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode)
     {
+        this.heldKeys[keycode] = false; //The key is no longer pressed
+        
         return false;
     }
 
@@ -154,6 +165,11 @@ class InputHandler implements InputProcessor
                 } 
             }
         }
+        
+        //Handle held keys, calling keyHeld()
+        for (int i=0; i<this.heldKeys.length; i++)
+            if (this.heldKeys[i])
+                this.keyHeld(i);
     }
     
     /**
@@ -172,6 +188,34 @@ class InputHandler implements InputProcessor
                 {
                     ((UiButton)obj).onClickHeld(button, this.world);
                 }
+        }
+    }
+    
+    /**
+     * Custom method.  Like keyDown except it repeats.
+     * @param keycode The keycode that was pressed
+     */
+    public void keyHeld(int keycode)
+    {
+        switch (keycode)
+        {
+            case Input.Keys.UP:
+            case Input.Keys.W:
+                //DEV_POS.add(0, 0.2F);
+                break;
+            case Input.Keys.DOWN:
+            case Input.Keys.S:
+                //DEV_POS.add(0, -0.2F);
+                break;
+            case Input.Keys.LEFT:
+            case Input.Keys.A:
+                //DEV_POS.add(-0.2F, 0);
+                break;
+            case Input.Keys.RIGHT:
+            case Input.Keys.D:
+                //DEV_POS.add(0.2F, 0);
+                break;
+                
         }
     }
     

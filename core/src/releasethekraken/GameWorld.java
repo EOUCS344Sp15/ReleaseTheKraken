@@ -170,6 +170,12 @@ public class GameWorld implements Disposable
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
     }
     
+    @Override
+    public String toString()
+    {
+        return this.getName() + "[w: " + this.width + ", h: " + this.height + "]";
+    }
+    
     /**
      * Adds an entity to the world
      * @param entity The entity to add

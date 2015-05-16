@@ -63,8 +63,8 @@ public class LevelLoader
         
         //Load world properties
         newWorld.setName(properties.get("levelname", String.class));
-        newWorld.setWidth(properties.get("width", Integer.class));
-        newWorld.setHeight(properties.get("height", Integer.class));
+        newWorld.setWidth(properties.get("width", Integer.class)*2);
+        newWorld.setHeight(properties.get("height", Integer.class)*2);
         newWorld.setTiledMap(map);
         newWorld.setTiledMapUnitScale(unitScale);
         
@@ -138,6 +138,7 @@ public class LevelLoader
         }
         
         Gdx.app.log("LevelLoader", "Successfully loaded the world!");
+        Gdx.app.log("LevelLoader", newWorld.toString());
         
         return newWorld;
     }

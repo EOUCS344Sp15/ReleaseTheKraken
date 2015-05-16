@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.InputHandler;
 
 /**
  * Draws some useful debugging information on the screen.
@@ -28,6 +29,7 @@ public class DebugOverlay extends UiObject
     private static final DebugEntry worldStats1; //DebugEntry to hold the world stats
     private static final DebugEntry worldStats2; //DebugEntry to hold the world stats
     private static final DebugEntry worldStats3; //DebugEntry to hold the world stats
+    private static final DebugEntry devPos; //DebugEntry to hold the developer position point
     
     static //Initialize debug info list
     {
@@ -45,6 +47,7 @@ public class DebugOverlay extends UiObject
         debugData.add(worldStats1 = new DebugEntry());
         debugData.add(worldStats2 = new DebugEntry());
         debugData.add(worldStats3 = new DebugEntry());
+        debugData.add(devPos = new DebugEntry());
     }
     
     public DebugOverlay(GameRenderer renderer)
@@ -84,6 +87,7 @@ public class DebugOverlay extends UiObject
             worldStats1.data = "Level: " + world.getName();
             worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
             worldStats3.data = String.format("%-12.12s : %-6s", "Entities", world.getEntitites().size);
+            devPos.data = String.format("Dev Pos: x:%-3.0f y:%-3.0f", InputHandler.DEV_POS.x, InputHandler.DEV_POS.y);
         }
     }
     

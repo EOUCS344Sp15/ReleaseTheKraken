@@ -8,12 +8,15 @@ package releasethekraken.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.InputHandler;
 import releasethekraken.entity.Entity;
 import releasethekraken.ui.tooltip.TextToolTip;
 import releasethekraken.ui.tooltip.ToolTip;
@@ -25,28 +28,55 @@ import releasethekraken.ui.tooltip.ToolTip;
  */
 public class GameRenderer implements Disposable
 {
-    //The Game Renderer's reference to the game world it should be rendering
+    /** The Game Renderer's reference to the game world it should be rendering */
     private GameWorld world;
-        
-    private SpriteBatch uiSpriteBatch; //SpriteBatch to render UI sprites
-    private SpriteBatch worldSpriteBatch; //SpriteBatch to render world sprites
-    private ShapeRenderer uiShapeRenderer; //ShapeRenderer to render UI shapes
-    private ShapeRenderer worldShapeRenderer; //ShapeRenderer to render world shapes
+    /** SpriteBatch to render UI sprites */
+    private SpriteBatch uiSpriteBatch;
+    /** SpriteBatch to render world sprites */
+    private SpriteBatch worldSpriteBatch;
+    /** ShapeRenderer to render UI shapes */
+    private ShapeRenderer uiShapeRenderer;
+    /** ShapeRenderer to render world shapes */
+    private ShapeRenderer worldShapeRenderer;
+    /** The camera to view the world */
+    private OrthographicCamera camera;
+    /** The OrthogonalTiledMapRenderer to render the tile map */
+    OrthogonalTiledMapRenderer tiledMapRenderer;
     
-    public Array<UiObject> uiObjects; //The array of UiObjects
+    /** The array of UiObjects */
+    public Array<UiObject> uiObjects;
     
-    //Whether the debug screen is visible or not
+    /** Whether the debug screen is visible or not*/
     public boolean debugScreenVisible = false;
     private DebugOverlay debugOverlay;
     
-    //Constructor
+    /**
+     * Constructs a new GameRenderer
+     * @param world The world to be rendered
+     */
     public GameRenderer(GameWorld world)
     {
         this.world = world;
+        
+        //Create the camera to view the world
+        this.camera = new OrthographicCamera();
+        float cameraWidth = 80.0F;
+        float cameraHeight = (Gdx.graphics.getHeight()*1F/Gdx.graphics.getWidth())*cameraWidth;
+        
+        this.camera.setToOrtho(false, cameraWidth, cameraHeight);
+        Gdx.app.log("GameRenderer", "Calculated camera dimensions: " + cameraWidth + " x " + cameraHeight);
+        
         this.uiSpriteBatch = new SpriteBatch();
         this.worldSpriteBatch = new SpriteBatch();
         this.uiShapeRenderer = new ShapeRenderer();
         this.worldShapeRenderer = new ShapeRenderer();
+        
+        //Set the world renderers to render to the camera's projection matrix
+        this.worldSpriteBatch.setProjectionMatrix(this.camera.combined);
+        this.worldShapeRenderer.setProjectionMatrix(this.camera.combined);
+        
+        //Create the tile map renderer
+        this.tiledMapRenderer = new OrthogonalTiledMapRenderer(world.getTiledMap(), 1/(world.getTiledMapUnitScale()));
         
         this.uiObjects = new Array<UiObject>();
         
@@ -97,16 +127,48 @@ public class GameRenderer implements Disposable
      * Renders the game world
      */
     public void render()
-    {        
+    {
+        //The width of the sidebar in local camera units
+        float sidebarLocalWidth = 0.2F*this.camera.viewportWidth;
+        
+        //The amount to offset the player focus so that it is centered on the screen taking into account the sidebar
+        float playerXOffset = sidebarLocalWidth/2;
+        
+        //Calculate the center position of the camera
+        float cameraX = MathUtils.clamp(
+                InputHandler.DEV_POS.x - playerXOffset,
+                this.camera.viewportWidth/2 - sidebarLocalWidth,
+                this.world.getWidth() - this.camera.viewportWidth/2);
+        float cameraY = MathUtils.clamp(
+                InputHandler.DEV_POS.y,
+                this.camera.viewportHeight/2,
+                this.world.getHeight() - this.camera.viewportHeight/2);
+        
+        //Position the camera
+        this.camera.position.set(cameraX, cameraY, 0);
+        this.camera.update();
+        
         //Clears screen buffer
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        //Update the renderer's projection matrices
+        this.worldSpriteBatch.setProjectionMatrix(this.camera.combined);
+        this.worldShapeRenderer.setProjectionMatrix(this.camera.combined);
+        
+        //Render tiles
+        this.tiledMapRenderer.setView(this.camera);
+        this.tiledMapRenderer.render();
         
         this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         
         //Draws Entity Shapes
         for (Entity entity : this.world.getEntitites())
             entity.renderShapes(this.worldShapeRenderer);
+        
+        //TODO: Remove.  Draws InputHandler.DEV_POS in the world
+        this.worldShapeRenderer.setColor(Color.RED);
+        this.worldShapeRenderer.x(InputHandler.DEV_POS, 2);
         
         this.worldShapeRenderer.end();
         
@@ -138,7 +200,7 @@ public class GameRenderer implements Disposable
             if (!(obj instanceof ToolTip))
                 obj.renderSprites(this.uiSpriteBatch);
         
-        this.uiSpriteBatch.draw(GameAssets.texBadlogic, Gdx.graphics.getWidth() - GameAssets.texBadlogic.getWidth(), 0); //Draws LibGDX logo
+        //this.uiSpriteBatch.draw(GameAssets.texBadlogic, Gdx.graphics.getWidth() - GameAssets.texBadlogic.getWidth(), 0); //Draws LibGDX logo
         
         this.uiSpriteBatch.end();
         
@@ -169,5 +231,6 @@ public class GameRenderer implements Disposable
         this.worldSpriteBatch.dispose();
         this.uiShapeRenderer.dispose();
         this.worldShapeRenderer.dispose();
+        this.tiledMapRenderer.dispose();
     }
 }
