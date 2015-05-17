@@ -22,6 +22,7 @@ public class Sidebar extends UiObject
     private UiButton krakenButton;
     
     private Color color;
+    private Color borderColor;
     
     //Constructor
     public Sidebar(GameRenderer renderer)
@@ -29,6 +30,7 @@ public class Sidebar extends UiObject
         super(renderer, 0, 0, 0.2F, 1.0F);
         
         this.color = Color.valueOf("3173DE");
+        this.borderColor = this.color.cpy().sub(0.1F, 0.1F, 0.1F, 0);
         this.depth = 1; //Set the render depth so that it renders under its contents
         
         //Create arrays of children UI objects
@@ -84,6 +86,30 @@ public class Sidebar extends UiObject
         for (UiButton button : this.powerupButtons)
             renderer.uiObjects.add(button);
         renderer.uiObjects.add(this.krakenButton);
+        
+        renderer.uiObjects.add(new UiText(
+                renderer,
+                0.1F*scrWidth,
+                0.9F*scrHeight,
+                0.2F*scrWidth,
+                0.1F*scrHeight,
+                "Purchase Units"));
+        
+        renderer.uiObjects.add(new UiText(
+                renderer,
+                0.1F*scrWidth,
+                0.55F*scrHeight,
+                0.2F*scrWidth,
+                0.1F*scrHeight,
+                "Use Power Ups"));
+        
+        renderer.uiObjects.add(new UiText(
+                renderer,
+                0.06F*scrWidth,
+                0.23F*scrHeight,
+                0.2F*scrWidth,
+                0.1F*scrHeight,
+                "Points"));
             
     }
     
@@ -92,5 +118,13 @@ public class Sidebar extends UiObject
     {
         shapeRenderer.setColor(this.color);
         shapeRenderer.rect(this.x, this.y, this.width, this.height);
+        
+        float borderWidth = 0.0025F*Gdx.graphics.getWidth();
+        
+        shapeRenderer.setColor(this.borderColor);
+        shapeRenderer.rect(this.x + this.width - borderWidth,
+                this.y,
+                borderWidth,
+                this.height);
     }
 }
