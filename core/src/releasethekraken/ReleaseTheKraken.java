@@ -8,6 +8,7 @@ import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.pirate.EntityGunTower;
 import releasethekraken.entity.seacreature.EntityFish;
+import releasethekraken.entity.seacreature.EntityPlayer;
 
 public class ReleaseTheKraken extends ApplicationAdapter
 {    
@@ -26,6 +27,7 @@ public class ReleaseTheKraken extends ApplicationAdapter
         registerEntity("EntityPowerup", EntityPowerUp.class);
         registerEntity("EntityFish", EntityFish.class);
         registerEntity("EntityGunTower", EntityGunTower.class);
+        registerEntity("EntityPlayer", EntityPlayer.class);
     }
 
     @Override

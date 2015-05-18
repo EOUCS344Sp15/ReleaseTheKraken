@@ -11,16 +11,15 @@ package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
-import releasethekraken.entity.EntityLiving;
 
 /**
  *
  * @author roelleh
  */
-public class PlayerCharacterEntity extends EntityLiving 
+public class EntityPlayer extends EntitySeaCreature
 {
     //Primary constructor
-    public PlayerCharacterEntity(GameWorld world, float xLocation, float yLocation)
+    public EntityPlayer(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
         
@@ -29,7 +28,7 @@ public class PlayerCharacterEntity extends EntityLiving
     }
     
     //Secondary constructor
-    public PlayerCharacterEntity(GameWorld world, TextureMapObject mapObject)
+    public EntityPlayer(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
         //This will be implemented when the level loader is written
