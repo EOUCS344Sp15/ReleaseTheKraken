@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import releasethekraken.GameWorld;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
@@ -110,7 +111,22 @@ public class Sidebar extends UiObject
                 0.2F*scrWidth,
                 0.1F*scrHeight,
                 "Points"));
-            
+        
+        renderer.uiObjects.add(new UiPointsBar(
+                renderer,
+                0.006F*scrWidth,
+                0.16F*scrHeight,
+                0.2F - 0.006F*2,
+                0.04F));
+    }
+    
+    @Override
+    public void update(GameWorld world)
+    {
+        super.update(world);
+        
+        //Update the disabled status on the Kraken button
+        this.krakenButton.setDisabled(world.getPoints() < world.getPointsForKraken());
     }
     
     @Override

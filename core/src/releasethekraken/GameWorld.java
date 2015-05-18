@@ -33,6 +33,13 @@ public class GameWorld implements Disposable
     //The width and height of the world
     public float width;
     public float height;
+    
+    /** The current amount of coins */
+    private int coins;
+    /** The current amount of points */
+    private int points;
+    /** The amount of points required to RELEASE THE KRAKEN! */
+    private int pointsForKraken;
      
     /**
      * Constructs a new GameWorld
@@ -43,6 +50,7 @@ public class GameWorld implements Disposable
         this.name = "DefaultWorldName";
         this.width = 0;
         this.height = 0;
+        this.points = 0;
     }
     
     /**
@@ -60,6 +68,9 @@ public class GameWorld implements Disposable
         */
         for(int i=0; i<this.entities.size; i++)
             this.entities.get(i).update();
+        
+        //Update the points from the dev position for testing purposes.  TODO: Remove
+        this.points = (int) InputHandler.DEV_POS.y * 10;
     }
     
     /**
@@ -205,6 +216,76 @@ public class GameWorld implements Disposable
     public Array<Entity> getEntitites()
     {
         return this.entities;
+    }
+
+    /**
+     * Gets the current amount of points earned
+     * @return The current points
+     */
+    public int getPoints()
+    {
+        return points;
+    }
+
+    /**
+     * Adds points to the current points
+     * @param points The points to add
+     */
+    public void addPoints(int points)
+    {
+        this.points += points;
+    }
+
+    /**
+     * Gets the amount of points required to RELEASE THE KRAKEN!
+     * @return The amount of points to required to RELEASE THE KRAKEN!
+     */
+    public int getPointsForKraken()
+    {
+        return pointsForKraken;
+    }
+
+    /**
+     * Sets the amount of points required to RELEASE THE KRAKEN!
+     * @param pointsForKraken The new amount of points required to RELEASE THE KRAKEN!
+     */
+    public void setPointsForKraken(int pointsForKraken)
+    {
+        this.pointsForKraken = pointsForKraken;
+    }
+
+    /**
+     * Gets the amount of coins the player has
+     * @return The amount of coins the player has
+     */
+    public int getCoins()
+    {
+        return coins;
+    }
+
+    /**
+     * Adds coins to the amount of coins that the player has
+     * @param coins The amount of coins to add
+     */
+    public void addCoins(int coins)
+    {
+        this.coins += coins;
+    }
+    
+    /**
+     * Removes the specified amount of coins, if there are enough to remove
+     * @param cost The amount of coins to remove
+     * @return True if the amount of coins was removed, false otherwise (if there was not enough)
+     */
+    public boolean removeCoins(int cost)
+    {
+        if (cost < this.coins)
+        {
+            this.coins -= cost;
+            return true;
+        }
+        else
+            return false;
     }
     
     /**

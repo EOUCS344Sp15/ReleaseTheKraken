@@ -63,6 +63,7 @@ public class LevelLoader
         
         //Load world properties
         newWorld.setName(properties.get("levelname", String.class));
+        newWorld.setPointsForKraken(Integer.parseInt(properties.get("krakenpoints", String.class)));
         newWorld.setWidth(properties.get("width", Integer.class)*2);
         newWorld.setHeight(properties.get("height", Integer.class)*2);
         newWorld.setTiledMap(map);
