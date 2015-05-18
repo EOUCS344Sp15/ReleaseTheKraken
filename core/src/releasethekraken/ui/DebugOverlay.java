@@ -30,6 +30,8 @@ public class DebugOverlay extends UiObject
     private static final DebugEntry worldStats2; //DebugEntry to hold the world stats
     private static final DebugEntry worldStats3; //DebugEntry to hold the world stats
     private static final DebugEntry devPos; //DebugEntry to hold the developer position point
+    private static final DebugEntry playerStats1; //DebugEntry to hold the player stats
+    private static final DebugEntry playerStats2; //DebugEntry to hold the player stats
     
     static //Initialize debug info list
     {
@@ -48,6 +50,8 @@ public class DebugOverlay extends UiObject
         debugData.add(worldStats2 = new DebugEntry());
         debugData.add(worldStats3 = new DebugEntry());
         debugData.add(devPos = new DebugEntry());
+        debugData.add(playerStats1 = new DebugEntry());
+        debugData.add(playerStats2 = new DebugEntry());
     }
     
     public DebugOverlay(GameRenderer renderer)
@@ -88,6 +92,8 @@ public class DebugOverlay extends UiObject
             worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
             worldStats3.data = String.format("%-12.12s : %-6s", "Entities", world.getEntitites().size);
             devPos.data = String.format("Dev Pos: x:%-3.0f y:%-3.0f", InputHandler.DEV_POS.x, InputHandler.DEV_POS.y);
+            playerStats1.data = String.format("Player Pos: X:%-2.1f Y:%-2.1f", world.getPlayer().getPos().x, world.getPlayer().getPos().y);
+            playerStats2.data = String.format("Player Vel: X:%-2.1f Y:%-2.1f m/s", world.getPlayer().getVel().x, world.getPlayer().getVel().y);
         }
     }
     

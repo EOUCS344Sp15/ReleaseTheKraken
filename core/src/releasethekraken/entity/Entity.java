@@ -7,7 +7,6 @@ package releasethekraken.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
@@ -15,47 +14,6 @@ import releasethekraken.GameWorld;
 import releasethekraken.ui.Renderable;
 /**
  * The skeleton class for all entities.
- * 
- * changelog:
- * 
- * --5/11/15--
- * -fixed more documentation
- * -Added default implementation for the constructors
- * 
- * --5/9/15--
- * -added variables
- *  -xLoc - X Location
- *  -yLoc - Y Location
- *  -sprite - Sprite for the entity to display
- * 
- * -added methods
- *  -render() - used to draw the sprite
- *  -update() - used to update (move, add/remove health/stats)
- *  -dispose() - overriden from the Disposable class
- * 
- * -implemented Renderable
- * 
- * --5/10/15--
- * -added variables
- *  -float xVel - X Velocity
- *  -float yVel - Y Velocity
- *  -GameWorld world - where the entity exists
- * 
- * -changed variables
- *  -int xLoc --> float xLoc
- *  -int yLoc --> float yLoc
- * 
- * -removed
- *  -render() - removed and replaced by the following added methods
- *  -Sprite sprite - sprite will be stored in GameAssets file
- * 
- * -added methods
- *  -renderShapes(ShapeRenderer)
- *  -renderSprite(SpriteBatch)
- *  -default constructor
- *      -takes GameWorld and the x/y coordinates as arguments
- *  -constructor
- *      -takes GameWorld and RectangleMapObject as arguments
  * 
  * @author Lucas Schuetz
  */
@@ -94,7 +52,14 @@ public class Entity implements Disposable, Renderable
     public Entity(GameWorld world, TextureMapObject mapObject)
     {
         this.world = world;
-        this.pos = new Vector2(mapObject.getX(), mapObject.getY());
+        
+        /*
+        TODO: I'm not entirely sure the positioning is accurate.  It might only work for 32x32 sprites in the level editor
+        I'm also not sure why I have to add the texture height to the Y coordinate
+        */
+        this.pos = new Vector2(
+                mapObject.getX()/(this.world.getTiledMapUnitScale()) + (mapObject.getTextureRegion().getRegionWidth()/32F), 
+                mapObject.getY()/(this.world.getTiledMapUnitScale()) + (mapObject.getTextureRegion().getRegionWidth()/32F) + (mapObject.getTextureRegion().getRegionWidth()/this.world.getTiledMapUnitScale()));
         this.vel = new Vector2(0, 0);
     }
     
@@ -115,7 +80,7 @@ public class Entity implements Disposable, Renderable
      */
     public void update()
     {
-        //update the entity
+        this.pos.add(this.vel.x/60F, this.vel.y/60F); //Move the entity with their velocity
     }
     
     @Override

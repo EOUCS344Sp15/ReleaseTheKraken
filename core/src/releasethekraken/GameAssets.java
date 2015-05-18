@@ -10,6 +10,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Loads the game assets and provides static references to them
@@ -20,6 +21,12 @@ public class GameAssets extends AssetManager
 {
     //Static references to the game assets
     public static Texture texBadlogic;
+    
+    public static Texture entityTextures;
+    
+    public static TextureRegion entityPlayerTexture;
+    public static TextureRegion entityFishTexture;
+    public static TextureRegion entityGunTowerTexture;
     
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
@@ -44,10 +51,12 @@ public class GameAssets extends AssetManager
         this.load("badlogic.jpg", Texture.class);
         this.load(fontMainDesc);
         this.load(fontDebugDesc);
+        this.load("entities.png", Texture.class);
         
         this.finishLoading(); //Waits until all assets are loaded
         
         texBadlogic = this.get("badlogic.jpg", Texture.class);
+        entityTextures = this.get("entities.png", Texture.class);
         
         //The multiplier to determine the scale for the text
         float textScaleMultiplier = Gdx.graphics.getWidth()/1280.0F;
@@ -57,5 +66,9 @@ public class GameAssets extends AssetManager
         
         fontDebug = (BitmapFont) this.get(fontDebugDesc);
         fontDebug.getData().setScale(0.25F*textScaleMultiplier);
+        
+        entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
+        entityFishTexture = new TextureRegion(entityTextures, 32, 0, 32, 32);
+        entityGunTowerTexture = new TextureRegion(entityTextures, 64, 0, 32, 32);
     }
 }

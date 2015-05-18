@@ -136,11 +136,11 @@ public class GameRenderer implements Disposable
         
         //Calculate the center position of the camera
         float cameraX = MathUtils.clamp(
-                InputHandler.DEV_POS.x - playerXOffset,
+                this.world.getPlayer().getPos().x - playerXOffset,
                 this.camera.viewportWidth/2 - sidebarLocalWidth,
                 this.world.getWidth() - this.camera.viewportWidth/2);
         float cameraY = MathUtils.clamp(
-                InputHandler.DEV_POS.y,
+                this.world.getPlayer().getPos().y,
                 this.camera.viewportHeight/2,
                 this.world.getHeight() - this.camera.viewportHeight/2);
         
@@ -166,17 +166,13 @@ public class GameRenderer implements Disposable
         for (Entity entity : this.world.getEntitites())
             entity.renderShapes(this.worldShapeRenderer);
         
-        //TODO: Remove.  Draws InputHandler.DEV_POS in the world
-        this.worldShapeRenderer.setColor(Color.RED);
-        this.worldShapeRenderer.x(InputHandler.DEV_POS, 2);
-        
         this.worldShapeRenderer.end();
+        
+        this.worldSpriteBatch.begin();
         
         //Draws Entity Sprites
         for (Entity entity : this.world.getEntitites())
             entity.renderSprites(this.worldSpriteBatch);
-        
-        this.worldSpriteBatch.begin();
         
         this.worldSpriteBatch.end();
         

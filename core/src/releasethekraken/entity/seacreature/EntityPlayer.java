@@ -6,10 +6,10 @@
 
 package releasethekraken.entity.seacreature;
 
-
-
-
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 
 /**
@@ -18,6 +18,9 @@ import releasethekraken.GameWorld;
  */
 public class EntityPlayer extends EntitySeaCreature
 {
+    /** The maximum speed the player can move */
+    public final float maxSpeed = 4.0F;
+    
     //Primary constructor
     public EntityPlayer(GameWorld world, float xLocation, float yLocation)
     {
@@ -31,11 +34,53 @@ public class EntityPlayer extends EntitySeaCreature
     public EntityPlayer(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
-        //This will be implemented when the level loader is written
         
         this.health = 15;
         this.maxHealth = 15; 
     }
     
- 
+    @Override
+    public void update()
+    {
+        super.update();
+        
+        //Temporary code to keep the player inside the world bounds, until a collision system is implemented
+        if (this.pos.x < 0)
+            this.vel.add(1, 0);
+        if (this.pos.x > this.world.getWidth())
+            this.vel.add(-1, 0);
+        if (this.pos.y < 0)
+            this.vel.add(0, 1);
+        if (this.pos.y > this.world.getHeight())
+            this.vel.add(0, -1);
+        
+        //Apply friction to the player's velocity
+        if (this.vel.len() > 0)
+        {
+            this.vel.scl(0.9F); //Apply friction to the player
+            
+            //Make the velicity 0 if it is close enough
+            if (this.vel.len() < 0.01F)
+                this.vel.set(0, 0);
+        }
+    }
+    
+    @Override
+    public void renderShapes(ShapeRenderer shapeRenderer)
+    {
+        super.renderShapes(shapeRenderer);
+    }
+    
+    @Override
+    public void renderSprites(SpriteBatch batch)
+    {
+        super.renderSprites(batch);
+        
+        float spriteUnitWidth = 2F;
+        batch.draw(GameAssets.entityPlayerTexture,
+                this.pos.x - spriteUnitWidth/2,
+                this.pos.y - spriteUnitWidth/2,
+                spriteUnitWidth,
+                spriteUnitWidth);
+    }
 }

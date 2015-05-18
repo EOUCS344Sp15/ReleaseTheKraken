@@ -6,8 +6,10 @@
 package releasethekraken.entity.pirate;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 
@@ -51,5 +53,24 @@ public class EntityGunTower extends EntityPirate
             
             Gdx.app.log(this.toString(), "Closest target: " + target);
         }
+    }
+    
+    @Override
+    public void renderShapes(ShapeRenderer shapeRenderer)
+    {
+        super.renderShapes(shapeRenderer);
+    }
+    
+    @Override
+    public void renderSprites(SpriteBatch batch)
+    {
+        super.renderSprites(batch);
+        
+        float spriteUnitWidth = 2F;
+        batch.draw(GameAssets.entityGunTowerTexture,
+                this.pos.x - spriteUnitWidth/2,
+                this.pos.y - spriteUnitWidth/2,
+                spriteUnitWidth,
+                spriteUnitWidth);
     }
 }

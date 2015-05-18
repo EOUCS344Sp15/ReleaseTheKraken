@@ -19,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import releasethekraken.entity.Entity;
+import releasethekraken.entity.seacreature.EntityPlayer;
 
 /**
  * Loads a level from a .tmx file.
@@ -127,8 +128,8 @@ public class LevelLoader
                         Entity entity = constructor.newInstance(newWorld, entityObject);
                         newWorld.addEntity(entity); //Add the entity to the world
                         
-                        //if (entity instanceof EntityPlayer) //Set the player if the entity is the player
-                        //    newWorld.setPlayer((EntityPlayer)entity);
+                        if (entity instanceof EntityPlayer) //Set the player if the entity is the player
+                            newWorld.setPlayer((EntityPlayer)entity);
                     }
                     catch (Exception e)
                     {

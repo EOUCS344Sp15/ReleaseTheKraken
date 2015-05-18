@@ -18,7 +18,7 @@ import releasethekraken.GameWorld;
  * 
  * @author Dalton
  */
-public class UiPointsBar extends InteractiveUiObject
+public class UiPointsBar extends UiObject
 {
     /** The minimum value of the progress bar */
     private int min;

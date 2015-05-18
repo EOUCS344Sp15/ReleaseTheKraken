@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.entity.Entity;
+import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.util.EntityDistanceComparator;
 
 /**
@@ -23,7 +24,7 @@ public class GameWorld implements Disposable
     private long worldTime = 0L;
     /** The world's TiledMap */
     private TiledMap tiledMap;
-    /** The TiledMap's unit scale */
+    /** The TiledMap's unit scale.  This is how many units = 1 meter */
     private float tiledMapUnitScale;
     /** The world's name */
     private String name;
@@ -40,6 +41,9 @@ public class GameWorld implements Disposable
     private int points;
     /** The amount of points required to RELEASE THE KRAKEN! */
     private int pointsForKraken;
+    
+    /** A reference to the player */
+    private EntityPlayer player;
      
     /**
      * Constructs a new GameWorld
@@ -286,6 +290,24 @@ public class GameWorld implements Disposable
         }
         else
             return false;
+    }
+    
+    /**
+     * Gets the EntityPlayer reference
+     * @return The EntityPlayer reference
+     */
+    public EntityPlayer getPlayer()
+    {
+        return this.player;
+    }
+    
+    /**
+     * Sets the player reference
+     * @param entityPlayer The EntityPlayer object that will be the player
+     */
+    public void setPlayer(EntityPlayer entityPlayer)
+    {
+        this.player = entityPlayer;
     }
     
     /**

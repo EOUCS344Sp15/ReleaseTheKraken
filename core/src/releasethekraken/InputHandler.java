@@ -11,6 +11,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.ui.InteractiveUiObject;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiObject;
@@ -197,23 +198,29 @@ public class InputHandler implements InputProcessor
      */
     public void keyHeld(int keycode)
     {
+        EntityPlayer player = this.world.getPlayer();
+        
         switch (keycode)
         {
             case Input.Keys.UP:
             case Input.Keys.W:
-                //DEV_POS.add(0, 0.2F);
+                if (player.getVel().y < player.maxSpeed)
+                    player.getVel().add(0, 0.5F);
                 break;
             case Input.Keys.DOWN:
             case Input.Keys.S:
-                //DEV_POS.add(0, -0.2F);
+               if (player.getVel().y > 0 - player.maxSpeed)
+                    player.getVel().add(0, -0.5F);
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                //DEV_POS.add(-0.2F, 0);
+                if (player.getVel().x > 0 - player.maxSpeed)
+                    player.getVel().add(-0.5F, 0);
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                //DEV_POS.add(0.2F, 0);
+                if (player.getVel().x < player.maxSpeed)
+                    player.getVel().add(0.5F, 0);
                 break;
                 
         }

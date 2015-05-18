@@ -6,8 +6,10 @@
 
 package releasethekraken.entity.seacreature;
 
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 
 /**
@@ -35,5 +37,24 @@ public class EntityFish extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
+    }
+    
+    @Override
+    public void renderShapes(ShapeRenderer shapeRenderer)
+    {
+        super.renderShapes(shapeRenderer);
+    }
+    
+    @Override
+    public void renderSprites(SpriteBatch batch)
+    {
+        super.renderSprites(batch);
+        
+        float spriteUnitWidth = 2F;
+        batch.draw(GameAssets.entityFishTexture,
+                this.pos.x - spriteUnitWidth/2,
+                this.pos.y - spriteUnitWidth/2,
+                spriteUnitWidth,
+                spriteUnitWidth);
     }
 }
