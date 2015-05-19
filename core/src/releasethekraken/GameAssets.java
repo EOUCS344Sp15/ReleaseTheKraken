@@ -23,10 +23,14 @@ public class GameAssets extends AssetManager
     public static Texture texBadlogic;
     
     public static Texture entityTextures;
+    public static Texture uiTextures;
     
     public static TextureRegion entityPlayerTexture;
     public static TextureRegion entityFishTexture;
     public static TextureRegion entityGunTowerTexture;
+    
+    public static TextureRegion[] powerupTextures;
+    public static TextureRegion coinTexture;
     
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
@@ -52,11 +56,13 @@ public class GameAssets extends AssetManager
         this.load(fontMainDesc);
         this.load(fontDebugDesc);
         this.load("entities.png", Texture.class);
+        this.load("hudSprites.png", Texture.class);
         
         this.finishLoading(); //Waits until all assets are loaded
         
         texBadlogic = this.get("badlogic.jpg", Texture.class);
         entityTextures = this.get("entities.png", Texture.class);
+        uiTextures = this.get("hudSprites.png", Texture.class);
         
         //The multiplier to determine the scale for the text
         float textScaleMultiplier = Gdx.graphics.getWidth()/1280.0F;
@@ -70,5 +76,11 @@ public class GameAssets extends AssetManager
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityFishTexture = new TextureRegion(entityTextures, 32, 0, 32, 32);
         entityGunTowerTexture = new TextureRegion(entityTextures, 64, 0, 32, 32);
+        
+        powerupTextures = new TextureRegion[4];
+        for (int i=0; i<4; i++)
+            powerupTextures[i] = new TextureRegion(uiTextures, i*32, 0, 32, 32);
+        
+        coinTexture = new TextureRegion(uiTextures, 0, 32, 16, 16);
     }
 }

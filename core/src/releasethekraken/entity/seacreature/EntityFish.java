@@ -17,7 +17,7 @@ import releasethekraken.GameWorld;
  * @author sbartlett
  */
 public class EntityFish extends EntitySeaCreature
-{
+{    
     //Primary constructor
     public EntityFish(GameWorld world, float xLocation, float yLocation)
     {

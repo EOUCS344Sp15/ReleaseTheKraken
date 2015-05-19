@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.entity.Entity;
+import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.util.EntityDistanceComparator;
 
@@ -55,6 +56,12 @@ public class GameWorld implements Disposable
         this.width = 0;
         this.height = 0;
         this.points = 0;
+        
+        //Add powerups for testing purposes
+        this.entities.add(new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10));
+        this.entities.add(new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20));
+        this.entities.add(new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30));
+        this.entities.add(new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40));
     }
     
     /**

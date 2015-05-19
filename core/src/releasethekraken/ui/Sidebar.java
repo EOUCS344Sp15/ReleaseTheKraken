@@ -118,6 +118,12 @@ public class Sidebar extends UiObject
                 0.16F*scrHeight,
                 0.2F - 0.006F*2,
                 0.04F));
+        
+        renderer.uiObjects.add(new CoinsDisplay(renderer,
+                0.006F*scrWidth,
+                0.92F*scrHeight,
+                0.2F - 0.006F*2,
+                0.06F));
     }
     
     @Override
