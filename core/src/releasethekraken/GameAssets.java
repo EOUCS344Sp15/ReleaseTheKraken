@@ -31,6 +31,9 @@ public class GameAssets extends AssetManager
     
     public static TextureRegion[] powerupTextures;
     public static TextureRegion coinTexture;
+    public static TextureRegion heartTexture;
+    public static TextureRegion strengthTexture;
+    public static TextureRegion clockTexture;
     
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
@@ -69,9 +72,11 @@ public class GameAssets extends AssetManager
         
         fontMain = (BitmapFont) this.get(fontMainDesc);
         fontMain.getData().setScale(0.5F*textScaleMultiplier);
+        fontMain.getData().markupEnabled = true;
         
         fontDebug = (BitmapFont) this.get(fontDebugDesc);
         fontDebug.getData().setScale(0.25F*textScaleMultiplier);
+        fontDebug.getData().markupEnabled = true;
         
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityFishTexture = new TextureRegion(entityTextures, 32, 0, 32, 32);
@@ -82,5 +87,8 @@ public class GameAssets extends AssetManager
             powerupTextures[i] = new TextureRegion(uiTextures, i*32, 0, 32, 32);
         
         coinTexture = new TextureRegion(uiTextures, 0, 32, 16, 16);
+        heartTexture = new TextureRegion(uiTextures, 16, 32, 16, 16);
+        strengthTexture = new TextureRegion(uiTextures, 32, 32, 16, 16);
+        clockTexture = new TextureRegion(uiTextures, 48, 32, 16, 16);
     }
 }

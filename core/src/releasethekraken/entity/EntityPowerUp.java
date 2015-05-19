@@ -6,6 +6,7 @@
 package releasethekraken.entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -27,10 +28,10 @@ public class EntityPowerUp extends Entity
     static //Add stats for each type of power up here
     {
         //TODO: adjust the values
-        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 20, "Damage\nBoost", "A description of the power up should probably go here..."));
-        addStat(Ability.HEALUP, new PowerUpStats(60*20, 30, "Heal", "A description of the power up should probably go here..."));
-        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 40, "Speed\nBoost", "A description of the power up should probably go here..."));
-        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense\nBoost", "A description of the power up should probably go here..."));
+        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 10, "Damage\nBoost", "A description of the power up should probably go here...", Color.valueOf("FF6A00A6")));
+        addStat(Ability.HEALUP, new PowerUpStats(60*20, 20, "Heal", "A description of the power up should probably go here...", Color.CYAN.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 30, "Speed\nBoost", "A description of the power up should probably go here...", Color.WHITE.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense\nBoost", "A description of the power up should probably go here...", Color.TEAL.cpy().sub(0, 0, 0, 0.35F)));
     }
     
     protected Ability type; //tracks the type of power up
@@ -164,6 +165,8 @@ public class EntityPowerUp extends Entity
         public final String name;
         /** A description of the power up */
         public final String description;
+        /** The color of the radius preview, with transparency */
+        public final Color previewColor;
         
         /**
          * Constructs a new PowerUpStats object.  Register it with EntityPowerUp
@@ -171,13 +174,15 @@ public class EntityPowerUp extends Entity
          * @param radius The radius of the effect, in meters
          * @param name The name of the power up
          * @param description A description of the power up
+         * @param previewColor The color of the radius preview, with transparency
          */
-        public PowerUpStats(int duration, int radius, String name, String description)
+        public PowerUpStats(int duration, int radius, String name, String description, Color previewColor)
         {
             this.duration = duration;
             this.radius = radius;
             this.name = name;
             this.description = description;
+            this.previewColor = previewColor;
         }
     }
 }

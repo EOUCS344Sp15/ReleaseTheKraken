@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.ui.tooltip.PowerUpToolTip;
 
 /**
@@ -25,6 +26,8 @@ public class PowerUpUiButton extends UiButton
     private EntityPowerUp.Ability powerUpType;
     /** The power up stats reference */
     private EntityPowerUp.PowerUpStats powerUpStats;
+    /** A local reference to the player */
+    private EntityPlayer player = null;
     
     /**
      * Constructs a new PowerUpUiButton.
@@ -65,6 +68,9 @@ public class PowerUpUiButton extends UiButton
     {
         super.update(world);
         
+        //Update the player reference
+        this.player = world.getPlayer();
+        
         //Update the local power up count
         this.powerUpCount = world.getPowerUps(this.powerUpType);
         
@@ -83,5 +89,25 @@ public class PowerUpUiButton extends UiButton
             world.addPowerUps(this.powerUpType, -1); //Subtract 1 from the power up count
             EntityPowerUp.onUse(world, this.powerUpType); //Use the power up
         }
+    }
+    
+    @Override
+    public void onHover(float x, float y)
+    {
+        super.onHover(x, y);
+        
+        if (this.player != null && this.state != ButtonState.DISABLED) //Make the player render the preview
+            this.player.powerUpPreview = this.powerUpType;
+        else if (this.player != null) //Make the player not render it if the button is disabled
+            this.player.powerUpPreview = null;
+    }
+    
+    @Override
+    public void onLeaveHover()
+    {
+        super.onLeaveHover();
+        
+        if (this.player != null) //Make the player no longer render the preview
+            this.player.powerUpPreview = null;
     }
 }

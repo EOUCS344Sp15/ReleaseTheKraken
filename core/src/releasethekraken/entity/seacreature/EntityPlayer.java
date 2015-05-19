@@ -6,11 +6,13 @@
 
 package releasethekraken.entity.seacreature;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityPowerUp;
 
 /**
  *
@@ -20,6 +22,9 @@ public class EntityPlayer extends EntitySeaCreature
 {
     /** The maximum speed the player can move */
     public final float maxSpeed = 4.0F;
+    
+    /** Which power up to preview the radius for, or null for none */
+    public EntityPowerUp.Ability powerUpPreview = null;
     
     //Primary constructor
     public EntityPlayer(GameWorld world, float xLocation, float yLocation)
@@ -69,6 +74,30 @@ public class EntityPlayer extends EntitySeaCreature
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
         super.renderShapes(shapeRenderer);
+        
+        //Render power up preview
+        if (this.powerUpPreview != null)
+        {
+            shapeRenderer.end();
+            
+            //Enable OpenGL alpha blending
+            Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+            Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+            
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            
+            EntityPowerUp.PowerUpStats powerUpStats = EntityPowerUp.getStats(this.powerUpPreview);
+            
+            shapeRenderer.setColor(powerUpStats.previewColor);
+            shapeRenderer.circle(this.pos.x, this.pos.y, powerUpStats.radius, 32);
+            
+            shapeRenderer.end();
+            
+             //Disable OpenGL blending so everything else doesn't get messed up
+            Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
+            
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        }
     }
     
     @Override

@@ -42,6 +42,7 @@ public class PowerUpToolTip extends ToolTip
         this.powerUpStats = EntityPowerUp.getStats(powerUpType);
         this.color = Color.valueOf("234399");
         
+        //Get the height of the description, in pixels
 	this.descriptionHeight = GameAssets.fontMain.getCache().addText(
                 "Information:\n" + this.powerUpStats.description,
                 0,
@@ -65,7 +66,7 @@ public class PowerUpToolTip extends ToolTip
             float textHeight = GameAssets.fontMain.getCapHeight();
             
             float boxWidth = (0.25F + 0.005F)*Gdx.graphics.getWidth();
-            float boxHeight = this.descriptionHeight + GameAssets.fontMain.getCapHeight();
+            float boxHeight = this.descriptionHeight + GameAssets.fontMain.getCapHeight() + 0.08F*Gdx.graphics.getHeight();
             
             float boxX = mouseX + 0.05F*Gdx.graphics.getWidth();
             float boxY = Gdx.graphics.getHeight() - mouseY + (boxHeight - textHeight)/2 + textHeight/2;
@@ -104,6 +105,22 @@ public class PowerUpToolTip extends ToolTip
             Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
             
             //Start a new shape batch so that it is left in the state it started in
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            
+            //Draw the radius symbol            
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.circle(
+                    boxX + 0.009F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY - 0.04F*Gdx.graphics.getWidth(),
+                    0.008F*Gdx.graphics.getWidth());
+            
+            shapeRenderer.line(
+                    boxX + 0.009F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY - 0.04F*Gdx.graphics.getWidth(),
+                    boxX + 0.009F*Gdx.graphics.getWidth() + 0.008F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY - 0.04F*Gdx.graphics.getWidth());
+            
+            shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         }
     }
@@ -122,14 +139,40 @@ public class PowerUpToolTip extends ToolTip
             float boxX = mouseX + 0.05F*Gdx.graphics.getWidth();
             float boxY = Gdx.graphics.getHeight() - mouseY + (this.descriptionHeight/2);
             
+            //Draw the description, saving the height for the next render
             this.descriptionHeight = GameAssets.fontMain.draw(
                     batch,
-                    "Information:\n" + this.powerUpStats.description,
+                    "[CYAN]Information:[WHITE]\n" + this.powerUpStats.description,
                     boxX,
-                    boxY,
+                    boxY + 0.08F*Gdx.graphics.getHeight()/2,
                     0.25F*Gdx.graphics.getWidth(),
                     -1,
                     true).height;
+            
+            //Draw the duration text
+            GameAssets.fontMain.draw(batch,
+                    String.format("[CYAN]Duration:[WHITE] %.0f secs", this.powerUpStats.duration/60F),
+                    boxX + 0.03F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY - 0.03F*Gdx.graphics.getHeight(),
+                    0.25F*Gdx.graphics.getWidth(),
+                    -1,
+                    false);
+            
+            //Draw the are of effect text
+            GameAssets.fontMain.draw(batch,
+                    String.format("[CYAN]Radius:[WHITE] %d meters", this.powerUpStats.radius),
+                    boxX + 0.03F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY - 0.065F*Gdx.graphics.getHeight(),
+                    0.25F*Gdx.graphics.getWidth(),
+                    -1,
+                    false);
+            
+            //Draw the clock symbol
+            batch.draw(GameAssets.clockTexture,
+                    boxX,
+                    Gdx.graphics.getHeight() - mouseY - 0.055F*Gdx.graphics.getHeight(),
+                    0.018F*Gdx.graphics.getWidth(),
+                    0.018F*Gdx.graphics.getWidth());
         }
     }
 }
