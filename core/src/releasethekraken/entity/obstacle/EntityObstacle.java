@@ -6,23 +6,33 @@
 package releasethekraken.entity.obstacle;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.math.Vector2;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 
 /** The EntityObstacle class represents the Obstacles that are present in the 
- *  game. The entity Obstacle extends EntityLiving. 
+ *  game. The entity Obstacle extends EntityLiving.
  *
  * @author Mitch
  */
 public class EntityObstacle extends EntityLiving
 {
 
+    /**
+     * Primary constructor
+     * @param world
+     * @param xLocation
+     * @param yLocation 
+     */
     public EntityObstacle(GameWorld world, float xLocation, float yLocation) 
     {
         super(world, xLocation, yLocation);
     }
     
+    /**
+     * Secondary constructor
+     * @param world
+     * @param mapObject 
+     */
     public EntityObstacle(GameWorld world, TextureMapObject mapObject)
     {
        super(world, mapObject);

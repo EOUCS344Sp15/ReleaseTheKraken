@@ -12,14 +12,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import java.util.HashMap;
+import releasethekraken.CollisionHandler;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.seacreature.EntityPlayer;
 
 /**
  *
  * @author tarstarkes
  */
-public class EntityPowerUp extends Entity
+public class EntityPowerUp extends Entity implements CollisionHandler
 {
     /** A HashMap to map PowerUpStats to PowerUp types */
     private static final HashMap<Ability, PowerUpStats> powerUpStats 
@@ -141,6 +143,16 @@ public class EntityPowerUp extends Entity
     public static void addStat(Ability ability, PowerUpStats stats)
     {
         powerUpStats.put(ability, stats);
+    }
+
+    @Override
+    public void onCollide(Entity other)
+    {
+        if (other instanceof EntityPlayer) //Allow the player to pick up power ups
+        {
+            this.world.addPowerUps(this.type, 1);
+            this.dispose();
+        }
     }
     
     /**

@@ -46,6 +46,16 @@ public class EntityGunTower extends EntityPirate
     {
         super.update();
         
+        /*
+            I suggest that you make use of the EntityProjectile class.  You can
+            set the owner to "this" to specify the entity that shot the projectile,
+            which will be used in determining what the projectile can collide with
+            and damage.  Maybe subclass it to provide different types of projectiles
+            such as: EntityBullet, EntityCannonBall, EntityWaterSquirt, etc, each
+            with their own unique properties.
+                - Dalton
+        */
+        
         /* This was getting REALLY annoying, so I commented it out :P
         //Code for testing the getClosestTarget method
         if (this.world.getWorldTime() % (5*60) == 0)
