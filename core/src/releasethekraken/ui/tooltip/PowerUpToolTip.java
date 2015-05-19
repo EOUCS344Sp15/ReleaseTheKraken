@@ -7,29 +7,52 @@ package releasethekraken.ui.tooltip;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
+import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.ui.GameRenderer;
 
 /**
- * Represents a ToolTip that displays text.
+ * The tool tip that is shown when hovering over a power up button.
  * @author Dalton
  */
-public class TextToolTip extends ToolTip
+public class PowerUpToolTip extends ToolTip
 {
-    protected String text; //The text to display
+    /** The type of power up shown */
+    private EntityPowerUp.Ability powerUpType;
+    /** The stats for the power up */
+    private EntityPowerUp.PowerUpStats powerUpStats;
+    /** The color of the tool tip */
     protected Color color;
+    /** The height of the description, in pixels */
+    private float descriptionHeight;
     
-    public TextToolTip(GameRenderer renderer, String text)
+    /**
+     * Constructs a new power up tool tip.
+     * @param renderer The GameRenderer reference
+     * @param powerUpType The type of power up being shown
+     */
+    public PowerUpToolTip(GameRenderer renderer, EntityPowerUp.Ability powerUpType)
     {
-        super(renderer, 0.0F, 0.0F);
-        this.text = text;
+        super(renderer);
+        
+        this.powerUpType = powerUpType;
+        this.powerUpStats = EntityPowerUp.getStats(powerUpType);
         this.color = Color.valueOf("234399");
+        
+	this.descriptionHeight = GameAssets.fontMain.getCache().addText(
+                "Information:\n" + this.powerUpStats.description,
+                0,
+                0,
+                0.25F*Gdx.graphics.getWidth(),
+                -1,
+                true).height;
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer) //TODO: Make tool tip display better
+    public void renderShapes(ShapeRenderer shapeRenderer)
     {
         super.renderShapes(shapeRenderer);
         
@@ -40,22 +63,14 @@ public class TextToolTip extends ToolTip
             float mouseY = Gdx.input.getY(0);
             
             float textHeight = GameAssets.fontMain.getCapHeight();
-            float textWidth = GameAssets.fontMain.getSpaceWidth()*this.text.length();
             
-            float boxWidth = textWidth;
-            float boxHeight = textHeight*1.8F;
+            float boxWidth = (0.25F + 0.005F)*Gdx.graphics.getWidth();
+            float boxHeight = this.descriptionHeight + GameAssets.fontMain.getCapHeight();
             
             float boxX = mouseX + 0.05F*Gdx.graphics.getWidth();
             float boxY = Gdx.graphics.getHeight() - mouseY + (boxHeight - textHeight)/2 + textHeight/2;
             
             float triangleAlignX = boxX;
-            
-            //Swap the tooltip to the other side if it's on the other side of the screen
-            if (mouseX > Gdx.graphics.getWidth()/2)
-            {
-                boxX = mouseX - 0.05F*Gdx.graphics.getWidth() - textWidth;
-                triangleAlignX = boxX + boxWidth;
-            }
             
             /*
                 Starting and stopping the shape renderer multiple times and copying 
@@ -94,7 +109,7 @@ public class TextToolTip extends ToolTip
     }
 
     @Override
-    public void renderSprites(SpriteBatch batch) //TODO: Make tool tip display better
+    public void renderSprites(SpriteBatch batch)
     {
         super.renderSprites(batch);
         
@@ -104,17 +119,17 @@ public class TextToolTip extends ToolTip
             float mouseX = Gdx.input.getX(0);
             float mouseY = Gdx.input.getY(0);
             
-            float textHeight = GameAssets.fontMain.getCapHeight();
-            float textWidth = GameAssets.fontMain.getSpaceWidth()*this.text.length();
-            
             float boxX = mouseX + 0.05F*Gdx.graphics.getWidth();
-            float boxY = Gdx.graphics.getHeight() - mouseY + (textHeight/2);
+            float boxY = Gdx.graphics.getHeight() - mouseY + (this.descriptionHeight/2);
             
-            //Swap the tooltip to the other side if it's on the other side of the screen
-            if (mouseX > Gdx.graphics.getWidth()/2)
-                boxX = mouseX - 0.05F*Gdx.graphics.getWidth() - textWidth;
-            
-            GameAssets.fontMain.draw(batch, this.text, boxX, boxY, 1.0F, -1, false);
+            this.descriptionHeight = GameAssets.fontMain.draw(
+                    batch,
+                    "Information:\n" + this.powerUpStats.description,
+                    boxX,
+                    boxY,
+                    0.25F*Gdx.graphics.getWidth(),
+                    -1,
+                    true).height;
         }
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.ui.tooltip.PowerUpToolTip;
 
 /**
  * Represents a power up UI button.  Includes a counter to display how many
@@ -41,6 +42,7 @@ public class PowerUpUiButton extends UiButton
         this.powerUpStats = EntityPowerUp.getStats(powerUpType);
         
         this.text = this.powerUpStats.name;
+        this.setToolTip(new PowerUpToolTip(renderer, powerUpType));
     }
     
     @Override

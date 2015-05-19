@@ -59,6 +59,11 @@ public class EntityPowerUp extends Entity
         this.despawnTimer = mapObject.getProperties().get("Despawn", Integer.class);
     }
     
+    /**
+     * Called when a power up is used.
+     * @param world The world that the power up is used in
+     * @param powerUpType The type of power up that was used
+     */
     public static void onUse(GameWorld world, Ability powerUpType)
     {
         //TODO: use the power up.  Use the values in PowerUpStats.
