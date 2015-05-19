@@ -5,6 +5,7 @@
  */
 package releasethekraken.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -26,10 +27,10 @@ public class EntityPowerUp extends Entity
     static //Add stats for each type of power up here
     {
         //TODO: adjust the values
-        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 20, "Damage Boost", "A description of the power up should probably go here..."));
+        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 20, "Damage\nBoost", "A description of the power up should probably go here..."));
         addStat(Ability.HEALUP, new PowerUpStats(60*20, 30, "Heal", "A description of the power up should probably go here..."));
-        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 40, "Speed Boost", "A description of the power up should probably go here..."));
-        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense Boost", "A description of the power up should probably go here..."));
+        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 40, "Speed\nBoost", "A description of the power up should probably go here..."));
+        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense\nBoost", "A description of the power up should probably go here..."));
     }
     
     protected Ability type; //tracks the type of power up
@@ -56,6 +57,12 @@ public class EntityPowerUp extends Entity
         super(world, mapObject);
         this.type = Ability.valueOf(mapObject.getProperties().get("PowerupType", String.class));
         this.despawnTimer = mapObject.getProperties().get("Despawn", Integer.class);
+    }
+    
+    public static void onUse(GameWorld world, Ability powerUpType)
+    {
+        //TODO: use the power up.  Use the values in PowerUpStats.
+        Gdx.app.log("EntityPowerUp", "onUse(world, " + powerUpType + ")");
     }
     
     @Override

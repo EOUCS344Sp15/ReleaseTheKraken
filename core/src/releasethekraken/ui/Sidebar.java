@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
@@ -72,8 +73,8 @@ public class Sidebar extends UiObject
             buttonX = 0.006F*scrWidth + xOffset;
             buttonY = 0.4F*scrHeight - yOffset;
             
-            this.powerupButtons.add(new UiButton(renderer, buttonX, buttonY, buttonWidth, 
-                    buttonHeight, "Power\nUp " + (i + 1), Color.PURPLE.cpy().sub(0.1F, 0.1F, 0.1F, 0)));
+            this.powerupButtons.add(new PowerUpUiButton(renderer, buttonX, buttonY, buttonWidth, 
+                    buttonHeight, EntityPowerUp.Ability.values()[i]));
         }
         
         //Create the Release the Kraken button

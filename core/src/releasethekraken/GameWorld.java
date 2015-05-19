@@ -32,6 +32,9 @@ public class GameWorld implements Disposable
     /** The array of entities in the world */
     private Array<Entity> entities;
     
+    /** The amount of power ups the player has.  Use EntityPowerUp.Ability.ordinal() as the index */
+    private int[] powerUps;
+    
     //The width and height of the world
     public float width;
     public float height;
@@ -56,6 +59,11 @@ public class GameWorld implements Disposable
         this.width = 0;
         this.height = 0;
         this.points = 0;
+        
+        //Initialize the array of power up counts
+        this.powerUps = new int[4];
+        for (int i=0; i<this.powerUps.length; i++)
+            this.powerUps[i] = 4;
         
         //Add powerups for testing purposes
         this.entities.add(new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10));
@@ -315,6 +323,26 @@ public class GameWorld implements Disposable
     public void setPlayer(EntityPlayer entityPlayer)
     {
         this.player = entityPlayer;
+    }
+    
+    /**
+     * Gets how many power ups the player has of a given type.
+     * @param type The type of power up
+     * @return How many of those power ups the player has
+     */
+    public int getPowerUps(EntityPowerUp.Ability type)
+    {
+        return this.powerUps[type.ordinal()];
+    }
+    
+    /**
+     * Adds (or subtracts) the specified amount of power ups for the given type
+     * @param type The type of power up to add or subtract an amount to
+     * @param amount The amount to add or subtract
+     */
+    public void addPowerUps(EntityPowerUp.Ability type, int amount)
+    {
+        this.powerUps[type.ordinal()] += amount;
     }
     
     /**

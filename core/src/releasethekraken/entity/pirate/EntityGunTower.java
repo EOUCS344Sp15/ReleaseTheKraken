@@ -46,13 +46,14 @@ public class EntityGunTower extends EntityPirate
     {
         super.update();
         
+        /* This was getting REALLY annoying, so I commented it out :P
         //Code for testing the getClosestTarget method
         if (this.world.getWorldTime() % (5*60) == 0)
         {
             EntitySeaCreature target = this.world.getClosestTarget(this, EntitySeaCreature.class);
             
             Gdx.app.log(this.toString(), "Closest target: " + target);
-        }
+        }*/
     }
     
     @Override
