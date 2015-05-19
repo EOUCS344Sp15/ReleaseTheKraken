@@ -70,6 +70,9 @@ public class GameWorld implements Disposable
         this.entities.add(new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20));
         this.entities.add(new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30));
         this.entities.add(new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40));
+        
+        //Add coins for testing purposes
+        this.coins = 1337;
     }
     
     /**

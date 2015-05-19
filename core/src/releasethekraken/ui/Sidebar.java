@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.seacreature.EntityFish;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
@@ -49,6 +51,16 @@ public class Sidebar extends UiObject
         final int scrWidth = Gdx.graphics.getWidth();
         final int scrHeight = Gdx.graphics.getHeight();
         
+        //Array of purchasable units.  TODO: Generate this instead
+        Class[] purchaseableUnits =
+        {
+            EntityFish.class,
+            EntityFish.class,
+            EntityFish.class,
+            EntityFish.class
+        };
+        
+        
         for (int i=0; i<4; i++) //Temporary, until we get actual units to represent
         {
             //Calculate X and Y offsets for the buttons based on the counter variable i
@@ -59,8 +71,8 @@ public class Sidebar extends UiObject
             buttonX = 0.006F*scrWidth + xOffset;
             buttonY = 0.75F*scrHeight - yOffset;
             
-            this.unitButtons.add(new UiButton(renderer, buttonX, buttonY, buttonWidth, 
-                    buttonHeight, "Unit " + (i + 1), Color.BLUE.cpy().sub(0.1F, 0.1F, 0.1F, 0)));
+            this.unitButtons.add(new PurchaseUnitUiButton(renderer, buttonX, buttonY, buttonWidth, 
+                    buttonHeight, purchaseableUnits[i]));
         }
         
         for (int i=0; i<4; i++) //Temporary, until we get actual powerups to represent

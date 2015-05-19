@@ -10,40 +10,40 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
-import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.ui.GameRenderer;
 
 /**
- * The tool tip that is shown when hovering over a power up button.
+ * 
  * @author Dalton
  */
-public class PowerUpToolTip extends ToolTip
+public class PurchaseUnitToolTip extends ToolTip
 {
-    /** The type of power up shown */
-    private EntityPowerUp.Ability powerUpType;
-    /** The stats for the power up */
-    private EntityPowerUp.PowerUpStats powerUpStats;
+    /** The type of sea creature being shown */
+    private Class<? extends EntitySeaCreature> seaCreature;
+    /** The stats for the sea creature */
+    private EntitySeaCreature.SeaCreatureStats seaCreatureStats;
     /** The color of the tool tip */
     protected Color color;
     /** The height of the description, in pixels */
     private float descriptionHeight;
     
     /**
-     * Constructs a new power up tool tip.
+     * Constructs a new purchase unit tool tip.
      * @param renderer The GameRenderer reference
-     * @param powerUpType The type of power up being shown
+     * @param seaCreature The type of sea creature being shown
      */
-    public PowerUpToolTip(GameRenderer renderer, EntityPowerUp.Ability powerUpType)
+    public PurchaseUnitToolTip(GameRenderer renderer, Class<? extends EntitySeaCreature> seaCreature)
     {
         super(renderer);
         
-        this.powerUpType = powerUpType;
-        this.powerUpStats = EntityPowerUp.getStats(powerUpType);
+        this.seaCreature = seaCreature;
+        this.seaCreatureStats = EntitySeaCreature.getStats(seaCreature);
         this.color = Color.valueOf("234399");
         
         //Get the height of the description, in pixels
 	this.descriptionHeight = GameAssets.fontMain.getCache().addText(
-                "Information:\n" + this.powerUpStats.description,
+                "Information:\n" + this.seaCreatureStats.description,
                 0,
                 0,
                 0.25F*Gdx.graphics.getWidth(),
@@ -65,7 +65,7 @@ public class PowerUpToolTip extends ToolTip
             float textHeight = GameAssets.fontMain.getCapHeight();
             
             float boxWidth = (0.25F + 0.005F)*Gdx.graphics.getWidth();
-            float boxHeight = this.descriptionHeight + GameAssets.fontMain.getCapHeight() + 0.08F*Gdx.graphics.getHeight();
+            float boxHeight = this.descriptionHeight + GameAssets.fontMain.getCapHeight() + 0.16F*Gdx.graphics.getHeight();
             
             float boxX = mouseX + 0.05F*Gdx.graphics.getWidth();
             float boxY = Gdx.graphics.getHeight() - mouseY + (boxHeight - textHeight)/2 + textHeight/2;
@@ -104,22 +104,6 @@ public class PowerUpToolTip extends ToolTip
             Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
             
             //Start a new shape batch so that it is left in the state it started in
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            
-            //Draw the radius symbol            
-            shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.circle(
-                    boxX + 0.009F*Gdx.graphics.getWidth(),
-                    Gdx.graphics.getHeight() - mouseY - 0.04F*Gdx.graphics.getWidth(),
-                    0.008F*Gdx.graphics.getWidth());
-            
-            shapeRenderer.line(
-                    boxX + 0.009F*Gdx.graphics.getWidth(),
-                    Gdx.graphics.getHeight() - mouseY - 0.04F*Gdx.graphics.getWidth(),
-                    boxX + 0.009F*Gdx.graphics.getWidth() + 0.008F*Gdx.graphics.getWidth(),
-                    Gdx.graphics.getHeight() - mouseY - 0.04F*Gdx.graphics.getWidth());
-            
-            shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         }
     }
@@ -141,35 +125,74 @@ public class PowerUpToolTip extends ToolTip
             //Draw the description, saving the height for the next render
             this.descriptionHeight = GameAssets.fontMain.draw(
                     batch,
-                    "[CYAN]Information:[WHITE]\n" + this.powerUpStats.description,
+                    "[CYAN]Information:[WHITE]\n" + this.seaCreatureStats.description,
                     boxX,
-                    boxY + 0.08F*Gdx.graphics.getHeight()/2,
+                    boxY + 0.16F*Gdx.graphics.getHeight()/2,
                     0.25F*Gdx.graphics.getWidth(),
                     -1,
                     true).height;
             
-            //Draw the duration text
+            //Draw the health text
             GameAssets.fontMain.draw(batch,
-                    String.format("[CYAN]Duration:[WHITE] %.0f secs", this.powerUpStats.duration/60F),
+                    String.format("%-3d[CYAN]health[WHITE]", this.seaCreatureStats.health),
+                    boxX + 0.03F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY + 0.005F*Gdx.graphics.getHeight(),
+                    0.25F*Gdx.graphics.getWidth(),
+                    -1,
+                    false);
+            
+            //Draw the strength text
+            GameAssets.fontMain.draw(batch,
+                    String.format("%-3d[CYAN]strength[WHITE]", this.seaCreatureStats.strength),
                     boxX + 0.03F*Gdx.graphics.getWidth(),
                     Gdx.graphics.getHeight() - mouseY - 0.03F*Gdx.graphics.getHeight(),
                     0.25F*Gdx.graphics.getWidth(),
                     -1,
                     false);
             
-            //Draw the are of effect text
+            //Draw the price text
             GameAssets.fontMain.draw(batch,
-                    String.format("[CYAN]Radius:[WHITE] %d meters", this.powerUpStats.radius),
+                    String.format("%-3d[CYAN]coins[WHITE]", this.seaCreatureStats.cost),
                     boxX + 0.03F*Gdx.graphics.getWidth(),
                     Gdx.graphics.getHeight() - mouseY - 0.065F*Gdx.graphics.getHeight(),
                     0.25F*Gdx.graphics.getWidth(),
                     -1,
                     false);
             
+            //Draw the build time text
+            GameAssets.fontMain.draw(batch,
+                    String.format("%-3.0f[CYAN]seconds[WHITE]", this.seaCreatureStats.buildTime/60F),
+                    boxX + 0.03F*Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight() - mouseY - 0.1F*Gdx.graphics.getHeight(),
+                    0.25F*Gdx.graphics.getWidth(),
+                    -1,
+                    false);
+            
+            //Draw the clock symbol
+            batch.draw(GameAssets.heartTexture,
+                    boxX,
+                    Gdx.graphics.getHeight() - mouseY - 0.02F*Gdx.graphics.getHeight(),
+                    0.018F*Gdx.graphics.getWidth(),
+                    0.018F*Gdx.graphics.getWidth());
+            
+            //Draw the clock symbol
+            batch.draw(GameAssets.strengthTexture,
+                    boxX,
+                    Gdx.graphics.getHeight() - mouseY - 0.055F*Gdx.graphics.getHeight(),
+                    0.018F*Gdx.graphics.getWidth(),
+                    0.018F*Gdx.graphics.getWidth());
+            
+            //Draw the clock symbol
+            batch.draw(GameAssets.coinTexture,
+                    boxX,
+                    Gdx.graphics.getHeight() - mouseY - 0.090F*Gdx.graphics.getHeight(),
+                    0.018F*Gdx.graphics.getWidth(),
+                    0.018F*Gdx.graphics.getWidth());
+            
             //Draw the clock symbol
             batch.draw(GameAssets.clockTexture,
                     boxX,
-                    Gdx.graphics.getHeight() - mouseY - 0.055F*Gdx.graphics.getHeight(),
+                    Gdx.graphics.getHeight() - mouseY - 0.125F*Gdx.graphics.getHeight(),
                     0.018F*Gdx.graphics.getWidth(),
                     0.018F*Gdx.graphics.getWidth());
         }

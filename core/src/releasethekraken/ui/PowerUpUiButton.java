@@ -31,7 +31,7 @@ public class PowerUpUiButton extends UiButton
     
     /**
      * Constructs a new PowerUpUiButton.
-     * @param renderer The GameRenderer instance
+     * @param renderer The GameRenderer reference
      * @param x The X coordinate, in pixels
      * @param y Tye Y coordinate, in pixels
      * @param width The width, in percentage of the screen width

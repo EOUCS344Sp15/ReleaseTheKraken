@@ -21,7 +21,7 @@ public class EntitySeaCreature extends EntityLiving
     static //Add stats for each type of sea creature here
     {
         //TODO: adjust the values
-        addStat(EntityFish.class, new SeaCreatureStats(10, 5, 2, "Basic Fish", "A description of a fish should probably go here..."));
+        addStat(EntityFish.class, new SeaCreatureStats(10, 10, 5, 2*60, "Basic\nFish", "A description of a fish should probably go here..."));
     }
     
     //Primary constructor
@@ -65,6 +65,8 @@ public class EntitySeaCreature extends EntityLiving
     {
         /** How much the sea creature costs, in coins */
         public final int cost;
+        /** How much health the sea creature starts with */
+        public final int health;
         /** How strong the sea creature's attack is */
         public final int strength;
         /** How long it takes to spawn the sea creature, in ticks */
@@ -77,14 +79,16 @@ public class EntitySeaCreature extends EntityLiving
         /**
          * Constructs a new SeaCreatureStats object.  Register it with EntitySeaCreature
          * @param cost How much the sea creature costs, in coins
+         * @param health How much health the sea creature starts with
          * @param strength How strong the sea creature's attack is
          * @param buildTime How long it takes to spawn the sea creature, in ticks
          * @param name The name of the sea creature
          * @param description A description of the sea creature
          */
-        public SeaCreatureStats(int cost, int strength, int buildTime, String name, String description)
+        public SeaCreatureStats(int cost, int health, int strength, int buildTime, String name, String description)
         {
             this.cost = cost;
+            this.health = health;
             this.strength = strength;
             this.buildTime = buildTime;
             this.name = name;
