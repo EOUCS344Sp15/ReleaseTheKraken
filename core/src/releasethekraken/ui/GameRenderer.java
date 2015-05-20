@@ -16,8 +16,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
-import releasethekraken.InputHandler;
 import releasethekraken.entity.Entity;
+import releasethekraken.path.SeaCreaturePath;
 import releasethekraken.ui.tooltip.TextToolTip;
 import releasethekraken.ui.tooltip.ToolTip;
 
@@ -50,6 +50,9 @@ public class GameRenderer implements Disposable
     public boolean debugScreenVisible = false;
     private DebugOverlay debugOverlay;
     
+    /** A list of all paths to render */
+    private Array<SeaCreaturePath> seaCreaturePaths = new Array<SeaCreaturePath>();
+    
     /**
      * Constructs a new GameRenderer
      * @param world The world to be rendered
@@ -57,6 +60,9 @@ public class GameRenderer implements Disposable
     public GameRenderer(GameWorld world)
     {
         this.world = world;
+        
+        //Populate the list of connected paths
+        this.world.getFirstPath().getAllConnectedPaths(this.seaCreaturePaths);
         
         //Create the camera to view the world
         this.camera = new OrthographicCamera();
@@ -175,6 +181,19 @@ public class GameRenderer implements Disposable
             entity.renderSprites(this.worldSpriteBatch);
         
         this.worldSpriteBatch.end();
+        
+        //Draw debug world overlay stuff
+        if (this.debugScreenVisible)
+        {
+            this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        
+            //Draw paths
+            this.worldShapeRenderer.setColor(Color.RED);
+            for (SeaCreaturePath scPath : this.seaCreaturePaths)
+                this.worldShapeRenderer.polyline(scPath.getPolyline().getTransformedVertices());
+
+            this.worldShapeRenderer.end();
+        }
         
         //Updates UI objects
         for (UiObject obj : this.uiObjects)

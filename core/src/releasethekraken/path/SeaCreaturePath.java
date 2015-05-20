@@ -5,9 +5,13 @@
  */
 package releasethekraken.path;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Polyline;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import java.util.Arrays;
 
 /**
  * Represents a path that sea creatures can go on.  Can end with 0 - n branching
@@ -39,7 +43,57 @@ public class SeaCreaturePath
         this.id = id;
         this.parent = parent;
         this.nextPaths = nextPaths;
+        
+        final float scale = 1/16F; //Scale it down to match the world units
+        
+        //Scale the polyline to match the world units.
+        //This has to be done manually because Polyline.setScale() doesn't seem to work.
+        float[] vertices = polyline.getTransformedVertices();
+        for (int i=0; i<vertices.length; i++)
+            vertices[i] *= scale;
+        polyline = new Polyline(vertices);
+        
         this.polyline = polyline;
+        
+        vertices = polyline.getVertices(); //Get an array of vertices, in x1, y1, x2, y2,... format
+        Vector2[] points = new Vector2[vertices.length/2]; //Make an array of Vector2 objects
+        
+        //Convert the vertices to Vector2 objects
+        for (int i=0; i<points.length; i++)
+        {
+            float x = vertices[i*2];
+            float y = vertices[(i*2)+1];
+            points[i] = new Vector2(x, y);
+        }
+        
+        //Make the smooth path with the points
+        this.path = new CatmullRomSpline<Vector2>(points, false);
+        
+        Gdx.app.log("SCPath " + this.toString(true), "Points: " + Arrays.toString(points));
+    }
+    
+    /**
+     * Fills the array with this path, and all paths connected to it in some way.
+     * This method is recursive, as it calls itself on the parent path and all
+     * next paths.
+     * @param connectedPaths The list (preferably empty) to fill with a list of connected paths
+     */
+    public void getAllConnectedPaths(Array<SeaCreaturePath> connectedPaths)
+    {
+        //Add this path to the list if it isn't already there
+        if (!connectedPaths.contains(this, true))
+            connectedPaths.add(this);
+        else
+            return; //If this is already added, then it's already been called on this
+        
+        //Add parent's connected paths
+        if (this.parent != null)
+            this.parent.getAllConnectedPaths(connectedPaths);
+        
+        //Add next path's connected paths
+        for (SeaCreaturePath nextPath : this.nextPaths)
+            if (nextPath != null)
+                nextPath.getAllConnectedPaths(connectedPaths);
     }
 
     /**
@@ -76,6 +130,15 @@ public class SeaCreaturePath
     public void setNextPaths(Array<SeaCreaturePath> nextPaths)
     {
         this.nextPaths = nextPaths;
+    }
+    
+    /**
+     * Gets the path's Polyline
+     * @return The path's Polyline
+     */
+    public Polyline getPolyline()
+    {
+        return this.polyline;
     }
     
     @Override

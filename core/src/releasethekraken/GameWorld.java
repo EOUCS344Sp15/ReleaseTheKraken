@@ -99,12 +99,12 @@ public class GameWorld implements Disposable
         //Update the points from the dev position for testing purposes.  TODO: Remove
         this.points = (int) InputHandler.DEV_POS.y * 10;
         
-        //Print the paths for debugging purposes.  TODO: Make this work for any path setup, or remove
+        //Print the paths for debugging purposes.
         if (this.worldTime == 10)
-        {
-            Gdx.app.log("GameWorld", "First Path: " + this.firstPath);
-            for (SeaCreaturePath nextPath : this.firstPath.getNextPaths())
-                Gdx.app.log("GameWorld", "Next Path: " + nextPath);
+        {            
+            Array<SeaCreaturePath> paths = new Array<SeaCreaturePath>();
+            this.firstPath.getAllConnectedPaths(paths);
+            Gdx.app.log("GameWorld", "Paths: " + paths);
         }
     }
     
