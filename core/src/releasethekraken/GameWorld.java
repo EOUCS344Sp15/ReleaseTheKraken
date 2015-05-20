@@ -5,12 +5,14 @@
  */
 package releasethekraken;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
+import releasethekraken.path.SeaCreaturePath;
 import releasethekraken.util.EntityDistanceComparator;
 
 /**
@@ -48,6 +50,9 @@ public class GameWorld implements Disposable
     
     /** A reference to the player */
     private EntityPlayer player;
+    
+    /** The beginning of the chain of paths that sea creatures can take */
+    private SeaCreaturePath firstPath;
      
     /**
      * Constructs a new GameWorld
@@ -93,6 +98,14 @@ public class GameWorld implements Disposable
         
         //Update the points from the dev position for testing purposes.  TODO: Remove
         this.points = (int) InputHandler.DEV_POS.y * 10;
+        
+        //Print the paths for debugging purposes.  TODO: Make this work for any path setup, or remove
+        if (this.worldTime == 10)
+        {
+            Gdx.app.log("GameWorld", "First Path: " + this.firstPath);
+            for (SeaCreaturePath nextPath : this.firstPath.getNextPaths())
+                Gdx.app.log("GameWorld", "Next Path: " + nextPath);
+        }
     }
     
     /**
@@ -346,6 +359,24 @@ public class GameWorld implements Disposable
     public void addPowerUps(EntityPowerUp.Ability type, int amount)
     {
         this.powerUps[type.ordinal()] += amount;
+    }
+
+    /**
+     * Gets the beginning of the chain of paths that sea creatures can take
+     * @return The first path
+     */
+    public SeaCreaturePath getFirstPath()
+    {
+        return firstPath;
+    }
+
+    /**
+     * Sets the beginning of the chain of paths that sea creature can take
+     * @param firstPath The first path
+     */
+    public void setFirstPath(SeaCreaturePath firstPath)
+    {
+        this.firstPath = firstPath;
     }
     
     /**

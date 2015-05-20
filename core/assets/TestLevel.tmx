@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="17">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="20">
  <properties>
   <property name="krakenpoints" value="250"/>
   <property name="levelname" value="Test Level"/>
@@ -50,12 +50,27 @@
  </tileset>
  <layer name="terrain" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztWdFOwzAMzMY2unUCAYP9/5+SSj3hHU5qp2lTCR5OnaosuXNsJ3YvIYTLP0w4RLxHHCNOG+BTyv8j4h7xGnFuzOVE7yx2vY7cgV3EVyMdvbL+zchnGLeP+BzRSoOHM6NryNnrN2tr8OSLYewQl63iMYfBxxFrL4ax3ng8jDaCrZbKrx4dV8MY5v8RHvPSgLcFtEgdU/5iiWuN/z381lLbNz06Su2v6dmiDsR/ij9rWOLMkzpK/NaiYelzW+Pg2ROvBksuKYG849yd65RoWGsvPDr4nrclDVYd8v9aTm2lwZMPrf6EOdfeB+uavRiLe/dTYq79DA3y3iefqL3m7j3iAv73HJapibzx543vPvzWIc+gGhpKcqF3bXA+K2vWioWSvfCuDR3D2c++aj1Dpe9Lvz8qc1rzifdO1WfmtOQ6L88cf6BExzU82sGTX3M2KOVf6s89zemZBz0SLU/L+ebEhbX+H7jIM6PEFtzzYV0pPfLMwnNuXgGXGvkptU87odW71tS+LNl7gh5gyd5cNwJ17JZ6y1qf1mI7+Ce0tdYhz7Zcj4l7iZ141xEuYX19Wl7XzpU+PNbwXfjpBbEOK2rq4HyRyqW3cQy0WHi01JPLE6zFOnfpfi1pA2hJ3fWtPfk19oZ54U4KfhwrctwWevKaLWU9AO6aDyIXt/6+BC7Mgeua1rYuxVo6pP/yNxPrOa3FQEpH7e8Xll59zn7yW5Gcg/OQVi/X0uLpKbCOqfqSdaTquDk9Z2+NK89m5KKp+pJ1YzzXN3P2JNUTSdVQkhNy0VRfZcqvanxXstTqqKOQ37lW4NqU/8d596aMnetb4CDrW/6t8ci9t9S6XKvVqo//8ffwDcNYbGo=
+   eJztWWtvwjAMDO/Sok0bMP7/P10i9TRjnNbOo6k0PpxAKDQ+xz7Hbu+c699QYe/x7XHwOK7Anhi6ETH7rx4Pj0+Pc2NfHtlvMb9SPpfRdmDj8dOIxyDsf1PaE9ZtPe4jWnGw2LxGTMVNa7u0ehHWhrxslY9TCDGOXPtQrLXm4370EXxVS18tPC6KNdz+q3vWpYCvClwoj7l40eS1ZP/DvXIpHZsWHqn+l/iskQfyP2Y/51Cj5lEeKXGr4VC7bks2WM7EykGjJSmgd5yHcZ8UDkudhYUHv+etiYOWB/2/pKmtOFj0UBtPeObS56DdcyBrce/eRZ61zeBA7330E71X7tkjLxB/J1enJ7LmnzW/B/fKg9agEhxStNC6N2w+C3uWyoWUs7DuDR6h9vNY1dZQGvs07g/CM7V6Yr1TDS6utRqts9o5ZT+QwiPc3Xfk/xZ9pXlUyv6ceA5c7gyWGYmk09QnOXkhzcoknEbk5DGf+XBeMT60ZuEzV1dK8Jk7pw3haq2p2nOpAfABas7GMK9FH7umWZY0p9X4DvEZm0UvDVrbpmZMfJbYkd86ht4tz0/SdamuDO65h+/c3yyI89CiJA+uF7G6ghoILho7WvKZ0gnORfvs1POq6QNwid31tTP5Jc6G24U7KezjuULXrWEmL/mS9gOwXYpBeu9q/X5HmkXzvqa1r1OxFA8av/ydibZOSzkQ41H6/YVmVj/lP/quiD6D65DUL5fiYpkpcB5z/SXnEevjcmbO1h6X1mZo0Vx/yXljPe9vcs4kNhPR9P7Qorm5ylxclXivpOnV0UdB33mvAJ2P9V9cd2/C2tzYgg20v+XfJTumftf0urxXK9Ufv/H/8AsTRGxg
   </data>
  </layer>
  <objectgroup name="paths">
   <object id="3" x="522" y="1652">
-   <polyline points="0,0 50,-272 268,-392 530,-424 830,-414 904,-466 898,-538 766,-636 454,-620 334,-646 66,-714 0,-794 14,-882 134,-982 338,-1078 476,-1190 556,-1296"/>
+   <properties>
+    <property name="next" value="17,18"/>
+   </properties>
+   <polyline points="0,0 50,-272 268,-392 530,-424 830,-414 904,-466 898,-538 766,-636 454,-620 334,-646 66,-714"/>
+  </object>
+  <object id="17" x="585" y="937">
+   <properties>
+    <property name="next" value=""/>
+   </properties>
+   <polyline points="0,0 -57,-105 -8,-216 151,-330 280,-426 486,-616"/>
+  </object>
+  <object id="18" x="584" y="937">
+   <properties>
+    <property name="next" value=""/>
+   </properties>
+   <polyline points="0,0 -200,-9 -405,-26 -501,-102 -515,-244 -493,-416 -359,-559 -197,-697 12,-761 185,-726 488,-618"/>
   </object>
  </objectgroup>
  <objectgroup name="entities">
@@ -72,5 +87,6 @@
   <object id="14" gid="27" x="1322.67" y="608" width="32" height="32"/>
   <object id="15" gid="27" x="562.667" y="534.667" width="32" height="32"/>
   <object id="16" gid="27" x="382.667" y="654.667" width="32" height="32"/>
+  <object id="19" gid="27" x="1061" y="764" width="32" height="32"/>
  </objectgroup>
 </map>
