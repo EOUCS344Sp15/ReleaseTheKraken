@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import java.util.HashMap;
-import releasethekraken.CollisionHandler;
+import releasethekraken.util.CollisionHandler;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.seacreature.EntityPlayer;

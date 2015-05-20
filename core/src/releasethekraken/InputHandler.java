@@ -15,6 +15,7 @@ import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.ui.InteractiveUiObject;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiObject;
+import releasethekraken.util.Screenshots;
 
 /**
  * Handles various types of input
@@ -74,6 +75,9 @@ public class InputHandler implements InputProcessor
             break;
         case Input.Keys.NUMPAD_6:
             DEV_POS.add(1, 0);
+            break;
+        case Input.Keys.F12: //Screenshot
+            Screenshots.saveScreenshot();
             break;
         }
         

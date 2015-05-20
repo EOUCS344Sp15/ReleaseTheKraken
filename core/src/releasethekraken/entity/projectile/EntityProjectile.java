@@ -5,7 +5,7 @@
  */
 package releasethekraken.entity.projectile;
 
-import releasethekraken.CollisionHandler;
+import releasethekraken.util.CollisionHandler;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.pirate.EntityPirate;
