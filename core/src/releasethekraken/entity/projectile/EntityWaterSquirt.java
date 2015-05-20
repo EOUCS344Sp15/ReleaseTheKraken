@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.Entity;
-import releasethekraken.entity.projectile.EntityProjectile;
 
 /**
  *
