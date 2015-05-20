@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.projectile.EntityProjectile;
+import releasethekraken.entity.projectile.EntityWaterSquirt;
 
 /**
  *
@@ -56,5 +58,15 @@ public class EntityFish extends EntitySeaCreature
                 this.pos.y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
+    }
+    
+    /**
+     * Builds and returns a new projectile
+     * @param world The world that the projectile is in
+     * @return an EntityWaterSquirt projectile owned by this.EntityFish
+     */
+    public EntityProjectile attack(GameWorld world)
+    {
+        return new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this);
     }
 }
