@@ -21,8 +21,9 @@ public class EntitySeaCreature extends EntityLiving
     static //Add stats for each type of sea creature here
     {
         //TODO: adjust the values
-        addStat(EntityFish.class, new SeaCreatureStats(10, 10, 5, 2*60, "Basic\nFish", "A description of a fish should probably go here..."));
-        addStat(EntityTurtle.class, new SeaCreatureStats(10, 10, 5, 2*60, "Turtle", "The turtle is tanky but his damage is a little low. "));
+        addStat(EntityFish.class, new SeaCreatureStats(10, 10, 5, 2*60, "Fish", "A description of a fish should probably go here..."));
+        addStat(EntityTurtle.class, new SeaCreatureStats(60, 50, 3, 5*60, "Turtle", "The turtle is tanky but his damage is a little low. "));
+        addStat(EntityOrca.class, new SeaCreatureStats(150, 100, 20, 10*60, "Orca", "A description of an orca should probably go here..."));
     }
     
     //Primary constructor
