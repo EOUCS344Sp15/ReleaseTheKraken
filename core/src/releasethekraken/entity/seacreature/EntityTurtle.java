@@ -16,38 +16,37 @@ import releasethekraken.entity.projectile.EntityWaterSquirt;
 
 /**
  *
- * @author sbartlett
+ * @author mwinburn
  */
-public class EntityFish extends EntitySeaCreature
-{    
+public class EntityTurtle extends EntitySeaCreature 
+{
+    
     /**
-     * Primary Constructor for EntityFish
+     * Primary Constructor for EntityTurtle
      * @param world Variable containing the game world
      * @param xLocation X Location in the world
      * @param yLocation Y Location in the world
      */
-    public EntityFish(GameWorld world, float xLocation, float yLocation)
+    public EntityTurtle(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
         
-        //TODO: Change these
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 20;
+        this.maxHealth = 20;
     }
     
     /**
-     * Secondary Constructor for EntityFish
+     * Secondary Constructor for EntityTurtle
      * @param world Variable containing the game world
      * @param mapObject Variable holding a texture map
      */
-    public EntityFish(GameWorld world, TextureMapObject mapObject)
+    public EntityTurtle(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
         //This will be implemented when the level loader is written
         
-        //TODO: Change these
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 20;
+        this.maxHealth = 20;
     }
     
     @Override
@@ -62,6 +61,7 @@ public class EntityFish extends EntitySeaCreature
         super.renderSprites(batch);
         
         float spriteUnitWidth = 2F;
+        /* Temporary use of the Fish Texture until we get one for turtle */
         batch.draw(GameAssets.entityFishTexture,
                 this.pos.x - spriteUnitWidth/2,
                 this.pos.y - spriteUnitWidth/2,
