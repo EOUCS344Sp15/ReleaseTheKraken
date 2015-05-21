@@ -65,8 +65,8 @@ public class EntityFish extends EntitySeaCreature
      * @param world The world that the projectile is in
      * @return an EntityWaterSquirt projectile owned by this.EntityFish
      */
-    public EntityProjectile attack(GameWorld world)
+    public void attack()
     {
-        return new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this);
+        this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
     }
 }
