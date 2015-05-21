@@ -10,13 +10,15 @@ import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 
 /**
- *
+ * Last Edit: 
  * @author tyang
  */
 public class EntityPirate extends EntityLiving
 {
     /** The amount of points the pirate is worth if killed */
-    private int points;
+    protected int points;
+    /** The amount of time between attack function calls (measured in seconds).*/
+    protected int attackRate;
     
     //Primary constructor
     public EntityPirate(GameWorld world, float xLocation, float yLocation)
