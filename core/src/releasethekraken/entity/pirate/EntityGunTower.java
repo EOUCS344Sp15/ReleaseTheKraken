@@ -19,7 +19,7 @@ import releasethekraken.entity.seacreature.EntitySeaCreature;
  */
 public class EntityGunTower extends EntityPirate
 {
-
+    
     //Primary constructor
     public EntityGunTower(GameWorld world, float xLocation, float yLocation)
     {
@@ -28,6 +28,8 @@ public class EntityGunTower extends EntityPirate
         //Override variables for this type of entity
         this.health = 10;
         this.maxHealth = 10;
+        this.points = 5;
+        this.attackRate = 5;
     }
     
     //Secondary constructor
@@ -64,6 +66,14 @@ public class EntityGunTower extends EntityPirate
             
             Gdx.app.log(this.toString(), "Closest target: " + target);
         }*/
+        
+        /**                         */
+        /*
+        if (this.world.getWorldTime() % (attackRate*60) == 0)
+        {
+            attack();
+        }
+                */
     }
     
     @Override
@@ -83,5 +93,10 @@ public class EntityGunTower extends EntityPirate
                 this.pos.y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
+    }
+    
+    public void attack()
+    {
+        // Create Projectile
     }
 }
