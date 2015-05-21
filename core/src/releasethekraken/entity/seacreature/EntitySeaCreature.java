@@ -22,6 +22,7 @@ public class EntitySeaCreature extends EntityLiving
     {
         //TODO: adjust the values
         addStat(EntityFish.class, new SeaCreatureStats(10, 10, 5, 2*60, "Basic\nFish", "A description of a fish should probably go here..."));
+        addStat(EntityTurtle.class, new SeaCreatureStats(10, 10, 5, 2*60, "Turtle", "The turtle is tanky but his damage is a little low. "));
     }
     
     //Primary constructor
