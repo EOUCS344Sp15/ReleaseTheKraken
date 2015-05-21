@@ -71,7 +71,6 @@ public class EntityFish extends EntitySeaCreature
     
     /**
      * Builds and returns a new projectile
-     * @param world The world that the projectile is in
      */
     public void attack()
     {
