@@ -13,7 +13,7 @@ import releasethekraken.entity.EntityLiving;
  * Last Edit: 
  * @author tyang
  */
-public class EntityPirate extends EntityLiving
+public abstract class EntityPirate extends EntityLiving
 {
     /** The amount of points the pirate is worth if killed */
     protected int points;

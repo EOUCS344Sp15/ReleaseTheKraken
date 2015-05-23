@@ -7,6 +7,12 @@ package releasethekraken;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.entity.Entity;
@@ -14,6 +20,7 @@ import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.path.SeaCreaturePath;
 import releasethekraken.util.EntityDistanceComparator;
+import releasethekraken.physics.PhysicsContactListener;
 
 /**
  * This class represents the game world.  When a new level is loaded, a new
@@ -22,7 +29,11 @@ import releasethekraken.util.EntityDistanceComparator;
  * @author Dalton
  */
 public class GameWorld implements Disposable
-{    
+{
+    /** The Box2D physics world */
+    private World physWorld;
+    /** The array of physics bodies in the physics world */
+    private Array<Body> physBodies;
     /** The world time, in ticks */
     private long worldTime = 0L;
     /** The world's TiledMap */
@@ -31,8 +42,6 @@ public class GameWorld implements Disposable
     private float tiledMapUnitScale;
     /** The world's name */
     private String name;
-    /** The array of entities in the world */
-    private Array<Entity> entities;
     
     /** The amount of power ups the player has.  Use EntityPowerUp.Ability.ordinal() as the index */
     private int[] powerUps;
@@ -59,11 +68,15 @@ public class GameWorld implements Disposable
      */
     public GameWorld()
     {
-        this.entities = new Array<Entity>();
         this.name = "DefaultWorldName";
         this.width = 0;
         this.height = 0;
         this.points = 0;
+        
+        Vector2 gravity = new Vector2(0, 0); //The world's gravity.  Since this is top down, it is 0
+        this.physWorld = new World(gravity, true); //Create the physics world
+        this.physWorld.setContactListener(new PhysicsContactListener()); //Set the physics world's contact listener
+        this.physBodies = new Array<Body>();
         
         //Initialize the array of power up counts
         this.powerUps = new int[4];
@@ -71,10 +84,10 @@ public class GameWorld implements Disposable
             this.powerUps[i] = 4;
         
         //Add powerups for testing purposes
-        this.entities.add(new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10));
-        this.entities.add(new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20));
-        this.entities.add(new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30));
-        this.entities.add(new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40));
+        //this.entities.add(new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10));
+        //this.entities.add(new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20));
+        //this.entities.add(new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30));
+        //this.entities.add(new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40));
         
         //Add coins for testing purposes
         this.coins = 1337;
@@ -85,7 +98,18 @@ public class GameWorld implements Disposable
      */
     public void update()
     {
+        this.physWorld.getBodies(this.physBodies); //Refreshes the physBodies array
         this.worldTime++;
+        
+        for (Body body : this.physBodies)
+        {
+            Object object = body.getUserData();
+            
+            if (object instanceof Entity)
+                ((Entity)object).update();
+        }
+        
+        this.physWorld.step(1F/ReleaseTheKraken.TICK_RATE, 6, 2); //Calculate physics
         
         /*
         Update world entities
@@ -93,8 +117,8 @@ public class GameWorld implements Disposable
         causes problems when an entity iterates over all entites while being
         updated (see GameWorld.getClosestTarget())
         */
-        for(int i=0; i<this.entities.size; i++)
-            this.entities.get(i).update();
+        //for(int i=0; i<this.entities.size; i++)
+        //    this.entities.get(i).update();
         
         //Update the points from the dev position for testing purposes.  TODO: Remove
         this.points = (int) InputHandler.DEV_POS.y * 10;
@@ -106,6 +130,53 @@ public class GameWorld implements Disposable
             this.firstPath.getAllConnectedPaths(paths);
             Gdx.app.log("GameWorld", "Paths: " + paths);
         }
+    }
+    
+    /**
+     * Spawns the boundaries around the world.  Should only be called once, after
+     * the world size variables have been set.
+     * Code copy and pasted from Dalton's app
+     */
+    public void spawnWorldBoundaries()
+    {
+        //Set up boundaries
+        EdgeShape edgeShape = new EdgeShape();
+
+        //The fixture def
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = 10000.0F;
+        fixtureDef.friction = 0.4F;
+        fixtureDef.restitution = 0.0F;
+
+        //The body def
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+
+        //The body
+        Body body = this.physWorld.createBody(bodyDef);
+
+        //Top part
+        edgeShape.set(0, this.height, this.width, this.height);
+        fixtureDef.shape = edgeShape;
+        body.createFixture(fixtureDef);
+
+        //Left part
+        edgeShape.set(0, 0, 0, this.height);
+        fixtureDef.shape = edgeShape;
+        body.createFixture(fixtureDef);
+
+        //Right part
+        edgeShape.set(this.width, 0, this.width, this.height);
+        fixtureDef.shape = edgeShape;
+        body.createFixture(fixtureDef);
+
+        //Bottom part
+        edgeShape.set(0, 0, this.width, 0);
+        fixtureDef.shape = edgeShape;
+        fixtureDef.friction = 2.0F; //300.0F;
+        body.createFixture(fixtureDef);
+
+        edgeShape.dispose();
     }
     
     /**
@@ -211,9 +282,11 @@ public class GameWorld implements Disposable
     public void dispose()
     {
         //Dispose of all entities in the world
-        for (Entity entity : this.entities)
-            entity.dispose();
+        for (Body body : this.physBodies)
+            if (body.getUserData() instanceof Entity)
+                ((Entity)body.getUserData()).dispose();
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
+        this.physWorld.dispose();
     }
     
     @Override
@@ -221,17 +294,23 @@ public class GameWorld implements Disposable
     {
         return this.getName() + "[w: " + this.width + ", h: " + this.height + "]";
     }
-    
+
     /**
-     * Adds an entity to the world
-     * @param entity The entity to add
+     * Gets the Box2D physics world
+     * @return The Box2D physics world
      */
-    public void addEntity(Entity entity)
+    public World getPhysWorld()
     {
-        if (this.entities.contains(entity, true) == false)
-        {
-            this.entities.add(entity);
-        }
+        return physWorld;
+    }
+
+    /**
+     * Gets the list of physics bodies in the world
+     * @return The list of physics bodies
+     */
+    public Array<Body> getPhysBodies()
+    {
+        return physBodies;
     }
     
     /**
@@ -240,17 +319,7 @@ public class GameWorld implements Disposable
      */
     public void removeEntity(Entity entity)
     {
-        this.entities.removeValue(entity, true);
-    }
-    
-    /**
-     * Gets the array of entities, for rendering purposes.  
-     * TODO: Is there a way to have this only visible to GameRenderer?
-     * @return The array of entities
-     */
-    public Array<Entity> getEntitites()
-    {
-        return this.entities;
+        this.physWorld.destroyBody(entity.getPhysBody()); //Removes the entity from the physics world
     }
 
     /**
@@ -397,9 +466,18 @@ public class GameWorld implements Disposable
         Array<E> targets = new Array<E>(); //Set up an array to hold all potential targets
         
         //Find potential entities and add them to the array
-        for (Entity ent : this.entities)           
-            if (targetType.isAssignableFrom(ent.getClass()))
-                targets.add((E)ent);
+        for (Body body : this.physBodies)
+        {
+            Object object = body.getUserData();
+            
+            if (object instanceof Entity)
+            {
+                Entity ent = (Entity)object;
+                
+                if (targetType.isAssignableFrom(ent.getClass()))
+                    targets.add((E)ent);
+            }
+        }
         
         targets.sort(new EntityDistanceComparator<E>(source)); //Sort the array of entities based on distance
         

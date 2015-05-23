@@ -15,6 +15,9 @@ public class ReleaseTheKraken extends Game
     /** The HashMap to store registered entities */
     private static HashMap<String, Class<? extends Entity>> entityMap = new HashMap<String, Class<? extends Entity>>();
     
+    /** How many times the game updates per second */
+    public static final int TICK_RATE = 60;
+    
     //Register game objects
     static
     {

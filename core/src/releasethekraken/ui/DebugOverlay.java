@@ -90,7 +90,7 @@ public class DebugOverlay extends UiObject
             nativeHeap.data = String.format("%-12.12s : %-6.3f MB", "Native Heap", Gdx.app.getNativeHeap()/1024F/1024F);
             worldStats1.data = "Level: " + world.getName();
             worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
-            worldStats3.data = String.format("%-12.12s : %-6s", "Entities", world.getEntitites().size);
+            worldStats3.data = String.format("%-12.12s : %-6s", "Phys Bodies", world.getPhysBodies().size);
             devPos.data = String.format("Dev Pos: x:%-3.0f y:%-3.0f", InputHandler.DEV_POS.x, InputHandler.DEV_POS.y);
             playerStats1.data = String.format("Player Pos: X:%-2.1f Y:%-2.1f", world.getPlayer().getPos().x, world.getPlayer().getPos().y);
             playerStats2.data = String.format("Player Vel: X:%-2.1f Y:%-2.1f m/s", world.getPlayer().getVel().x, world.getPlayer().getVel().y);

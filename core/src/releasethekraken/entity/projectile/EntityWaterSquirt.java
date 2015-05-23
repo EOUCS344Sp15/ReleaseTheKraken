@@ -17,9 +17,9 @@ import releasethekraken.entity.Entity;
 public class EntityWaterSquirt extends EntityProjectile
 {
 
-    public EntityWaterSquirt(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner) 
+    public EntityWaterSquirt(GameWorld world, float xLoc, float yLoc, Entity owner) 
     {
-        super(world, xLoc, yLoc, xVel, yVel, owner);
+        super(world, xLoc, yLoc, owner);
     }
     
     @Override
@@ -29,8 +29,8 @@ public class EntityWaterSquirt extends EntityProjectile
         
         float spriteUnitWidth = 2F;
         batch.draw(GameAssets.entityFishTexture, //TODO: Need a sprite for WaterSquirt
-                this.pos.x - spriteUnitWidth/2,
-                this.pos.y - spriteUnitWidth/2,
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
     }

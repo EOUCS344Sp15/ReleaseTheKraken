@@ -42,6 +42,12 @@ public class EntityOrca extends EntitySeaCreature
     }
     
     @Override
+    protected void spawnInWorld(float x, float y, float xVel, float yVel)
+    {
+        //TODO: Copy and modify the code from EntityPlayer
+    }
+    
+    @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
         super.renderShapes(shapeRenderer);
@@ -54,8 +60,8 @@ public class EntityOrca extends EntitySeaCreature
         
         float spriteUnitWidth = 2F;
         batch.draw(GameAssets.entityFishTexture, //TODO: Need Orca Sprite
-                this.pos.x - spriteUnitWidth/2,
-                this.pos.y - spriteUnitWidth/2,
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
     }
@@ -66,6 +72,6 @@ public class EntityOrca extends EntitySeaCreature
     public void attack()
     {
         //TODO: Make EntityWaterBomb for the Orca attack
-        this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
+        //this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
     }
 }

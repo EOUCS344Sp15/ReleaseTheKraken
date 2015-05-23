@@ -11,6 +11,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import java.util.HashMap;
 import releasethekraken.util.CollisionHandler;
 import releasethekraken.GameAssets;
@@ -53,6 +58,7 @@ public class EntityPowerUp extends Entity implements CollisionHandler
         super(world, xLocation, yLocation);
         this.type = ptype;
         this.despawnTimer = seconds*60;
+        this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
     public EntityPowerUp(GameWorld world, TextureMapObject mapObject)
@@ -60,6 +66,36 @@ public class EntityPowerUp extends Entity implements CollisionHandler
         super(world, mapObject);
         this.type = Ability.valueOf(mapObject.getProperties().get("PowerupType", String.class));
         this.despawnTimer = mapObject.getProperties().get("Despawn", Integer.class);
+    }
+    
+    @Override
+    protected void spawnInWorld(float x, float y, float xVel, float yVel)
+    {
+        //TODO: Copy and modify the code from EntityPlayer
+        //Set up hitbox shape - Defines the hitbox
+        CircleShape hitbox = new CircleShape();
+        hitbox.setRadius(1);
+        
+        //Set up body definition - Defines the type of physics body that this is
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(x, y);
+        bodyDef.fixedRotation = true;
+        
+        //Set up physics body - Defines the actual physics body
+        this.physBody = this.world.getPhysWorld().createBody(bodyDef);
+        this.physBody.setUserData(this); //Store this object into the body so that it isn't lost
+        
+        //Set up physics fixture - Defines physical properties
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = hitbox;
+        fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
+        fixtureDef.friction = 0.1F; //friction with other objects
+        fixtureDef.restitution = 0.0F; //Bouncyness
+        this.physBody.createFixture(fixtureDef);
+        
+        //Dispose of the hitbox shape, which is no longer needed
+        hitbox.dispose();
     }
     
     /**
@@ -111,8 +147,8 @@ public class EntityPowerUp extends Entity implements CollisionHandler
         
         float spriteUnitWidth = 2F;
         batch.draw(texture,
-                this.pos.x - spriteUnitWidth/2,
-                this.pos.y - spriteUnitWidth/2,
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
     }

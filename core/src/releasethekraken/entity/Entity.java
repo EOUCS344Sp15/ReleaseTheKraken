@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
 import releasethekraken.ui.Renderable;
@@ -17,16 +18,12 @@ import releasethekraken.ui.Renderable;
  * 
  * @author Lucas Schuetz
  */
-public class Entity implements Disposable, Renderable
+public abstract class Entity implements Disposable, Renderable
 {
     /** The game world that the entity is in */
     protected GameWorld world;
-    
-    /** The position of the entity */
-    protected Vector2 pos;
-    
-    /** The velocity of the entity */
-    protected Vector2 vel;
+    /** The entity's physics body in the physics world */
+    protected Body physBody = null;
     
     /**
      *  Default constructor
@@ -38,8 +35,6 @@ public class Entity implements Disposable, Renderable
     public Entity(GameWorld world, float xLocation, float yLocation)
     {
         this.world = world;
-        this.pos = new Vector2(xLocation, yLocation);
-        this.vel = new Vector2(0, 0);
     }
     
     /**
@@ -57,11 +52,25 @@ public class Entity implements Disposable, Renderable
         TODO: I'm not entirely sure the positioning is accurate.  It might only work for 32x32 sprites in the level editor
         I'm also not sure why I have to add the texture height to the Y coordinate
         */
-        this.pos = new Vector2(
-                mapObject.getX()/(this.world.getTiledMapUnitScale()) + (mapObject.getTextureRegion().getRegionWidth()/32F), 
-                mapObject.getY()/(this.world.getTiledMapUnitScale()) + (mapObject.getTextureRegion().getRegionWidth()/32F) + (mapObject.getTextureRegion().getRegionWidth()/this.world.getTiledMapUnitScale()));
-        this.vel = new Vector2(0, 0);
+        this.spawnInWorld(
+                mapObject.getX()/(this.world.getTiledMapUnitScale()) + (mapObject.getTextureRegion().getRegionWidth()/32F),
+                mapObject.getY()/(this.world.getTiledMapUnitScale()) + (mapObject.getTextureRegion().getRegionWidth()/32F) + (mapObject.getTextureRegion().getRegionWidth()/this.world.getTiledMapUnitScale()),
+                0,
+                0);
     }
+    
+    /**
+     * Spawns the entity in the physics world.  The entity should create its
+     * physics body in the physics world, and attach itself to it.  This should
+     * be called by the constructor.
+     * This <strong>MUST</strong> be implemented, as an entity cannot exist in 
+     * the world without doing this.
+     * @param x The X position in the world
+     * @param y The Y position in the world
+     * @param xVel The X velocity
+     * @param yVel The Y velocity
+     */
+    protected abstract void spawnInWorld(float x, float y, float xVel, float yVel);
     
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
@@ -80,7 +89,7 @@ public class Entity implements Disposable, Renderable
      */
     public void update()
     {
-        this.pos.add(this.vel.x/60F, this.vel.y/60F); //Move the entity with their velocity
+        
     }
     
     @Override
@@ -93,22 +102,33 @@ public class Entity implements Disposable, Renderable
     @Override
     public String toString()
     {
-        return this.getClass().getSimpleName() + "[" + this.pos.x + ", " + this.pos.y + "]";
+        return this.getClass().getSimpleName() + "[" + this.physBody.getPosition().x + ", " + this.physBody.getPosition().y + "]";
     }
-
+    
     /**
-     * @return The entity's position
+     * Gets the entity's physics body
+     * @return The entity's physics body
+     */
+    public Body getPhysBody()
+    {
+        return this.physBody;
+    }
+    
+    /**
+     * Gets the entity's position from its physics body
+     * @return The vector position of the entity
      */
     public Vector2 getPos()
     {
-        return pos;
+        return this.physBody.getPosition();
     }
-
+    
     /**
-     * @return The entity's velocity
+     * Gets the linear velocity of the entity
+     * @return The vector linear velocity of the entity
      */
     public Vector2 getVel()
     {
-        return vel;
+        return this.physBody.getLinearVelocity();
     }
 }

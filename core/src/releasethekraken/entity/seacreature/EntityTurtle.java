@@ -50,6 +50,12 @@ public class EntityTurtle extends EntitySeaCreature
     }
     
     @Override
+    protected void spawnInWorld(float x, float y, float xVel, float yVel)
+    {
+        //TODO: Copy and modify the code from EntityPlayer
+    }
+    
+    @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
         super.renderShapes(shapeRenderer);
@@ -63,8 +69,8 @@ public class EntityTurtle extends EntitySeaCreature
         float spriteUnitWidth = 2F;
         /* Temporary use of the Fish Texture until we get one for turtle */
         batch.draw(GameAssets.entityFishTexture,
-                this.pos.x - spriteUnitWidth/2,
-                this.pos.y - spriteUnitWidth/2,
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
     }
@@ -74,6 +80,6 @@ public class EntityTurtle extends EntitySeaCreature
      */
     public void attack()
     {
-        this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
+        //this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
     }
 }

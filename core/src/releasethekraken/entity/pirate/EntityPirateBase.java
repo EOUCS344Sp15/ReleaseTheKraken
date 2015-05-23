@@ -39,6 +39,12 @@ public class EntityPirateBase extends EntityPirate
     }
     
     @Override
+    protected void spawnInWorld(float x, float y, float xVel, float yVel)
+    {
+        //TODO: Copy and modify the code from EntityPlayer
+    }
+    
+    @Override
     public void update()
     {
         super.update();

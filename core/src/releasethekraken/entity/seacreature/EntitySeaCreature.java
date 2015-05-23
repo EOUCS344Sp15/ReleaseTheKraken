@@ -12,7 +12,7 @@ import releasethekraken.entity.EntityLiving;
  *
  * @author mwinburn
  */
-public class EntitySeaCreature extends EntityLiving
+public abstract class EntitySeaCreature extends EntityLiving
 {
     /** A HashMap to map SeaCreatureStats to SeaCreature classes */
     private static final HashMap<Class<? extends EntitySeaCreature>, SeaCreatureStats> unitStats 

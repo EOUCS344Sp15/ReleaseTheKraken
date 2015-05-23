@@ -12,7 +12,7 @@ import releasethekraken.GameWorld;
  * Represents a living entity with health that can die.
  * @author Dalton
  */
-public class EntityLiving extends Entity
+public abstract class EntityLiving extends Entity
 {
     /** The entity's health */
     protected int health;

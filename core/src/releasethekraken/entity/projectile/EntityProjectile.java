@@ -35,13 +35,18 @@ public class EntityProjectile extends Entity implements CollisionHandler
      * @param yVel The Y velocity of the projectile
      * @param owner The owner of the projectile, or null
      */
-    public EntityProjectile(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
+    public EntityProjectile(GameWorld world, float xLoc, float yLoc, Entity owner)
     {
         super(world, xLoc, yLoc);
-        this.vel.set(xVel, yVel); //Set the velocity
         this.owner = owner; //Sets the owner of the projectile
         this.despawnTimer = -1; //Default despawn timer (never despawns)
         this.damage = 5; //Default damage
+    }
+    
+    @Override
+    protected void spawnInWorld(float x, float y, float xVel, float yVel)
+    {
+        //TODO: Copy and modify the code from EntityPlayer
     }
     
     @Override

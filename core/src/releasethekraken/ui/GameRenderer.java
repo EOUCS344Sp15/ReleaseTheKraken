@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
@@ -40,6 +42,8 @@ public class GameRenderer implements Disposable
     private ShapeRenderer worldShapeRenderer;
     /** The camera to view the world */
     private OrthographicCamera camera;
+    /** The Box2D Debug Renderer */
+    Box2DDebugRenderer box2DDebugRenderer;
     /** The OrthogonalTiledMapRenderer to render the tile map */
     OrthogonalTiledMapRenderer tiledMapRenderer;
     
@@ -80,6 +84,10 @@ public class GameRenderer implements Disposable
         //Set the world renderers to render to the camera's projection matrix
         this.worldSpriteBatch.setProjectionMatrix(this.camera.combined);
         this.worldShapeRenderer.setProjectionMatrix(this.camera.combined);
+        
+        //Create the Box2D debug renderer
+        this.box2DDebugRenderer = new Box2DDebugRenderer();
+        this.box2DDebugRenderer.setDrawVelocities(true);
         
         //Create the tile map renderer
         this.tiledMapRenderer = new OrthogonalTiledMapRenderer(world.getTiledMap(), 1/(world.getTiledMapUnitScale()));
@@ -169,16 +177,24 @@ public class GameRenderer implements Disposable
         this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         
         //Draws Entity Shapes
-        for (Entity entity : this.world.getEntitites())
-            entity.renderShapes(this.worldShapeRenderer);
+        for (Body body : this.world.getPhysBodies())
+        {
+            Object object = body.getUserData();
+            if (object instanceof Entity)
+                ((Entity)object).renderShapes(this.worldShapeRenderer);
+        }
         
         this.worldShapeRenderer.end();
         
         this.worldSpriteBatch.begin();
         
         //Draws Entity Sprites
-        for (Entity entity : this.world.getEntitites())
-            entity.renderSprites(this.worldSpriteBatch);
+        for (Body body : this.world.getPhysBodies())
+        {
+            Object object = body.getUserData();
+            if (object instanceof Entity)
+                ((Entity)object).renderSprites(this.worldSpriteBatch);
+        }
         
         this.worldSpriteBatch.end();
         
@@ -193,6 +209,9 @@ public class GameRenderer implements Disposable
                 this.worldShapeRenderer.polyline(scPath.getPolyline().getTransformedVertices());
 
             this.worldShapeRenderer.end();
+            
+            //Render Box2D debug renderer
+            this.box2DDebugRenderer.render(this.world.getPhysWorld(), this.camera.combined);
         }
         
         //Updates UI objects
@@ -247,5 +266,6 @@ public class GameRenderer implements Disposable
         this.uiShapeRenderer.dispose();
         this.worldShapeRenderer.dispose();
         this.tiledMapRenderer.dispose();
+        this.box2DDebugRenderer.dispose();
     }
 }

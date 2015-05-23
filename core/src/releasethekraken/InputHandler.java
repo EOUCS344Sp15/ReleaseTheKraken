@@ -208,23 +208,23 @@ public class InputHandler implements InputProcessor
         {
             case Input.Keys.UP:
             case Input.Keys.W:
-                if (player.getVel().y < player.maxSpeed)
-                    player.getVel().add(0, 0.5F);
+                //if (player.getPhysBody().getLinearVelocity().y < player.maxSpeed)
+                    player.getPhysBody().applyForceToCenter(0, player.moveForce, true);
                 break;
             case Input.Keys.DOWN:
             case Input.Keys.S:
-               if (player.getVel().y > 0 - player.maxSpeed)
-                    player.getVel().add(0, -0.5F);
+                //if (player.getPhysBody().getLinearVelocity().y > 0 - player.maxSpeed)
+                    player.getPhysBody().applyForceToCenter(0, -player.moveForce, true);
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                if (player.getVel().x > 0 - player.maxSpeed)
-                    player.getVel().add(-0.5F, 0);
+                //if (player.getPhysBody().getLinearVelocity().x > 0 - player.maxSpeed)
+                    player.getPhysBody().applyForceToCenter(-player.moveForce, 0, true);
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                if (player.getVel().x < player.maxSpeed)
-                    player.getVel().add(0.5F, 0);
+                //if (player.getPhysBody().getLinearVelocity().x < player.maxSpeed)
+                    player.getPhysBody().applyForceToCenter(player.moveForce, 0, true);
                 break;
                 
         }

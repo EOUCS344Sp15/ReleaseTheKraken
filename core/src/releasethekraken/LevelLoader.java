@@ -73,6 +73,7 @@ public class LevelLoader
         newWorld.setHeight(properties.get("height", Integer.class)*2);
         newWorld.setTiledMap(map);
         newWorld.setTiledMapUnitScale(unitScale);
+        newWorld.spawnWorldBoundaries();
         
         //Load Entity Tile Data
         Gdx.app.log("LevelLoader", "Parsing entity tile data");
@@ -130,7 +131,7 @@ public class LevelLoader
                         //Construct a new entity by finding the correct constructor from its class, and reflectively instantiating it.  Magic!
                         Constructor<? extends Entity> constructor = entityClass.getConstructor(GameWorld.class, TextureMapObject.class);
                         Entity entity = constructor.newInstance(newWorld, entityObject);
-                        newWorld.addEntity(entity); //Add the entity to the world
+                        //newWorld.addEntity(entity); //Add the entity to the world //With Box2D, the entity should add itself to the world
                         
                         if (entity instanceof EntityPlayer) //Set the player if the entity is the player
                             newWorld.setPlayer((EntityPlayer)entity);
