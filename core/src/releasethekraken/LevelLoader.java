@@ -24,6 +24,7 @@ import java.util.Iterator;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.path.SeaCreaturePath;
+import releasethekraken.util.MapBodyManager;
 
 /**
  * Loads a level from a .tmx file.
@@ -56,12 +57,16 @@ public class LevelLoader
     {
         Gdx.app.log("LevelLoader", "Loading level \"" + this.levelName + "\"");
         
+        MapBodyManager mapBodyManager;
         GameWorld newWorld = new GameWorld();
         
         //Make a new TiledMap
         TiledMap map = new TmxMapLoader().load(this.levelName + ".tmx");
         
         float unitScale = 16.0F; //16 pixels = 1 meter
+        
+        mapBodyManager = new MapBodyManager(newWorld.getPhysWorld(), unitScale, null, 2);
+        mapBodyManager.createPhysics(map, "physics");
         
         //Get the map properties
         MapProperties properties = map.getProperties();

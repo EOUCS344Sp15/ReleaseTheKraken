@@ -34,6 +34,8 @@ public class GameWorld implements Disposable
     private World physWorld;
     /** The array of physics bodies in the physics world */
     private Array<Body> physBodies;
+    /** The array of physics bodies that should be removed as soon as possible */
+    private Array<Body> physBodiesToRemove;
     /** The world time, in ticks */
     private long worldTime = 0L;
     /** The world's TiledMap */
@@ -77,17 +79,18 @@ public class GameWorld implements Disposable
         this.physWorld = new World(gravity, true); //Create the physics world
         this.physWorld.setContactListener(new PhysicsContactListener()); //Set the physics world's contact listener
         this.physBodies = new Array<Body>();
+        this.physBodiesToRemove = new Array<Body>();
         
         //Initialize the array of power up counts
         this.powerUps = new int[4];
         for (int i=0; i<this.powerUps.length; i++)
-            this.powerUps[i] = 4;
+            this.powerUps[i] = 0;
         
         //Add powerups for testing purposes
-        //this.entities.add(new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10));
-        //this.entities.add(new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20));
-        //this.entities.add(new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30));
-        //this.entities.add(new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40));
+        new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10);
+        new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20);
+        new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30);
+        new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40);
         
         //Add coins for testing purposes
         this.coins = 1337;
@@ -110,6 +113,13 @@ public class GameWorld implements Disposable
         }
         
         this.physWorld.step(1F/ReleaseTheKraken.TICK_RATE, 6, 2); //Calculate physics
+        
+        //Remove physics bodies that need to be destroyed
+        for (Body body : this.physBodiesToRemove)
+        {
+            this.physBodiesToRemove.removeValue(body, true);
+            this.physWorld.destroyBody(body);
+        }
         
         /*
         Update world entities
@@ -319,7 +329,11 @@ public class GameWorld implements Disposable
      */
     public void removeEntity(Entity entity)
     {
-        this.physWorld.destroyBody(entity.getPhysBody()); //Removes the entity from the physics world
+        if (entity.getPhysBody() != null)
+        {
+            this.physBodiesToRemove.add(entity.getPhysBody());
+            Gdx.app.log("GameWorld", "removeEntity(" + entity + ");");
+        }
     }
 
     /**

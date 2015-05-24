@@ -5,7 +5,6 @@
  */
 package releasethekraken.entity.projectile;
 
-import releasethekraken.util.CollisionHandler;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.pirate.EntityPirate;
@@ -17,7 +16,7 @@ import releasethekraken.entity.seacreature.EntitySeaCreature;
  * 
  * @author Dalton
  */
-public class EntityProjectile extends Entity implements CollisionHandler
+public class EntityProjectile extends Entity
 {
     /** The owner of the projectile, can be null */
     private Entity owner;
@@ -95,7 +94,7 @@ public class EntityProjectile extends Entity implements CollisionHandler
         this.despawnTimer = despawnTimer;
     }
 
-    @Override
+    //@Override //TODO: Move this code to the PhysicsContactListener
     public void onCollide(Entity other)
     {
         if (other == this.owner) //Ignore collisions with the projectile's owner

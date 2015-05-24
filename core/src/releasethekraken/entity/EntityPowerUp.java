@@ -17,7 +17,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import java.util.HashMap;
-import releasethekraken.util.CollisionHandler;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.seacreature.EntityPlayer;
@@ -26,7 +25,7 @@ import releasethekraken.entity.seacreature.EntityPlayer;
  *
  * @author tarstarkes
  */
-public class EntityPowerUp extends Entity implements CollisionHandler
+public class EntityPowerUp extends Entity
 {
     /** A HashMap to map PowerUpStats to PowerUp types */
     private static final HashMap<Ability, PowerUpStats> powerUpStats 
@@ -181,14 +180,14 @@ public class EntityPowerUp extends Entity implements CollisionHandler
         powerUpStats.put(ability, stats);
     }
 
-    @Override
-    public void onCollide(Entity other)
+    /**
+     * Called when the power up is collided with the player
+     */
+    public void onPickUp()
     {
-        if (other instanceof EntityPlayer) //Allow the player to pick up power ups
-        {
-            this.world.addPowerUps(this.type, 1);
-            this.dispose();
-        }
+        Gdx.app.log("EntityPowerUp", "onPickUp()");
+        this.world.addPowerUps(this.type, 1);
+        this.dispose(); //TODO: Uncomment this after a way to safely delete entities is made
     }
     
     /**

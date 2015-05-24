@@ -7,6 +7,7 @@ package releasethekraken.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
@@ -56,10 +57,10 @@ public class PowerUpUiButton extends UiButton
         //Draw the amount of power ups
         GameAssets.fontMain.draw(batch,
                 this.powerUpCount + "",
-                this.x + 0.8F*this.width,
+                this.x,
                 this.y + 0.22F*this.height,
-                this.width,
-                -1,
+                this.width - 0.02F*this.width,
+                Align.right,
                 false);
     }
     
