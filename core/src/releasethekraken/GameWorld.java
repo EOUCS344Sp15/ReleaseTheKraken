@@ -104,9 +104,9 @@ public class GameWorld implements Disposable
         this.physWorld.getBodies(this.physBodies); //Refreshes the physBodies array
         this.worldTime++;
         
-        for (Body body : this.physBodies)
+        for (int i=0; i<this.physBodies.size; i++)
         {
-            Object object = body.getUserData();
+            Object object = this.physBodies.get(i).getUserData();
             
             if (object instanceof Entity)
                 ((Entity)object).update();
