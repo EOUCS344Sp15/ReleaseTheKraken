@@ -19,14 +19,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class GameAssets extends AssetManager
 {
-    //Static references to the game assets
-    public static Texture texBadlogic;
-    
+    //Static references to the game assets    
     public static Texture entityTextures;
     public static Texture uiTextures;
     
     public static TextureRegion entityPlayerTexture;
     public static TextureRegion entityFishTexture;
+    public static TextureRegion entityTurtleTexture;
+    public static TextureRegion entityOrcaTexture;
     public static TextureRegion entityGunTowerTexture;
     
     public static TextureRegion[] powerupTextures;
@@ -55,7 +55,6 @@ public class GameAssets extends AssetManager
         AssetDescriptor fontDebugDesc = new AssetDescriptor(
                 Gdx.files.internal("data/DebugFont.fnt"), BitmapFont.class);
         
-        this.load("badlogic.jpg", Texture.class);
         this.load(fontMainDesc);
         this.load(fontDebugDesc);
         this.load("entities.png", Texture.class);
@@ -63,7 +62,6 @@ public class GameAssets extends AssetManager
         
         this.finishLoading(); //Waits until all assets are loaded
         
-        texBadlogic = this.get("badlogic.jpg", Texture.class);
         entityTextures = this.get("entities.png", Texture.class);
         uiTextures = this.get("hudSprites.png", Texture.class);
         
@@ -80,6 +78,8 @@ public class GameAssets extends AssetManager
         
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityFishTexture = new TextureRegion(entityTextures, 32, 0, 32, 32);
+        entityTurtleTexture = new TextureRegion(entityTextures, 96, 0, 32, 32);
+        entityOrcaTexture = new TextureRegion(entityTextures, 0, 32, 32, 32);
         entityGunTowerTexture = new TextureRegion(entityTextures, 64, 0, 32, 32);
         
         powerupTextures = new TextureRegion[4];

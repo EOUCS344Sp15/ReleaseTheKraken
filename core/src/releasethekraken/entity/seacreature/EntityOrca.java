@@ -59,7 +59,7 @@ public class EntityOrca extends EntitySeaCreature
         super.renderSprites(batch);
         
         float spriteUnitWidth = 2F;
-        batch.draw(GameAssets.entityFishTexture, //TODO: Need Orca Sprite
+        batch.draw(GameAssets.entityOrcaTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,

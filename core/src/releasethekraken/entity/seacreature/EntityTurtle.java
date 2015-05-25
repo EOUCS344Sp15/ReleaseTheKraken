@@ -67,8 +67,7 @@ public class EntityTurtle extends EntitySeaCreature
         super.renderSprites(batch);
         
         float spriteUnitWidth = 2F;
-        /* Temporary use of the Fish Texture until we get one for turtle */
-        batch.draw(GameAssets.entityFishTexture,
+        batch.draw(GameAssets.entityTurtleTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,
