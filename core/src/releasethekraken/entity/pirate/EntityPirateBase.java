@@ -38,6 +38,19 @@ public class EntityPirateBase extends EntityPirate
         this.maxHealth = 1000000;
     }
     
+    /**
+     * 
+     * 
+     * @author tyang
+     */
+    public void regenerateHealth()
+    {
+        this.health += 1000;
+        if (this.health > this.maxHealth)
+        {
+            this.health = this.maxHealth;
+        }
+    }
     @Override
     protected void spawnInWorld(float x, float y, float xVel, float yVel)
     {
@@ -48,5 +61,10 @@ public class EntityPirateBase extends EntityPirate
     public void update()
     {
         super.update();
+        
+        if (this.world.getWorldTime() % (10*60) == 0)
+        {
+            regenerateHealth();
+        }
     }
 }
