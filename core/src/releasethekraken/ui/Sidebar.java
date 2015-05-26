@@ -13,7 +13,6 @@ import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityOrca;
-import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.entity.seacreature.EntityTurtle;
 import releasethekraken.ui.tooltip.TextToolTip;
 

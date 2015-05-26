@@ -1,9 +1,5 @@
 package releasethekraken.util;
 
-import java.lang.reflect.Constructor;
-import java.util.Iterator;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapLayer;
@@ -29,11 +25,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonValue.JsonIterator;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.JsonValue.JsonIterator;
-import releasethekraken.GameWorld;
-import releasethekraken.screen.GameScreen;
+import java.util.Iterator;
 
 /**
  * Copy and pasted from Dalton's app.  Modified a bit.

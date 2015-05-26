@@ -11,8 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
-import releasethekraken.entity.projectile.EntityProjectile;
-import releasethekraken.entity.projectile.EntityWaterSquirt;
 
 /**
  *

@@ -5,18 +5,14 @@
  */
 package releasethekraken.entity.pirate;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
-import releasethekraken.entity.seacreature.EntitySeaCreature;
 
 /**
  *
@@ -91,7 +87,7 @@ public class EntityGunTower extends EntityPirate
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         
