@@ -11,6 +11,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import releasethekraken.entity.Entity;
+import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.ui.InteractiveUiObject;
 import releasethekraken.ui.UiButton;
@@ -61,6 +63,7 @@ public class InputHandler implements InputProcessor
     public boolean keyDown(int keycode)
     {
         this.heldKeys[keycode] = true; //The key is now pressed
+        EntityPlayer player = this.world.getPlayer();
         
         switch(keycode)
         {
@@ -78,6 +81,17 @@ public class InputHandler implements InputProcessor
             break;
         case Input.Keys.F12: //Screenshot
             Screenshots.saveScreenshot();
+            break;
+            
+        /*projectile firing key
+            - currently shoots fish because projectile class in not finished yet.
+        */
+        case Input.Keys.SPACE:
+                EntityFish projectile = new EntityFish(this.world, player.getPos().x, player.getPos().y);
+                projectile.getPhysBody().setLinearDamping(0);
+                projectile.getPhysBody().getFixtureList().get(0).setRestitution(1);
+                projectile.getPhysBody().applyLinearImpulse(1000, 1000, 0, 0, true);
+
             break;
         }
         
