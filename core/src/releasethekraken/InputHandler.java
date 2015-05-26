@@ -12,6 +12,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.entity.Entity;
+import releasethekraken.entity.projectile.EntityProjectile;
+import releasethekraken.entity.projectile.EntitySeaShell;
 import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.ui.InteractiveUiObject;
@@ -83,15 +85,12 @@ public class InputHandler implements InputProcessor
             Screenshots.saveScreenshot();
             break;
             
-        /*projectile firing key
-            - currently shoots fish because projectile class in not finished yet.
-        */
+        //Player projectiles
         case Input.Keys.SPACE:
-                EntityFish projectile = new EntityFish(this.world, player.getPos().x, player.getPos().y);
-                projectile.getPhysBody().setLinearDamping(0);
-                projectile.getPhysBody().getFixtureList().get(0).setRestitution(1);
-                projectile.getPhysBody().applyLinearImpulse(1000, 1000, 0, 0, true);
-
+            Vector2 mousePos = this.pointerLocations.first();
+            Gdx.app.log("InputHandler::PlayerShoot", "MousePos: " + mousePos + " PlayerPos: " + player.getPos());
+            Vector2 velocity = player.getVel().cpy().nor().scl(500);
+            new EntitySeaShell(this.world, player.getPos().x, player.getPos().y, velocity.x, velocity.y, player);
             break;
         }
         
