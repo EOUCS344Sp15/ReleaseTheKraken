@@ -19,11 +19,11 @@ import releasethekraken.entity.seacreature.EntitySeaCreature;
 public class EntityProjectile extends Entity
 {
     /** The owner of the projectile, can be null */
-    private Entity owner;
+    protected Entity owner;
     /** How much damage the projectile does */
-    private int damage;
+    protected int damage;
     /** How long, in ticks, the projectile has left before it "dies".  If set to -1, it will never die */
-    private long despawnTimer;
+    protected long despawnTimer;
     
     /**
      * Constructs a new projectile
@@ -34,12 +34,13 @@ public class EntityProjectile extends Entity
      * @param yVel The Y velocity of the projectile
      * @param owner The owner of the projectile, or null
      */
-    public EntityProjectile(GameWorld world, float xLoc, float yLoc, Entity owner)
+    public EntityProjectile(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
     {
         super(world, xLoc, yLoc);
         this.owner = owner; //Sets the owner of the projectile
         this.despawnTimer = -1; //Default despawn timer (never despawns)
         this.damage = 5; //Default damage
+        //Call spawnInWorld() in subclasses!
     }
     
     @Override
