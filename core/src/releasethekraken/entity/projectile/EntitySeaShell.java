@@ -59,7 +59,7 @@ public class EntitySeaShell extends EntityProjectile
         
         //Set which collision type this object is
         fixtureDef.filter.categoryBits = COL_SEA_PROJECTILE;
-        //Set whcih collision types this object collides with
+        //Set which collision types this object collides with
         fixtureDef.filter.maskBits = COL_ALL ^ COL_SEA_CREATURE; //Collide with everything except sea creatures
         
         //Gdx.app.log("EntitySeaShell", "Category Bits: " + Integer.toBinaryString(fixtureDef.filter.categoryBits) + " Hex: " + Integer.toHexString(fixtureDef.filter.categoryBits));

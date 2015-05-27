@@ -105,7 +105,7 @@ public class EntityGunTower extends EntityPirate
         
         //Set which collision type this object is
         fixtureDef.filter.categoryBits = COL_PIRATE;
-        //Set whcih collision types this object collides with
+        //Set which collision types this object collides with
         fixtureDef.filter.maskBits = COL_ALL ^ COL_PIRATE_PROJECTILE; //Collide with everything except pirate projectiles
         
         this.physBody.createFixture(fixtureDef);

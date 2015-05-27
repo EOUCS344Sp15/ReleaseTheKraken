@@ -93,7 +93,7 @@ public class EntityPowerUp extends Entity
         
         //Set which collision type this object is
         fixtureDef.filter.categoryBits = COL_POWERUP;
-        //Set whcih collision types this object collides with
+        //Set which collision types this object collides with
         fixtureDef.filter.maskBits = COL_PLAYER; //Only collide with the player
         
         this.physBody.createFixture(fixtureDef);

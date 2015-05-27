@@ -204,7 +204,7 @@ public class GameRenderer implements Disposable
             this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         
             //Draw paths
-            this.worldShapeRenderer.setColor(Color.RED);
+            this.worldShapeRenderer.setColor(Color.BLUE);
             for (SeaCreaturePath scPath : this.seaCreaturePaths)
                 this.worldShapeRenderer.polyline(scPath.getPolyline().getTransformedVertices());
 

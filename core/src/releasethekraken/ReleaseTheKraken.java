@@ -6,8 +6,11 @@ import java.util.HashMap;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.pirate.EntityGunTower;
+import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityFish;
+import releasethekraken.entity.seacreature.EntityOrca;
 import releasethekraken.entity.seacreature.EntityPlayer;
+import releasethekraken.entity.seacreature.EntityTurtle;
 import releasethekraken.screen.GameScreen;
 
 public class ReleaseTheKraken extends Game
@@ -24,7 +27,10 @@ public class ReleaseTheKraken extends Game
         //Register entities
         registerEntity("EntityPowerup", EntityPowerUp.class);
         registerEntity("EntityFish", EntityFish.class);
+        registerEntity("EntityTurtle", EntityTurtle.class);
+        registerEntity("EntityOrca", EntityOrca.class);
         registerEntity("EntityGunTower", EntityGunTower.class);
+        registerEntity("EntityPirateBase", EntityPirateBase.class);
         registerEntity("EntityPlayer", EntityPlayer.class);
     }
     
