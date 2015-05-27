@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import java.util.Random;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
@@ -64,6 +65,9 @@ public class GameWorld implements Disposable
     
     /** The beginning of the chain of paths that sea creatures can take */
     private SeaCreaturePath firstPath;
+    
+    /** The world's random number generator */
+    public final Random random = new Random();
      
     /**
      * Constructs a new GameWorld

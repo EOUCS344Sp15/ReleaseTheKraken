@@ -29,6 +29,8 @@ public class GameAssets extends AssetManager
     public static TextureRegion entityOrcaTexture;
     public static TextureRegion entityGunTowerTexture;
     
+    public static TextureRegion[] seaShellTextures;
+    
     public static TextureRegion[] powerupTextures;
     public static TextureRegion coinTexture;
     public static TextureRegion heartTexture;
@@ -78,12 +80,16 @@ public class GameAssets extends AssetManager
         
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityFishTexture = new TextureRegion(entityTextures, 32, 0, 32, 32);
-        entityTurtleTexture = new TextureRegion(entityTextures, 96, 0, 32, 32);
-        entityOrcaTexture = new TextureRegion(entityTextures, 0, 32, 32, 32);
-        entityGunTowerTexture = new TextureRegion(entityTextures, 64, 0, 32, 32);
+        entityTurtleTexture = new TextureRegion(entityTextures, 64, 0, 32, 32);
+        entityOrcaTexture = new TextureRegion(entityTextures, 0, 32, 128, 64);
+        entityGunTowerTexture = new TextureRegion(entityTextures, 128, 0, 32, 32);
+        
+        seaShellTextures = new TextureRegion[6];
+        for (int i=0; i<seaShellTextures.length; i++)
+            seaShellTextures[i] = new TextureRegion(entityTextures, 32 + i*8, 96, 8, 8);
         
         powerupTextures = new TextureRegion[4];
-        for (int i=0; i<4; i++)
+        for (int i=0; i<powerupTextures.length; i++)
             powerupTextures[i] = new TextureRegion(uiTextures, i*32, 0, 32, 32);
         
         coinTexture = new TextureRegion(uiTextures, 0, 32, 16, 16);

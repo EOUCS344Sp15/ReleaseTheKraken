@@ -19,25 +19,17 @@ import releasethekraken.entity.Entity;
  */
 public class EntitySeaShell extends EntityProjectile
 {
-
+    /** The index of the array of sea shell textures */
+    private int textureIndex;
+    
     public EntitySeaShell(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
     {
         super(world, xLoc, yLoc, xVel, yVel, owner);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 2*60;
-    }
-    
-    @Override
-    public void renderSprites(SpriteBatch batch)
-    {
-        super.renderSprites(batch);
         
-        float spriteUnitWidth = 0.5F;
-        batch.draw(GameAssets.entityPlayerTexture, //TODO: Need a sprite for EntitySeaShell
-                this.physBody.getPosition().x - spriteUnitWidth/2,
-                this.physBody.getPosition().y - spriteUnitWidth/2,
-                spriteUnitWidth,
-                spriteUnitWidth);
+        //Set the texture index to a random index
+        this.textureIndex = world.random.nextInt(GameAssets.seaShellTextures.length);
     }
     
     @Override
@@ -51,7 +43,6 @@ public class EntitySeaShell extends EntityProjectile
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyDef.fixedRotation = true;
         
         //Set up physics body - Defines the actual physics body
         this.physBody = this.world.getPhysWorld().createBody(bodyDef);
@@ -70,5 +61,23 @@ public class EntitySeaShell extends EntityProjectile
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
+    }
+    
+    @Override
+    public void renderSprites(SpriteBatch batch)
+    {
+        super.renderSprites(batch);
+        
+        float spriteUnitWidth = 0.5F;
+        batch.draw(GameAssets.seaShellTextures[this.textureIndex],
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitWidth/2,
+                1/4F, //X point to rotate around
+                1/4F, //Y point to rotate around
+                spriteUnitWidth,
+                spriteUnitWidth,
+                1.0F, //X scale
+                1.0F, //Y scale
+                (float) Math.toDegrees(this.physBody.getAngle()));
     }
 }
