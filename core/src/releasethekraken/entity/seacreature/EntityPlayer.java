@@ -7,15 +7,18 @@
 package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
+import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
  *
@@ -30,6 +33,9 @@ public class EntityPlayer extends EntitySeaCreature
     
     /** Which power up to preview the radius for, or null for none */
     public EntityPowerUp.Ability powerUpPreview = null;
+    
+    /** The position in the world that the player is aiming at */
+    private Vector2 aimPos = new Vector2();
     
     //Primary constructor
     public EntityPlayer(GameWorld world, float xLocation, float yLocation)
@@ -73,6 +79,12 @@ public class EntityPlayer extends EntitySeaCreature
         fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
+        
+        //Set which collision type this object is
+        fixtureDef.filter.categoryBits = COL_PLAYER | COL_SEA_CREATURE;
+        //Set whcih collision types this object collides with
+        fixtureDef.filter.maskBits = COL_ALL ^ COL_SEA_PROJECTILE; //Collide with everything except sea creature projectiles
+        
         this.physBody.createFixture(fixtureDef);
         
         //Set the linear damping
@@ -141,6 +153,10 @@ public class EntityPlayer extends EntitySeaCreature
             
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         }
+        
+        //Draw crosshair
+        //shapeRenderer.setColor(Color.RED);
+        //shapeRenderer.x(this.aimPos, 1);
     }
     
     @Override
@@ -154,5 +170,14 @@ public class EntityPlayer extends EntitySeaCreature
                 this.physBody.getPosition().y - spriteUnitWidth/2,
                 spriteUnitWidth,
                 spriteUnitWidth);
+    }
+
+    /**
+     * Gets the player's world aim position
+     * @return The player's world aim position
+     */
+    public Vector2 getAimPos()
+    {
+        return aimPos;
     }
 }

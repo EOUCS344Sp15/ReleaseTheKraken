@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.projectile.EntityProjectile;
@@ -87,9 +88,9 @@ public class InputHandler implements InputProcessor
             
         //Player projectiles
         case Input.Keys.SPACE:
-            Vector2 mousePos = this.pointerLocations.first();
-            Gdx.app.log("InputHandler::PlayerShoot", "MousePos: " + mousePos + " PlayerPos: " + player.getPos());
-            Vector2 velocity = player.getVel().cpy().nor().scl(500);
+            Vector2 velocity = player.getAimPos().cpy().sub(player.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
+            float spread = 10F; //The amount of possible spread, in degrees
+            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
             new EntitySeaShell(this.world, player.getPos().x, player.getPos().y, velocity.x, velocity.y, player);
             break;
         }
@@ -188,6 +189,13 @@ public class InputHandler implements InputProcessor
         for (int i=0; i<this.heldKeys.length; i++)
             if (this.heldKeys[i])
                 this.keyHeld(i);
+        
+        //Update player's aim position
+        Vector3 mousePos3D = new Vector3(this.pointerLocations.first(), 0); //Convert mouse 0 to Vector 3
+        Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
+        this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
+        this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
+            
     }
     
     /**

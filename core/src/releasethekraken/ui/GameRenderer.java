@@ -256,6 +256,15 @@ public class GameRenderer implements Disposable
 
         this.uiSpriteBatch.end();
     }
+
+    /**
+     * Gets the camera instance
+     * @return The OrthographicCamera instance
+     */
+    public OrthographicCamera getCamera()
+    {
+        return camera;
+    }
     
     @Override
     public void dispose()

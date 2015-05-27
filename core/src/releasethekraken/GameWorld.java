@@ -336,7 +336,7 @@ public class GameWorld implements Disposable
         if (entity.getPhysBody() != null)
         {
             this.physBodiesToRemove.add(entity.getPhysBody());
-            Gdx.app.log("GameWorld", "removeEntity(" + entity + ");");
+            //Gdx.app.log("GameWorld", "removeEntity(" + entity + ");");
         }
     }
 
