@@ -5,21 +5,11 @@
  */
 package releasethekraken;
 
-import releasethekraken.ui.GameRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import releasethekraken.entity.Entity;
-import releasethekraken.entity.projectile.EntityProjectile;
-import releasethekraken.entity.projectile.EntitySeaShell;
-import releasethekraken.entity.seacreature.EntityFish;
-import releasethekraken.entity.seacreature.EntityPlayer;
-import releasethekraken.ui.InteractiveUiObject;
-import releasethekraken.ui.UiButton;
-import releasethekraken.ui.UiObject;
 import releasethekraken.util.Screenshots;
 
 /**
@@ -28,11 +18,7 @@ import releasethekraken.util.Screenshots;
  * @author Dalton
  */
 public class InputHandler implements InputProcessor
-{
-    //The input handler's private references to the game world and renderer
-    private GameWorld world;
-    private GameRenderer renderer;
-    
+{    
     /** 
      * A debugging position that is controllable with the numberpad 8 4 5 6 keys.
      * Use as an offset for positioning UI stuff.
@@ -48,10 +34,14 @@ public class InputHandler implements InputProcessor
     /** An array of held keys.  Keycode = index */
     private boolean[] heldKeys;
     
-    public InputHandler(GameWorld world, GameRenderer renderer)
+    /** The array of objects that implement KeyListener */
+    private Array<KeyListener> keyListeners;
+    
+    /** The array of objects that implement TouchListener */
+    private Array<TouchListener> touchListeners;
+    
+    public InputHandler()
     {
-        this.world = world;
-        this.renderer = renderer;
         this.activePointerLocations = new Array<Vector2>();
         for (int i=0; i<20; i++)
             this.activePointerLocations.add(new Vector2());
@@ -60,13 +50,15 @@ public class InputHandler implements InputProcessor
             this.pointerLocations.add(new Vector2());
         
         this.heldKeys = new boolean[256];
+        
+        this.keyListeners = new Array<KeyListener>();
+        this.touchListeners = new Array<TouchListener>();
     }
     
     @Override
     public boolean keyDown(int keycode)
     {
         this.heldKeys[keycode] = true; //The key is now pressed
-        EntityPlayer player = this.world.getPlayer();
         
         switch(keycode)
         {
@@ -85,15 +77,11 @@ public class InputHandler implements InputProcessor
         case Input.Keys.F12: //Screenshot
             Screenshots.saveScreenshot();
             break;
-            
-        //Player projectiles
-        case Input.Keys.SPACE:
-            Vector2 velocity = player.getAimPos().cpy().sub(player.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
-            float spread = 10F; //The amount of possible spread, in degrees
-            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
-            new EntitySeaShell(this.world, player.getPos().x, player.getPos().y, velocity.x, velocity.y, player);
-            break;
         }
+        
+        //Tell all registered KeyListeners about this
+        for (KeyListener keyListener : this.keyListeners)
+            keyListener.keyDown(keycode);
         
         return false;
     }
@@ -102,6 +90,10 @@ public class InputHandler implements InputProcessor
     public boolean keyUp(int keycode)
     {
         this.heldKeys[keycode] = false; //The key is no longer pressed
+        
+        //Tell all registered KeyListeners about this
+        for (KeyListener keyListener : this.keyListeners)
+            keyListener.keyUp(keycode);
         
         return false;
     }
@@ -115,22 +107,20 @@ public class InputHandler implements InputProcessor
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button)
     {
-        boolean handled = true;
+        //Tell all registered TouchListeners about this
+        for (TouchListener touchListener : this.touchListeners)
+            touchListener.touchDown(screenX, screenY, pointer, button);
         
-        for (UiObject obj : this.renderer.uiObjects) //Iterate over all UI Objects
-        {
-            if (obj instanceof UiButton)
-                if (((UiButton)obj).isInBounds(screenX, screenY)) //If the click was within the button's bounds, call onClick()
-                {
-                    ((UiButton)obj).onClick(button, this.world);
-                }
-        }
-        return handled;
+        return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button)
     {
+        //Tell all registered TouchListeners about this
+        for (TouchListener touchListener : this.touchListeners)
+            touchListener.touchUp(screenX, screenY, pointer, button);
+        
         return false;
     }
 
@@ -166,36 +156,10 @@ public class InputHandler implements InputProcessor
                 this.touchHeld(touchX, touchY, i, 0);
         }
         
-        //Handle pointer hovers, but only for the first one (for now)
-        for (UiObject obj : this.renderer.uiObjects)
-        {
-            if (obj instanceof InteractiveUiObject)
-            {
-                Vector2 pointer0 = this.getPointerLocations().get(0);
-                
-                //Call onHover() if the mouse is in the bounds of the object
-                if (((InteractiveUiObject)obj).isInBounds(pointer0.x, pointer0.y))
-                {
-                    ((InteractiveUiObject)obj).onHover(pointer0.x, pointer0.y);
-                }
-                else if (((InteractiveUiObject)obj).isHoverActive()) //If the object was still being hovered over, call onLeaveHover()
-                {
-                    ((InteractiveUiObject)obj).onLeaveHover();
-                } 
-            }
-        }
-        
         //Handle held keys, calling keyHeld()
         for (int i=0; i<this.heldKeys.length; i++)
             if (this.heldKeys[i])
-                this.keyHeld(i);
-        
-        //Update player's aim position
-        Vector3 mousePos3D = new Vector3(this.pointerLocations.first(), 0); //Convert mouse 0 to Vector 3
-        Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
-        this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
-        this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
-            
+                this.keyHeld(i);            
     }
     
     /**
@@ -207,14 +171,9 @@ public class InputHandler implements InputProcessor
      */
     public void touchHeld(int screenX, int screenY, int pointer, int button)
     {
-        for (UiObject obj : this.renderer.uiObjects) //Iterate over all UI Objects
-        {
-            if (obj instanceof UiButton)
-                if (((UiButton)obj).isInBounds(screenX, screenY)) //If the click was within the button's bounds, call onClick()
-                {
-                    ((UiButton)obj).onClickHeld(button, this.world);
-                }
-        }
+        //Tell all registered TouchListeners about this
+        for (TouchListener touchListener : this.touchListeners)
+            touchListener.touchHeld(screenX, screenY, pointer, button);
     }
     
     /**
@@ -223,32 +182,9 @@ public class InputHandler implements InputProcessor
      */
     public void keyHeld(int keycode)
     {
-        EntityPlayer player = this.world.getPlayer();
-        
-        switch (keycode)
-        {
-            case Input.Keys.UP:
-            case Input.Keys.W:
-                //if (player.getPhysBody().getLinearVelocity().y < player.maxSpeed)
-                    player.getPhysBody().applyForceToCenter(0, player.moveForce, true);
-                break;
-            case Input.Keys.DOWN:
-            case Input.Keys.S:
-                //if (player.getPhysBody().getLinearVelocity().y > 0 - player.maxSpeed)
-                    player.getPhysBody().applyForceToCenter(0, -player.moveForce, true);
-                break;
-            case Input.Keys.LEFT:
-            case Input.Keys.A:
-                //if (player.getPhysBody().getLinearVelocity().x > 0 - player.maxSpeed)
-                    player.getPhysBody().applyForceToCenter(-player.moveForce, 0, true);
-                break;
-            case Input.Keys.RIGHT:
-            case Input.Keys.D:
-                //if (player.getPhysBody().getLinearVelocity().x < player.maxSpeed)
-                    player.getPhysBody().applyForceToCenter(player.moveForce, 0, true);
-                break;
-                
-        }
+        //Tell all registered KeyListeners about this
+        for (KeyListener keyListener : this.keyListeners)
+            keyListener.keyHeld(keycode);
     }
     
     /**
@@ -288,5 +224,104 @@ public class InputHandler implements InputProcessor
     {
         for (int i=0; i<20; i++)
             this.pointerLocations.get(i).set(Gdx.input.getX(i), Gdx.input.getY(i)); //Add touch data
+    }
+    
+    /**
+     * Registers a KeyListener with the InputHandler
+     * @param keyListener The KeyListener to register
+     */
+    public void registerKeyListener(KeyListener keyListener)
+    {
+        this.keyListeners.add(keyListener);
+    }
+    
+    /**
+     * Unregisters a KeyListener with the InputHandler
+     * @param keyListener The KeyListener to unregister
+     */
+    public void unregisterKeyListener(KeyListener keyListener)
+    {
+        this.keyListeners.removeValue(keyListener, true);
+    }
+    
+    /**
+     * Registers a TouchListener with the InputHandler
+     * @param touchListener The TouchListener to register
+     */
+    public void registerTouchListener(TouchListener touchListener)
+    {
+        this.touchListeners.add(touchListener);
+    }
+    
+    /**
+     * Unregisters a TouchListener with the InputHandler
+     * @param touchListener The TouchListener to unregister
+     */
+    public void unregisterTouchListener(TouchListener touchListener)
+    {
+        this.touchListeners.removeValue(touchListener, true);
+    }
+    
+    /**
+     * A static inner interface that provides touch listening methods that you
+     * can implement.  Implement this, and then register with InputHandler to
+     * have the methods be called.
+     */
+    public static interface TouchListener
+    {
+        /**
+         * Called when a pointer is clicked/touched
+         * @param x The X coordinate on the screen
+         * @param y The Y coordinate on the screen
+         * @param pointer The pointer index that was used
+         * @param button The button that was pressed
+         */
+        public void touchDown(int x, int y, int pointer, int button);
+        
+        /**
+         * Called when a pointer is unclicked/untouched
+         * @param x The X coordinate on the screen
+         * @param y The Y coordinate on the screen
+         * @param pointer The pointer index that was used
+         * @param button The button that was pressed
+         */
+        public void touchUp(int x, int y, int pointer, int button);
+        
+        /**
+         * Called every tick that a pointer is clicked/touched
+         * @param x The X coordinate on the screen
+         * @param y The Y coordinate on the screen
+         * @param pointer The pointer index that was used
+         * @param button The button that was pressed
+         */
+        public void touchHeld(int x, int y, int pointer, int button);
+    }
+    
+    /**
+     * A static inner interface that provides key listening methods that you
+     * can implement.  Implement this, and then register with InputHandler to
+     * have the methods be called.
+     * 
+     * @author Dalton
+     */
+    public static interface KeyListener
+    {
+        /**
+         * Called when a key is pressed
+         * @param keycode The keycode of the key that was pressed
+         */
+        public void keyDown(int keycode);
+        
+        /**
+         * Called when a key is unpressed
+         * @param keycode The keycode of the key that was unpressed
+         */
+        public void keyUp(int keycode);
+        
+        /**
+         * Called every tick that a key is held
+         * @param keycode The keycode of the key that was held
+         */
+        public void keyHeld(int keycode);
     }
 }

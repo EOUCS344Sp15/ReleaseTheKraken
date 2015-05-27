@@ -104,9 +104,9 @@ public class GameRenderer implements Disposable
                 0.075F, 0.05F, "Pause", Color.GRAY.cpy().sub(0.1F, 0.1F, 0.1F, 0))
                 {
                     @Override
-                    public void onClick(int mouseButton, GameWorld world)
+                    public void onClick(int mouseButton)
                     {
-                        super.onClick(mouseButton, world);
+                        super.onClick(mouseButton);
                         Gdx.app.log("Pause Button", "onClick() called!");
                     }
                 };
@@ -121,9 +121,9 @@ public class GameRenderer implements Disposable
                 0.157F, 0.05F, "Debug Screen", Color.GRAY.cpy().sub(0.1F, 0.1F, 0.1F, 0))
                 {
                     @Override
-                    public void onClick(int mouseButton, GameWorld world)
+                    public void onClick(int mouseButton)
                     {
-                        super.onClick(mouseButton, world);
+                        super.onClick(mouseButton);
                         this.renderer.debugScreenVisible = !this.renderer.debugScreenVisible; //Toggle visibility
                         Gdx.app.log("Debug Menu Button", "Debug screen " + (this.renderer.debugScreenVisible ? "ON" : "OFF"));
                     }
@@ -216,7 +216,7 @@ public class GameRenderer implements Disposable
         
         //Updates UI objects
         for (UiObject obj : this.uiObjects)
-            obj.update(this.world);
+            obj.onUpdate();
         
         //Draws UI Shapes
         this.uiShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -264,6 +264,15 @@ public class GameRenderer implements Disposable
     public OrthographicCamera getCamera()
     {
         return camera;
+    }
+    
+    /**
+     * Gets the world that the GameRenderer is rendering
+     * @return The GameWorld being rendered
+     */
+    public GameWorld getWorld()
+    {
+        return this.world;
     }
     
     @Override

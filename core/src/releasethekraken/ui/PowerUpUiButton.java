@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import releasethekraken.GameAssets;
-import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.ui.tooltip.PowerUpToolTip;
@@ -65,30 +64,30 @@ public class PowerUpUiButton extends UiButton
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        super.update(world);
+        super.onUpdate();
         
         //Update the player reference
-        this.player = world.getPlayer();
+        this.player = this.world.getPlayer();
         
         //Update the local power up count
-        this.powerUpCount = world.getPowerUps(this.powerUpType);
+        this.powerUpCount = this.world.getPowerUps(this.powerUpType);
         
         //Disable the button if there aren't any power ups to use, or enable it if there are
         this.setDisabled(this.powerUpCount < 1);
     }
     
     @Override
-    public void onClick(int mouseButton, GameWorld world)
+    public void onClick(int mouseButton)
     {
-        super.onClick(mouseButton, world);
+        super.onClick(mouseButton);
         
         //Use the power up
-        if (this.state != ButtonState.DISABLED && world.getPowerUps(this.powerUpType) > 0)
+        if (this.state != ButtonState.DISABLED && this.world.getPowerUps(this.powerUpType) > 0)
         {
-            world.addPowerUps(this.powerUpType, -1); //Subtract 1 from the power up count
-            EntityPowerUp.onUse(world, this.powerUpType); //Use the power up
+            this.world.addPowerUps(this.powerUpType, -1); //Subtract 1 from the power up count
+            EntityPowerUp.onUse(this.world, this.powerUpType); //Use the power up
         }
     }
     

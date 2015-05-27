@@ -36,6 +36,9 @@ public class ReleaseTheKraken extends Game
     
     private GameAssets gameAssets;
     
+    /** The static InputHandler for the game */
+    public static InputHandler inputHandler;
+    
     @Override
     public void create()
     {
@@ -46,6 +49,10 @@ public class ReleaseTheKraken extends Game
             been loaded beyond this point.
         */
         this.gameAssets = new GameAssets();
+        
+        //Create a class to handle input.  Tell LibGDX about it
+        inputHandler = new InputHandler();
+        Gdx.input.setInputProcessor(inputHandler);
         
         this.setScreen(new GameScreen("TestLevel"));
     }

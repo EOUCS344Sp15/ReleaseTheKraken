@@ -81,8 +81,10 @@ public class DebugOverlay extends UiObject
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
+        super.onUpdate();
+        
         if (this.renderer.debugScreenVisible)
         {
             fpsEntry.data = String.format("%-12.12s : %-6s", "FPS", Gdx.graphics.getFramesPerSecond());
@@ -99,8 +101,8 @@ public class DebugOverlay extends UiObject
     
     /**
      * Adds a DebugEntry to the list of debug info to show. Once added, any
-     * changes to the DebugEntry will cause the entry in the debug overlay
-     * to update.  Use this to add your own debug entries.
+ changes to the DebugEntry will cause the entry in the debug overlay
+ to onUpdate.  Use this to add your own debug entries.
      * @param entry 
      */
     public static void addEntry(DebugEntry entry)

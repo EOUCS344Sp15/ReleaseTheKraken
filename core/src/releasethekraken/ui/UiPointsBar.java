@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import releasethekraken.GameAssets;
-import releasethekraken.GameWorld;
 
 /**
  * Represents the points bar, showing how many points the player has, as well as
@@ -45,9 +44,9 @@ public class UiPointsBar extends UiObject
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        super.update(world);
+        super.onUpdate();
         
         //Update the points bar's variables
         this.max = world.getPointsForKraken();

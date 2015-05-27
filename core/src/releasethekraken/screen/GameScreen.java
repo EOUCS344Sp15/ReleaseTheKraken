@@ -7,9 +7,11 @@ package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Vector3;
 import releasethekraken.GameWorld;
 import releasethekraken.InputHandler;
 import releasethekraken.LevelLoader;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.ui.GameRenderer;
 
 /**
@@ -33,9 +35,7 @@ public class GameScreen implements Screen
         //Create game renderer for the world
         this.renderer = new GameRenderer(this.world);
         
-        //Creates a class to handle user input. Tells LibGDX about it.
-        this.inputHandler = new InputHandler(this.world, this.renderer);
-        Gdx.input.setInputProcessor(this.inputHandler);
+        this.inputHandler = ReleaseTheKraken.inputHandler;
     }
     
     @Override
@@ -48,6 +48,12 @@ public class GameScreen implements Screen
     public void render(float delta) //This gets called 60 times a second.  Consider this the game loop.
     {
         this.inputHandler.update();
+        
+        //Update player's aim position
+        Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
+        Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
+        this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
+        this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
         
         this.world.update();
         this.renderer.render();

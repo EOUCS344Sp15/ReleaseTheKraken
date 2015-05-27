@@ -7,7 +7,7 @@
 package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -17,19 +17,22 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.InputHandler;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.projectile.EntitySeaShell;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
  *
  * @author roelleh
  */
-public class EntityPlayer extends EntitySeaCreature
+public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyListener
 {
     /** The maximum speed the player can move */
-    public final float maxSpeed = 4.0F;
+    public final float MAX_SPEED = 4.0F;
     /** The player's movement force, in newtons */
-    public final float moveForce = 7500.0F;
+    public final float MOVE_FORCE = 7500.0F;
     
     /** Which power up to preview the radius for, or null for none */
     public EntityPowerUp.Ability powerUpPreview = null;
@@ -45,6 +48,7 @@ public class EntityPlayer extends EntitySeaCreature
         
         this.health = 15;
         this.maxHealth = 15;
+        ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
     //Secondary constructor
@@ -54,6 +58,7 @@ public class EntityPlayer extends EntitySeaCreature
         
         this.health = 15;
         this.maxHealth = 15;
+        ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
     @Override
@@ -102,27 +107,11 @@ public class EntityPlayer extends EntitySeaCreature
     {
         super.update();
         
-        /*
-        //Temporary code to keep the player inside the world bounds, until a collision system is implemented
-        if (this.pos.x < 0)
-            this.vel.add(1, 0);
-        if (this.pos.x > this.world.getWidth())
-            this.vel.add(-1, 0);
-        if (this.pos.y < 0)
-            this.vel.add(0, 1);
-        if (this.pos.y > this.world.getHeight())
-            this.vel.add(0, -1);
-        
-        //Apply friction to the player's velocity
-        if (this.vel.len() > 0)
-        {
-            this.vel.scl(0.9F); //Apply friction to the player
-            
-            //Make the velicity 0 if it is close enough
-            if (this.vel.len() < 0.01F)
-                this.vel.set(0, 0);
-        }
-        */
+        //Update player's aim position
+        //Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
+        //Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
+        //this.aimPos.x = worldMousePos3D.x;
+        //this.aimPos.y = worldMousePos3D.y;
     }
     
     @Override
@@ -179,5 +168,51 @@ public class EntityPlayer extends EntitySeaCreature
     public Vector2 getAimPos()
     {
         return aimPos;
+    }
+
+    @Override
+    public void keyDown(int keycode)
+    {
+        switch (keycode)
+        {
+        case Input.Keys.SPACE: //Projectile firing
+            Vector2 velocity = this.aimPos.cpy().sub(this.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
+            float spread = 10F; //The amount of possible spread, in degrees
+            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
+            new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this);
+            break;
+        }
+    }
+
+    @Override
+    public void keyUp(int keycode) {}
+
+    @Override
+    public void keyHeld(int keycode)
+    {
+        switch (keycode)
+        {
+            case Input.Keys.UP:
+            case Input.Keys.W:
+                //if (this.physBody.getLinearVelocity().y < this.MAX_SPEED)
+                    this.physBody.applyForceToCenter(0, this.MOVE_FORCE, true);
+                break;
+            case Input.Keys.DOWN:
+            case Input.Keys.S:
+                //if (this.physBody.getLinearVelocity().y > 0 - this.MAX_SPEED)
+                    this.physBody.applyForceToCenter(0, -this.MOVE_FORCE, true);
+                break;
+            case Input.Keys.LEFT:
+            case Input.Keys.A:
+                //if (this.physBody.getLinearVelocity().x > 0 - this.MAX_SPEED)
+                    this.physBody.applyForceToCenter(-this.MOVE_FORCE, 0, true);
+                break;
+            case Input.Keys.RIGHT:
+            case Input.Keys.D:
+                //if (this.physBody.getLinearVelocity().x < this.MAX_SPEED)
+                    this.physBody.applyForceToCenter(this.MOVE_FORCE, 0, true);
+                break;
+            
+        }
     }
 }

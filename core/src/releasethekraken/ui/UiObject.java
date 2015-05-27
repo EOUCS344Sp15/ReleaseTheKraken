@@ -18,7 +18,10 @@ import releasethekraken.GameWorld;
  */
 public class UiObject implements Disposable, Renderable, Comparable<UiObject>
 {
-    protected GameRenderer renderer; //The game renderer that this belongs to
+    /** The GameRenderer that this belongs to */
+    protected GameRenderer renderer;
+    /** The GameWorld that this button is for.  Can be null */
+    protected GameWorld world;
     
     //X and Y coordinates on the screen
     protected float x;
@@ -51,6 +54,7 @@ public class UiObject implements Disposable, Renderable, Comparable<UiObject>
         this.height = height*Gdx.graphics.getHeight();
         this.depth = 0;
         this.renderer = renderer;
+        this.world = renderer.getWorld();
     }
     
     @Override
@@ -67,9 +71,8 @@ public class UiObject implements Disposable, Renderable, Comparable<UiObject>
     
     /**
      * Updates the UI object's logic
-     * @param world The game world the UI is for
      */
-    public void update(GameWorld world)
+    public void onUpdate()
     {
         
     }

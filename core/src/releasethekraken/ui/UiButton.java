@@ -99,21 +99,21 @@ public class UiButton extends InteractiveUiObject
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        super.update(world);
+        super.onUpdate();
         
         if (this.state == ButtonState.PRESSED && world.getWorldTime() - this.lastClickTime > 5) //Unpress the button
         {
             this.state = ButtonState.UNPRESSED;
-            this.onStoppedClicking(world);
+            this.onStoppedClicking();
         }
     }
     
     @Override
-    public void onClick(int mouseButton, GameWorld world)
+    public void onClick(int mouseButton)
     {
-        super.onClick(mouseButton, world);
+        super.onClick(mouseButton);
         
         if (this.state != ButtonState.DISABLED)
         {
@@ -124,9 +124,9 @@ public class UiButton extends InteractiveUiObject
     }
     
     @Override
-    public void onClickHeld(int mouseButton, GameWorld world)
+    public void onClickHeld(int mouseButton)
     {
-        super.onClickHeld(mouseButton, world);
+        super.onClickHeld(mouseButton);
         //Gdx.app.log("UiButton", "onClickHeld() called!");
         
         if (this.state != ButtonState.DISABLED)
@@ -138,9 +138,9 @@ public class UiButton extends InteractiveUiObject
     }
     
     @Override
-    public void onStoppedClicking(GameWorld world)
+    public void onStoppedClicking()
     {
-        super.onStoppedClicking(world);
+        super.onStoppedClicking();
         
         if (this.state != ButtonState.DISABLED)
         {

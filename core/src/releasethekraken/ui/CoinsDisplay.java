@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
-import releasethekraken.GameWorld;
 
 /**
  * Displays the amount of coins that the player has.
@@ -64,10 +63,10 @@ public class CoinsDisplay extends UiObject
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        super.update(world);
+        super.onUpdate();
         
-        this.coins = world.getCoins(); //Update the amount of coins to display
+        this.coins = this.world.getCoins(); //Update the amount of coins to display
     }
 }
