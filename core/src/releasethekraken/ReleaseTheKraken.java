@@ -2,7 +2,9 @@ package releasethekraken;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.Stack;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.pirate.EntityGunTower;
@@ -11,7 +13,8 @@ import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityOrca;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.entity.seacreature.EntityTurtle;
-import releasethekraken.screen.GameScreen;
+import releasethekraken.screen.AbstractScreen;
+import releasethekraken.screen.MainMenuScreen;
 
 public class ReleaseTheKraken extends Game
 {
@@ -20,6 +23,9 @@ public class ReleaseTheKraken extends Game
     
     /** How many times the game updates per second */
     public static final int TICK_RATE = 60;
+    
+    /** The stack of screens */
+    private Stack<AbstractScreen> screenStack = new Stack<AbstractScreen>();
     
     //Register game objects
     static
@@ -54,7 +60,8 @@ public class ReleaseTheKraken extends Game
         inputHandler = new InputHandler();
         Gdx.input.setInputProcessor(inputHandler);
         
-        this.setScreen(new GameScreen("TestLevel"));
+        //Push the main menu onto the stack
+        this.pushScreen(new MainMenuScreen(this));
     }
     
     @Override
@@ -63,6 +70,58 @@ public class ReleaseTheKraken extends Game
         super.dispose();
         Gdx.app.log(this.getClass().getSimpleName(), "Application Closing!");
         this.gameAssets.dispose();
+    }
+    
+    /**
+     * Pushes a new AbstractScreen onto the stack
+     * @param screen The new AbstractScreen to push
+     */
+    public void pushScreen(AbstractScreen screen)
+    {
+        this.screenStack.push(screen);
+        this.setScreen(screen); //Update the screen being rendered
+    }
+    
+    /**
+     * Pops an AbstractScreen off of the stack
+     * @return The AbstractScreen popped off the stack
+     */
+    public AbstractScreen popScreen()
+    {
+        AbstractScreen stackScreen = null;
+        
+        try
+        {
+            stackScreen = this.screenStack.pop();
+        }
+        catch (EmptyStackException e)
+        {
+            Gdx.app.log("ReleaseTheKraken", "popScreen() called, but the screen stack was empty!");
+        }
+        
+        this.setScreen(stackScreen); //Update the screen being rendered
+
+        return stackScreen;
+    }
+    
+    /**
+     * Peeks at the AbstractScreen on the top of the stack
+     * @return The AbstractScreen on top of the stack
+     */
+    public AbstractScreen peekScreen()
+    {
+        AbstractScreen stackScreen = null;
+        
+        try
+        {
+            stackScreen = this.screenStack.pop();
+        }
+        catch (EmptyStackException e)
+        {
+            Gdx.app.log("ReleaseTheKraken", "peekScreen() called, but the screen stack was empty!");
+        }
+
+        return stackScreen;
     }
     
     /**

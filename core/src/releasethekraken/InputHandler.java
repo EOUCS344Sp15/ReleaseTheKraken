@@ -225,6 +225,42 @@ public class InputHandler implements InputProcessor
         for (int i=0; i<20; i++)
             this.pointerLocations.get(i).set(Gdx.input.getX(i), Gdx.input.getY(i)); //Add touch data
     }
+
+    /**
+     * Gets the list of KeyListeners
+     * @return An Array of KeyListeners
+     */
+    public Array<KeyListener> getKeyListeners()
+    {
+        return keyListeners;
+    }
+
+    /**
+     * Sets the list of KeyListeners
+     * @param keyListeners The new Array of KeyListeners
+     */
+    public void setKeyListeners(Array<KeyListener> keyListeners)
+    {
+        this.keyListeners = keyListeners;
+    }
+
+    /**
+     * Gets the list of TouchListeners
+     * @return An Array of TouchListeners
+     */
+    public Array<TouchListener> getTouchListeners()
+    {
+        return touchListeners;
+    }
+
+    /**
+     * Sets the list of TouchListeners
+     * @param touchListeners The new Array of TouchListeners
+     */
+    public void setTouchListeners(Array<TouchListener> touchListeners)
+    {
+        this.touchListeners = touchListeners;
+    }
     
     /**
      * Registers a KeyListener with the InputHandler

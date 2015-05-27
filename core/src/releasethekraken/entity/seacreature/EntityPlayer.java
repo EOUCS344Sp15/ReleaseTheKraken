@@ -160,6 +160,13 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 spriteUnitWidth,
                 spriteUnitWidth);
     }
+    
+    @Override
+    public void dispose()
+    {
+        ReleaseTheKraken.inputHandler.unregisterKeyListener(this);
+        super.dispose();
+    }
 
     /**
      * Gets the player's world aim position
