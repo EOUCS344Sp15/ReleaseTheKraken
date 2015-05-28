@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -25,6 +26,7 @@ import releasethekraken.ui.Sidebar;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.tooltip.TextToolTip;
 import releasethekraken.screen.*;
+import releasethekraken.util.Screenshots;
 
 /**
  * This class renders the Game World.
@@ -103,8 +105,10 @@ public class GameRenderer extends UiRenderer
                     {
                         super.onClick(mouseButton);
                         
+                        Pixmap pixmap = Screenshots.getScreenshot(true);
+                        
                         //Go back to the pause menu for now
-                        rtk.pushScreen(new PauseScreen(rtk));
+                        rtk.pushScreen(new PauseScreen(rtk, pixmap));
                     }
                 };
         pauseButton.setToolTip(new TextToolTip(this, "Pause the game"));

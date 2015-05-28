@@ -7,7 +7,9 @@ package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import releasethekraken.ReleaseTheKraken;
+import releasethekraken.ui.UiBackground;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiText;
 import releasethekraken.ui.renderer.UiRenderer;
@@ -18,13 +20,13 @@ import releasethekraken.ui.tooltip.TextToolTip;
  * @author Lucas Schuetz
  */
 public class PauseScreen extends AbstractScreen
-{    
+{
     /**
      * Constructs a new MainMenuScreen
      * @param rtk The ReleaseTheKraken instance.  This is final so that the
      * anonymous inner classes can access it.
      */
-    public PauseScreen(final ReleaseTheKraken rtk)
+    public PauseScreen(final ReleaseTheKraken rtk, Pixmap background)
     {
         super(rtk);
         
@@ -32,6 +34,9 @@ public class PauseScreen extends AbstractScreen
         
         float scrWidth = Gdx.graphics.getWidth();
         float scrHeight = Gdx.graphics.getHeight();
+        
+        // Creates the background for Ui
+        this.renderer.uiObjects.add(new UiBackground(this.renderer, background));
         
         float textWidth = 0.2F;
         float textHeight = 0.2F;
@@ -85,8 +90,9 @@ public class PauseScreen extends AbstractScreen
                     {
                         super.onClick(mouseButton);
                         
-                        rtk.popScreen(); // Pop to game
-                        rtk.popScreen(); // Pop to main menu
+                        // Pop until currently screen is the Main Menu
+                        while(!(rtk.peekScreen() instanceof MainMenuScreen))
+                            rtk.popScreen();
                     }
                 };
         
