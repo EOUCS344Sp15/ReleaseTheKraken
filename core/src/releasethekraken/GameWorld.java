@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import java.util.Random;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
@@ -64,6 +65,9 @@ public class GameWorld implements Disposable
     
     /** The beginning of the chain of paths that sea creatures can take */
     private SeaCreaturePath firstPath;
+    
+     /**Variable for random number generator */
+    public final Random ran = new Random();
      
     /**
      * Constructs a new GameWorld
@@ -87,10 +91,10 @@ public class GameWorld implements Disposable
             this.powerUps[i] = 0;
         
         //Add powerups for testing purposes
-        new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10);
-        new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20);
-        new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30);
-        new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40);
+       // new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10);
+       // new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20);
+        //new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30);
+       // new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40);
         
         //Add coins for testing purposes
         this.coins = 1337;
@@ -100,7 +104,30 @@ public class GameWorld implements Disposable
      * Updates the state of the game world
      */
     public void update()
-    {
+    {     
+        /*
+        Temporary power up generator. Every 5 seconds there is a 50% chance
+        a power up will drop within a small radius above and to the right of the player.
+        TODO: Have power ups spawn within certain radius of player and put clamp on world size.
+        */
+        int answer = ran.nextInt(2) + 1;
+        int power = ran.nextInt(4) + 1;
+        int xrange = ran.nextInt(5) + 5;
+        int yrange = ran.nextInt(5) + 5;
+        Vector2 playerPos = this.player.getPos();
+        
+        if((this.worldTime % (ReleaseTheKraken.TICK_RATE*5)) == 299 && answer == 1)
+        {
+            if(power == 1)
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.HEALUP, 20);
+            else if(power == 2)
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.ATTACKUP, 10);
+            else if(power == 3)
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.SPEEDUP, 30);
+            else if(power == 4)      
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.DEFENSEUP, 40);           
+        }
+        
         this.physWorld.getBodies(this.physBodies); //Refreshes the physBodies array
         this.worldTime++;
         

@@ -74,7 +74,7 @@ public class EntityPowerUp extends Entity
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         
@@ -89,6 +89,9 @@ public class EntityPowerUp extends Entity
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
         this.physBody.createFixture(fixtureDef);
+        
+        //Set the linear damping
+        this.physBody.setLinearDamping(5F);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
@@ -194,7 +197,7 @@ public class EntityPowerUp extends Entity
     {
         SPEEDUP, ATTACKUP, HEALUP, DEFENSEUP
     }
-    
+
     /**
      * Represents the stats of a power up.
      * @author Dalton
