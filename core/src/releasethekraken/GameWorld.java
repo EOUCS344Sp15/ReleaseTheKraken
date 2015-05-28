@@ -107,25 +107,37 @@ public class GameWorld implements Disposable
     {     
         /*
         Temporary power up generator. Every 5 seconds there is a 50% chance
-        a power up will drop within a small radius above and to the right of the player.
-        TODO: Have power ups spawn within certain radius of player and put clamp on world size.
+        a power up will drop within a radius around the player.
+        TODO: Put clamp on world size, figure out how to make sure they don't spawn on coral/obstacles
+        & balancing once needed
         */
-        int answer = random.nextInt(2) + 1;
+        int spawn = random.nextInt(2) + 1;
+        int makeXNegative = random.nextInt(2) + 1;
+        int makeYNegative = random.nextInt(2) + 1;
         int power = random.nextInt(4) + 1;
-        int xrange = random.nextInt(5) + 5;
-        int yrange = random.nextInt(5) + 5;
+        int xrange = random.nextInt(10) + 5;
+        int yrange = random.nextInt(10) + 5;
         Vector2 playerPos = this.player.getPos();
         
-        if((this.worldTime % (ReleaseTheKraken.TICK_RATE*5)) == 299 && answer == 1)
+        if(makeXNegative == 1)
+            xrange *= -1;
+        
+        if(makeYNegative == 1)
+            yrange *= -1;
+        
+        //For testing purposes
+        //Gdx.app.log("PlayerPos", "X: " + xrange + "Y: " + yrange);
+        
+        if((this.worldTime % (ReleaseTheKraken.TICK_RATE*5)) == 299 && spawn == 1)
         {
             if(power == 1)
-                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.HEALUP, 20);
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.y + yrange, EntityPowerUp.Ability.HEALUP, 20);
             else if(power == 2)
-                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.ATTACKUP, 10);
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.y + yrange, EntityPowerUp.Ability.ATTACKUP, 10);
             else if(power == 3)
-                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.SPEEDUP, 30);
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.y + yrange, EntityPowerUp.Ability.SPEEDUP, 30);
             else if(power == 4)      
-                new EntityPowerUp(this, playerPos.x + xrange, playerPos.x + yrange, EntityPowerUp.Ability.DEFENSEUP, 40);           
+                new EntityPowerUp(this, playerPos.x + xrange, playerPos.y + yrange, EntityPowerUp.Ability.DEFENSEUP, 40);           
         }
         
         this.physWorld.getBodies(this.physBodies); //Refreshes the physBodies array
