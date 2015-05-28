@@ -24,6 +24,7 @@ import releasethekraken.ui.DebugOverlay;
 import releasethekraken.ui.Sidebar;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.tooltip.TextToolTip;
+import releasethekraken.screen.*;
 
 /**
  * This class renders the Game World.
@@ -102,8 +103,8 @@ public class GameRenderer extends UiRenderer
                     {
                         super.onClick(mouseButton);
                         
-                        //Go back to the main menu for now
-                        rtk.popScreen();
+                        //Go back to the pause menu for now
+                        rtk.pushScreen(new PauseScreen(rtk));
                     }
                 };
         pauseButton.setToolTip(new TextToolTip(this, "Pause the game"));
