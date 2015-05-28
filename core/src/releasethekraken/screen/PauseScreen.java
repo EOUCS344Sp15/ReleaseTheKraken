@@ -15,7 +15,7 @@ import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
  * This screen is the main menu screen
- * @author Dalton
+ * @author Lucas Schuetz
  */
 public class PauseScreen extends AbstractScreen
 {    
