@@ -96,13 +96,16 @@ public class ReleaseTheKraken extends Game
         try
         {
             stackScreen = this.screenStack.pop();
+            
+            if (stackScreen instanceof MainMenuScreen)
+                throw new IllegalStateException("The main menu should NOT BE POPPED!");
+            
+            this.setScreen(this.screenStack.peek()); //Update the screen being rendered
         }
         catch (EmptyStackException e)
         {
             Gdx.app.log("ReleaseTheKraken", "popScreen() called, but the screen stack was empty!");
         }
-        
-        this.setScreen(this.screenStack.peek()); //Update the screen being rendered
         
         Gdx.app.log("ReleaseTheKraken", "popScreen() called");
         Gdx.app.log("ReleaseTheKraken", "Screen Stack: " + this.screenStack);
@@ -120,7 +123,7 @@ public class ReleaseTheKraken extends Game
         
         try
         {
-            stackScreen = this.screenStack.pop();
+            stackScreen = this.screenStack.peek();
         }
         catch (EmptyStackException e)
         {

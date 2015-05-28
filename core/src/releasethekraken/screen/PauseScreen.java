@@ -90,9 +90,14 @@ public class PauseScreen extends AbstractScreen
                     {
                         super.onClick(mouseButton);
                         
+                        AbstractScreen top = rtk.peekScreen();
+                        
                         // Pop until currently screen is the Main Menu
-                        while(!(rtk.peekScreen() instanceof MainMenuScreen))
+                        while(top != null && !(top instanceof MainMenuScreen)) 
+                        {
                             rtk.popScreen();
+                            top = rtk.peekScreen();
+                        } // end while
                     }
                 };
         
