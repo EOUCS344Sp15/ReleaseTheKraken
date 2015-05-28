@@ -40,6 +40,18 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     /** The position in the world that the player is aiming at */
     private Vector2 aimPos = new Vector2();
     
+    /**A move left button has been pressed by the user */ 
+    private boolean leftPressedThisTick = false;
+    
+    /**A move right button has been pressed by the user */ 
+    private boolean rightPressedThisTick = false;
+    
+    /**A move down button has been pressed by the user */ 
+    private boolean downPressedThisTick = false;
+    
+    /**A move up button has been pressed by the user */ 
+    private boolean upPressedThisTick = false;
+    
     //Primary constructor
     public EntityPlayer(GameWorld world, float xLocation, float yLocation)
     {
@@ -107,11 +119,10 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     {
         super.update();
         
-        //Update player's aim position
-        //Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
-        //Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
-        //this.aimPos.x = worldMousePos3D.x;
-        //this.aimPos.y = worldMousePos3D.y;
+        this.downPressedThisTick = false;
+        this.upPressedThisTick = false;
+        this.leftPressedThisTick = false;
+        this.rightPressedThisTick = false;
     }
     
     @Override
@@ -201,23 +212,40 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         {
             case Input.Keys.UP:
             case Input.Keys.W:
+                if (!this.upPressedThisTick)
+                {
                 //if (this.physBody.getLinearVelocity().y < this.MAX_SPEED)
                     this.physBody.applyForceToCenter(0, this.MOVE_FORCE, true);
+                    this.upPressedThisTick = true;
+                }
                 break;
             case Input.Keys.DOWN:
             case Input.Keys.S:
+                if (!this.downPressedThisTick)
+                {
                 //if (this.physBody.getLinearVelocity().y > 0 - this.MAX_SPEED)
                     this.physBody.applyForceToCenter(0, -this.MOVE_FORCE, true);
+                    this.downPressedThisTick = true;
+                }
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
+                if(!this.leftPressedThisTick)
+                {
                 //if (this.physBody.getLinearVelocity().x > 0 - this.MAX_SPEED)
                     this.physBody.applyForceToCenter(-this.MOVE_FORCE, 0, true);
+                    this.leftPressedThisTick = true;
+                }
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                //if (this.physBody.getLinearVelocity().x < this.MAX_SPEED)
+                if(!this.rightPressedThisTick)
+                {
+                    //if (this.physBody.getLinearVelocity().x < this.MAX_SPEED)
                     this.physBody.applyForceToCenter(this.MOVE_FORCE, 0, true);
+                    this.rightPressedThisTick = true;
+                }
+               
                 break;
             
         }
