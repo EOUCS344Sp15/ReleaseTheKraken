@@ -63,3 +63,5 @@ build/
 ## OS Specific
 .DS_Store
 /.nb-gradle/private/
+/.nb-gradle/
+/core/assets/[?]/
