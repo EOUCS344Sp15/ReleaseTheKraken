@@ -5,6 +5,7 @@
  */
 package releasethekraken.ui;
 
+import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -141,12 +142,12 @@ public class Sidebar extends UiObject
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        super.update(world);
+        super.onUpdate();
         
         //Update the disabled status on the Kraken button
-        this.krakenButton.setDisabled(world.getPoints() < world.getPointsForKraken());
+        this.krakenButton.setDisabled(this.world.getPoints() < this.world.getPointsForKraken());
     }
     
     @Override

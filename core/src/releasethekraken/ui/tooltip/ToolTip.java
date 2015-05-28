@@ -7,8 +7,8 @@ package releasethekraken.ui.tooltip;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import releasethekraken.ui.GameRenderer;
 import releasethekraken.ui.UiObject;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * Represents a tool tip that can be shown by an InteractiveUiObject.
@@ -19,13 +19,13 @@ public class ToolTip extends UiObject
     protected boolean visible;
     
     //Constructor
-    public ToolTip(GameRenderer renderer)
+    public ToolTip(UiRenderer renderer)
     {
         this(renderer, 0.1F, 0.1F);
     }
     
     //Constructor
-    public ToolTip(GameRenderer renderer, float widthPercent, float heightPercent)
+    public ToolTip(UiRenderer renderer, float widthPercent, float heightPercent)
     {
         super(renderer, 0, 0, widthPercent, heightPercent);
         this.visible = false;

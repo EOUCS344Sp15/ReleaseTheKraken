@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package releasethekraken.ui;
+package releasethekraken.ui.renderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -16,28 +16,26 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.Entity;
 import releasethekraken.path.SeaCreaturePath;
+import releasethekraken.ui.DebugOverlay;
+import releasethekraken.ui.Sidebar;
+import releasethekraken.ui.UiButton;
 import releasethekraken.ui.tooltip.TextToolTip;
-import releasethekraken.ui.tooltip.ToolTip;
 
 /**
  * This class renders the Game World.
  * 
  * @author Dalton
  */
-public class GameRenderer implements Disposable
+public class GameRenderer extends UiRenderer
 {
     /** The Game Renderer's reference to the game world it should be rendering */
     private GameWorld world;
-    /** SpriteBatch to render UI sprites */
-    private SpriteBatch uiSpriteBatch;
     /** SpriteBatch to render world sprites */
     private SpriteBatch worldSpriteBatch;
-    /** ShapeRenderer to render UI shapes */
-    private ShapeRenderer uiShapeRenderer;
     /** ShapeRenderer to render world shapes */
     private ShapeRenderer worldShapeRenderer;
     /** The camera to view the world */
@@ -46,9 +44,6 @@ public class GameRenderer implements Disposable
     Box2DDebugRenderer box2DDebugRenderer;
     /** The OrthogonalTiledMapRenderer to render the tile map */
     OrthogonalTiledMapRenderer tiledMapRenderer;
-    
-    /** The array of UiObjects */
-    public Array<UiObject> uiObjects;
     
     /** Whether the debug screen is visible or not*/
     public boolean debugScreenVisible = false;
@@ -59,10 +54,13 @@ public class GameRenderer implements Disposable
     
     /**
      * Constructs a new GameRenderer
+     * @param rtk The ReleaseTheKraken instance.  This is final so that the
+     * anonymous inner classes can access it.
      * @param world The world to be rendered
      */
-    public GameRenderer(GameWorld world)
+    public GameRenderer(final ReleaseTheKraken rtk, GameWorld world)
     {
+        super();
         this.world = world;
         
         //Populate the list of connected paths
@@ -76,9 +74,7 @@ public class GameRenderer implements Disposable
         this.camera.setToOrtho(false, cameraWidth, cameraHeight);
         Gdx.app.log("GameRenderer", "Calculated camera dimensions: " + cameraWidth + " x " + cameraHeight);
         
-        this.uiSpriteBatch = new SpriteBatch();
         this.worldSpriteBatch = new SpriteBatch();
-        this.uiShapeRenderer = new ShapeRenderer();
         this.worldShapeRenderer = new ShapeRenderer();
         
         //Set the world renderers to render to the camera's projection matrix
@@ -92,8 +88,6 @@ public class GameRenderer implements Disposable
         //Create the tile map renderer
         this.tiledMapRenderer = new OrthogonalTiledMapRenderer(world.getTiledMap(), 1/(world.getTiledMapUnitScale()));
         
-        this.uiObjects = new Array<UiObject>();
-        
         this.debugOverlay = new DebugOverlay(this);
         this.uiObjects.add(this.debugOverlay);
           
@@ -104,10 +98,12 @@ public class GameRenderer implements Disposable
                 0.075F, 0.05F, "Pause", Color.GRAY.cpy().sub(0.1F, 0.1F, 0.1F, 0))
                 {
                     @Override
-                    public void onClick(int mouseButton, GameWorld world)
+                    public void onClick(int mouseButton)
                     {
-                        super.onClick(mouseButton, world);
-                        Gdx.app.log("Pause Button", "onClick() called!");
+                        super.onClick(mouseButton);
+                        
+                        //Go back to the main menu for now
+                        rtk.popScreen();
                     }
                 };
         pauseButton.setToolTip(new TextToolTip(this, "Pause the game"));
@@ -121,11 +117,14 @@ public class GameRenderer implements Disposable
                 0.157F, 0.05F, "Debug Screen", Color.GRAY.cpy().sub(0.1F, 0.1F, 0.1F, 0))
                 {
                     @Override
-                    public void onClick(int mouseButton, GameWorld world)
+                    public void onClick(int mouseButton)
                     {
-                        super.onClick(mouseButton, world);
-                        this.renderer.debugScreenVisible = !this.renderer.debugScreenVisible; //Toggle visibility
-                        Gdx.app.log("Debug Menu Button", "Debug screen " + (this.renderer.debugScreenVisible ? "ON" : "OFF"));
+                        super.onClick(mouseButton);
+                        if (this.renderer instanceof GameRenderer)
+                        {
+                            ((GameRenderer)this.renderer).debugScreenVisible = !((GameRenderer)this.renderer).debugScreenVisible; //Toggle visibility
+                        Gdx.app.log("Debug Menu Button", "Debug screen " + (((GameRenderer)this.renderer).debugScreenVisible ? "ON" : "OFF"));
+                        }
                     }
                 };
         debugMenuButton.setToolTip(new TextToolTip(this, "Show/Hide Debug Screen"));
@@ -137,11 +136,11 @@ public class GameRenderer implements Disposable
         this.uiObjects.sort(); //Sort the UI objects so that they render in the order of their render depths
     }
     
-    /**
-     * Renders the game world
-     */
+    @Override
     public void render()
     {
+        this.renderTime++;
+        
         //The width of the sidebar in local camera units
         float sidebarLocalWidth = 0.2F*this.camera.viewportWidth;
         
@@ -204,7 +203,7 @@ public class GameRenderer implements Disposable
             this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         
             //Draw paths
-            this.worldShapeRenderer.setColor(Color.RED);
+            this.worldShapeRenderer.setColor(Color.BLUE);
             for (SeaCreaturePath scPath : this.seaCreaturePaths)
                 this.worldShapeRenderer.polyline(scPath.getPolyline().getTransformedVertices());
 
@@ -214,56 +213,33 @@ public class GameRenderer implements Disposable
             this.box2DDebugRenderer.render(this.world.getPhysWorld(), this.camera.combined);
         }
         
-        //Updates UI objects
-        for (UiObject obj : this.uiObjects)
-            obj.update(this.world);
-        
-        //Draws UI Shapes
-        this.uiShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        
-        for (UiObject obj : this.uiObjects)
-            if (!(obj instanceof ToolTip))
-                obj.renderShapes(this.uiShapeRenderer);
-        
-        this.uiShapeRenderer.end();
-        
-        //Draws UI Sprites
-        this.uiSpriteBatch.begin();
-        
-        for (UiObject obj : this.uiObjects)
-            if (!(obj instanceof ToolTip))
-                obj.renderSprites(this.uiSpriteBatch);
-        
-        //this.uiSpriteBatch.draw(GameAssets.texBadlogic, Gdx.graphics.getWidth() - GameAssets.texBadlogic.getWidth(), 0); //Draws LibGDX logo
-        
-        this.uiSpriteBatch.end();
-        
-        //Draws UI ToolTip Shapes
-        this.uiShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        
-        for (UiObject obj : this.uiObjects)
-            if (obj instanceof ToolTip)
-                obj.renderShapes(this.uiShapeRenderer);
-        
-        this.uiShapeRenderer.end();
-        
-        //Draws UI ToolTip Sprites
-        this.uiSpriteBatch.begin();
-        
-        for (UiObject obj : this.uiObjects)
-            if (obj instanceof ToolTip)
-                obj.renderSprites(this.uiSpriteBatch);
+        this.renderUi(); //Renders the UI with the code in the superclass
+    }
 
-        this.uiSpriteBatch.end();
+    /**
+     * Gets the camera instance
+     * @return The OrthographicCamera instance
+     */
+    public OrthographicCamera getCamera()
+    {
+        return camera;
+    }
+    
+    /**
+     * Gets the world that the GameRenderer is rendering
+     * @return The GameWorld being rendered
+     */
+    public GameWorld getWorld()
+    {
+        return this.world;
     }
     
     @Override
     public void dispose()
     {
+        super.dispose();
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
-        this.uiSpriteBatch.dispose();
         this.worldSpriteBatch.dispose();
-        this.uiShapeRenderer.dispose();
         this.worldShapeRenderer.dispose();
         this.tiledMapRenderer.dispose();
         this.box2DDebugRenderer.dispose();

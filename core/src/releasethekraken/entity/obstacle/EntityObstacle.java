@@ -14,7 +14,7 @@ import releasethekraken.entity.EntityLiving;
  *
  * @author Mitch
  */
-public class EntityObstacle extends EntityLiving
+public abstract class EntityObstacle extends EntityLiving
 {
 
     /**
@@ -38,9 +38,4 @@ public class EntityObstacle extends EntityLiving
        super(world, mapObject);
     }
     
-    @Override
-    protected void spawnInWorld(float x, float y, float xVel, float yVel)
-    {
-        //TODO: Copy and modify the code from EntityPlayer
-    }
 }

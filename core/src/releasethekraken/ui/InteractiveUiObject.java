@@ -5,8 +5,13 @@
  */
 package releasethekraken.ui;
 
+import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import releasethekraken.GameWorld;
+import releasethekraken.InputHandler;
+import releasethekraken.ReleaseTheKraken;
+import releasethekraken.ui.renderer.UiRenderer;
 import releasethekraken.ui.tooltip.ToolTip;
 
 /**
@@ -14,36 +19,54 @@ import releasethekraken.ui.tooltip.ToolTip;
  * UiButton extends this.
  * @author Dalton
  */
-public class InteractiveUiObject extends UiObject
+public class InteractiveUiObject extends UiObject implements InputHandler.TouchListener
 {
     protected boolean hoverActive = false; //True if a pointer is hovering over this
     protected ToolTip toolTip = null; //The UI object's tooltip.  Can be null.
     
     //Constructor
-    public InteractiveUiObject(GameRenderer renderer)
+    public InteractiveUiObject(UiRenderer renderer)
     {
         this(renderer, 0.0F, 0.0F, 0.0F, 0.0F);
     }
     
     //Constructor
-    public InteractiveUiObject(GameRenderer renderer, float x, float y)
+    public InteractiveUiObject(UiRenderer renderer, GameWorld world, float x, float y)
     {
         this(renderer, x, y, 0.0F, 0.0F);
     }
     
     //Constructor
-    public InteractiveUiObject(GameRenderer renderer, float x, float y, float width, float height)
+    public InteractiveUiObject(UiRenderer renderer, float x, float y, float width, float height)
     {
         super(renderer, x, y, width, height);
+        ReleaseTheKraken.inputHandler.registerTouchListener(this); //Register this object as a touch listener
+    }
+    
+    @Override
+    public void onUpdate()
+    {
+        super.onUpdate();
+        
+        Vector2 pointer0 = ReleaseTheKraken.inputHandler.getPointerLocations().get(0);
+        
+        //Call onHover() if the mouse is in the bounds of the object
+        if (this.isInBounds(pointer0.x, pointer0.y))
+        {
+            this.onHover(pointer0.x, pointer0.y);
+        }
+        else if (this.isHoverActive()) //If the object was still being hovered over, call onLeaveHover()
+        {
+            this.onLeaveHover();
+        } 
     }
     
     /**
      * Called when the object is clicked
      * 
      * @param mouseButton The mouse button that was clicked.  TODO: which button?
-     * @param world The game world
      */
-    public void onClick(int mouseButton, GameWorld world)
+    public void onClick(int mouseButton)
     {
         
     }
@@ -52,18 +75,16 @@ public class InteractiveUiObject extends UiObject
      * Called when the object is clicked and held
      * 
      * @param mouseButton The mouse button that was clicked.  TODO: which button?
-     * @param world The game world
      */
-    public void onClickHeld(int mouseButton, GameWorld world)
+    public void onClickHeld(int mouseButton)
     {
         
     }
     
     /**
      * Called when the object is no longer being clicked.
-     * @param world The game world
      */
-    public void onStoppedClicking(GameWorld world)
+    public void onStoppedClicking()
     {
         
     }
@@ -128,5 +149,24 @@ public class InteractiveUiObject extends UiObject
         this.toolTip = toolTip;
         if (!this.renderer.uiObjects.contains(toolTip, true))
             this.renderer.uiObjects.add(toolTip); //Add tooltip to the list
+    }
+
+    //TouchListener interface methods
+    
+    @Override
+    public void touchDown(int x, int y, int pointer, int button)
+    {
+        if (this.isInBounds(x, y)) //If the click was within the button's bounds, call onClick()
+            this.onClick(button);
+    }
+
+    @Override
+    public void touchUp(int x, int y, int pointer, int button) {}
+
+    @Override
+    public void touchHeld(int x, int y, int pointer, int button)
+    {
+        if (this.isInBounds(x, y)) //If the click was within the button's bounds, call onClick()
+            this.onClickHeld(button);
     }
 }

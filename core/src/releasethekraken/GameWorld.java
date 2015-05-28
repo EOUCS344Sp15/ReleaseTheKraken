@@ -66,8 +66,8 @@ public class GameWorld implements Disposable
     /** The beginning of the chain of paths that sea creatures can take */
     private SeaCreaturePath firstPath;
     
-     /**Variable for random number generator */
-    public final Random ran = new Random();
+    /** The world's random number generator */
+    public final Random random = new Random();
      
     /**
      * Constructs a new GameWorld
@@ -359,7 +359,7 @@ public class GameWorld implements Disposable
         if (entity.getPhysBody() != null)
         {
             this.physBodiesToRemove.add(entity.getPhysBody());
-            Gdx.app.log("GameWorld", "removeEntity(" + entity + ");");
+            //Gdx.app.log("GameWorld", "removeEntity(" + entity + ");");
         }
     }
 

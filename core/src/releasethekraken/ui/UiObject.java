@@ -5,11 +5,13 @@
  */
 package releasethekraken.ui;
 
+import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * The base class for UI objects. 
@@ -18,7 +20,10 @@ import releasethekraken.GameWorld;
  */
 public class UiObject implements Disposable, Renderable, Comparable<UiObject>
 {
-    protected GameRenderer renderer; //The game renderer that this belongs to
+    /** The Renderer that this belongs to */
+    protected UiRenderer renderer;
+    /** The GameWorld that this button is for.  Can be null */
+    protected GameWorld world = null;
     
     //X and Y coordinates on the screen
     protected float x;
@@ -31,19 +36,19 @@ public class UiObject implements Disposable, Renderable, Comparable<UiObject>
     protected int depth; //The depth that the UI Object will be rendered at.  Can be negative
     
     //Constructor
-    public UiObject(GameRenderer renderer)
+    public UiObject(UiRenderer renderer)
     {
         this(renderer, 0.0F, 0.0F, 0.0F, 0.0F);
     }
     
     //Constructor
-    public UiObject(GameRenderer renderer, float x, float y)
+    public UiObject(UiRenderer renderer, float x, float y)
     {
         this(renderer, x, y, 0.0F, 0.0F);
     }
     
     //Constructor
-    public UiObject(GameRenderer renderer, float x, float y, float width, float height)
+    public UiObject(UiRenderer renderer, float x, float y, float width, float height)
     {
         this.x = x;
         this.y = y;
@@ -51,6 +56,9 @@ public class UiObject implements Disposable, Renderable, Comparable<UiObject>
         this.height = height*Gdx.graphics.getHeight();
         this.depth = 0;
         this.renderer = renderer;
+        
+        if (this.renderer instanceof GameRenderer)
+            this.world = ((GameRenderer)renderer).getWorld();
     }
     
     @Override
@@ -67,9 +75,8 @@ public class UiObject implements Disposable, Renderable, Comparable<UiObject>
     
     /**
      * Updates the UI object's logic
-     * @param world The game world the UI is for
      */
-    public void update(GameWorld world)
+    public void onUpdate()
     {
         
     }

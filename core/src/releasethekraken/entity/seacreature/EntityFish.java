@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
  *
@@ -76,6 +77,12 @@ public class EntityFish extends EntitySeaCreature
         fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
+        
+        //Set which collision type this object is
+        fixtureDef.filter.categoryBits = COL_SEA_CREATURE;
+        //Set which collision types this object collides with
+        fixtureDef.filter.maskBits = COL_ALL ^ COL_SEA_PROJECTILE; //Collide with everything except sea creature projectiles
+        
         this.physBody.createFixture(fixtureDef);
         
         //Set the linear damping

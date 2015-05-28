@@ -5,13 +5,14 @@
  */
 package releasethekraken.ui;
 
+import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.GameAssets;
-import releasethekraken.GameWorld;
 import releasethekraken.InputHandler;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * Draws some useful debugging information on the screen.
@@ -54,7 +55,7 @@ public class DebugOverlay extends UiObject
         debugData.add(playerStats2 = new DebugEntry());
     }
     
-    public DebugOverlay(GameRenderer renderer)
+    public DebugOverlay(UiRenderer renderer)
     {
         super(renderer,
                 Gdx.graphics.getWidth() - 0.2323F*Gdx.graphics.getWidth(),
@@ -66,41 +67,46 @@ public class DebugOverlay extends UiObject
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
-        if (this.renderer.debugScreenVisible)
-        {
-            //shapeRenderer.setColor(Color.valueOf("0000FF"));
-            //shapeRenderer.rect(this.x, this.y - this.height, this.width, this.height);
-        }
+        if (this.renderer instanceof GameRenderer)
+            if (((GameRenderer)this.renderer).debugScreenVisible)
+            {
+                //shapeRenderer.setColor(Color.valueOf("0000FF"));
+                //shapeRenderer.rect(this.x, this.y - this.height, this.width, this.height);
+            }
     }
     
     @Override
     public void renderSprites(SpriteBatch batch)
     {
-        if (this.renderer.debugScreenVisible)
-            GameAssets.fontDebug.draw(batch, debugData.toString("\n"), this.x, this.y, this.width, -1, true);
+        if (this.renderer instanceof GameRenderer)
+            if (((GameRenderer)this.renderer).debugScreenVisible)
+                GameAssets.fontDebug.draw(batch, debugData.toString("\n"), this.x, this.y, this.width, -1, true);
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        if (this.renderer.debugScreenVisible)
-        {
-            fpsEntry.data = String.format("%-12.12s : %-6s", "FPS", Gdx.graphics.getFramesPerSecond());
-            javaHeap.data = String.format("%-12.12s : %-6.3f MB", "Java Heap", Gdx.app.getJavaHeap()/1024F/1024F);
-            nativeHeap.data = String.format("%-12.12s : %-6.3f MB", "Native Heap", Gdx.app.getNativeHeap()/1024F/1024F);
-            worldStats1.data = "Level: " + world.getName();
-            worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
-            worldStats3.data = String.format("%-12.12s : %-6s", "Phys Bodies", world.getPhysBodies().size);
-            devPos.data = String.format("Dev Pos: x:%-3.0f y:%-3.0f", InputHandler.DEV_POS.x, InputHandler.DEV_POS.y);
-            playerStats1.data = String.format("Player Pos: X:%-2.1f Y:%-2.1f", world.getPlayer().getPos().x, world.getPlayer().getPos().y);
-            playerStats2.data = String.format("Player Vel: X:%-2.1f Y:%-2.1f m/s", world.getPlayer().getVel().x, world.getPlayer().getVel().y);
-        }
+        super.onUpdate();
+        
+        if (this.renderer instanceof GameRenderer)
+            if (((GameRenderer)this.renderer).debugScreenVisible)
+            {
+                fpsEntry.data = String.format("%-12.12s : %-6s", "FPS", Gdx.graphics.getFramesPerSecond());
+                javaHeap.data = String.format("%-12.12s : %-6.3f MB", "Java Heap", Gdx.app.getJavaHeap()/1024F/1024F);
+                nativeHeap.data = String.format("%-12.12s : %-6.3f MB", "Native Heap", Gdx.app.getNativeHeap()/1024F/1024F);
+                worldStats1.data = "Level: " + world.getName();
+                worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
+                worldStats3.data = String.format("%-12.12s : %-6s", "Phys Bodies", world.getPhysBodies().size);
+                devPos.data = String.format("Dev Pos: x:%-3.0f y:%-3.0f", InputHandler.DEV_POS.x, InputHandler.DEV_POS.y);
+                playerStats1.data = String.format("Player Pos: X:%-2.1f Y:%-2.1f", world.getPlayer().getPos().x, world.getPlayer().getPos().y);
+                playerStats2.data = String.format("Player Vel: X:%-2.1f Y:%-2.1f m/s", world.getPlayer().getVel().x, world.getPlayer().getVel().y);
+            }
     }
     
     /**
      * Adds a DebugEntry to the list of debug info to show. Once added, any
-     * changes to the DebugEntry will cause the entry in the debug overlay
-     * to update.  Use this to add your own debug entries.
+ changes to the DebugEntry will cause the entry in the debug overlay
+ to onUpdate.  Use this to add your own debug entries.
      * @param entry 
      */
     public static void addEntry(DebugEntry entry)

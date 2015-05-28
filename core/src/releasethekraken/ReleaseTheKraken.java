@@ -2,13 +2,19 @@ package releasethekraken;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.Stack;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.pirate.EntityGunTower;
+import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityFish;
+import releasethekraken.entity.seacreature.EntityOrca;
 import releasethekraken.entity.seacreature.EntityPlayer;
-import releasethekraken.screen.GameScreen;
+import releasethekraken.entity.seacreature.EntityTurtle;
+import releasethekraken.screen.AbstractScreen;
+import releasethekraken.screen.MainMenuScreen;
 
 public class ReleaseTheKraken extends Game
 {
@@ -18,17 +24,26 @@ public class ReleaseTheKraken extends Game
     /** How many times the game updates per second */
     public static final int TICK_RATE = 60;
     
+    /** The stack of screens */
+    private Stack<AbstractScreen> screenStack = new Stack<AbstractScreen>();
+    
     //Register game objects
     static
     {
         //Register entities
         registerEntity("EntityPowerup", EntityPowerUp.class);
         registerEntity("EntityFish", EntityFish.class);
+        registerEntity("EntityTurtle", EntityTurtle.class);
+        registerEntity("EntityOrca", EntityOrca.class);
         registerEntity("EntityGunTower", EntityGunTower.class);
+        registerEntity("EntityPirateBase", EntityPirateBase.class);
         registerEntity("EntityPlayer", EntityPlayer.class);
     }
     
     private GameAssets gameAssets;
+    
+    /** The static InputHandler for the game */
+    public static InputHandler inputHandler;
     
     @Override
     public void create()
@@ -41,7 +56,12 @@ public class ReleaseTheKraken extends Game
         */
         this.gameAssets = new GameAssets();
         
-        this.setScreen(new GameScreen("TestLevel"));
+        //Create a class to handle input.  Tell LibGDX about it
+        inputHandler = new InputHandler();
+        Gdx.input.setInputProcessor(inputHandler);
+        
+        //Push the main menu onto the stack
+        this.pushScreen(new MainMenuScreen(this));
     }
     
     @Override
@@ -50,6 +70,64 @@ public class ReleaseTheKraken extends Game
         super.dispose();
         Gdx.app.log(this.getClass().getSimpleName(), "Application Closing!");
         this.gameAssets.dispose();
+    }
+    
+    /**
+     * Pushes a new AbstractScreen onto the stack
+     * @param screen The new AbstractScreen to push
+     */
+    public void pushScreen(AbstractScreen screen)
+    {
+        this.screenStack.push(screen);
+        this.setScreen(screen); //Update the screen being rendered
+        
+        Gdx.app.log("ReleaseTheKraken", "pushScreen(" + screen.getClass().getSimpleName() + ") called");
+        Gdx.app.log("ReleaseTheKraken", "Screen Stack: " + this.screenStack);
+    }
+    
+    /**
+     * Pops an AbstractScreen off of the stack
+     * @return The AbstractScreen popped off the stack
+     */
+    public AbstractScreen popScreen()
+    {
+        AbstractScreen stackScreen = null;
+        
+        try
+        {
+            stackScreen = this.screenStack.pop();
+        }
+        catch (EmptyStackException e)
+        {
+            Gdx.app.log("ReleaseTheKraken", "popScreen() called, but the screen stack was empty!");
+        }
+        
+        this.setScreen(this.screenStack.peek()); //Update the screen being rendered
+        
+        Gdx.app.log("ReleaseTheKraken", "popScreen() called");
+        Gdx.app.log("ReleaseTheKraken", "Screen Stack: " + this.screenStack);
+
+        return stackScreen;
+    }
+    
+    /**
+     * Peeks at the AbstractScreen on the top of the stack
+     * @return The AbstractScreen on top of the stack
+     */
+    public AbstractScreen peekScreen()
+    {
+        AbstractScreen stackScreen = null;
+        
+        try
+        {
+            stackScreen = this.screenStack.pop();
+        }
+        catch (EmptyStackException e)
+        {
+            Gdx.app.log("ReleaseTheKraken", "peekScreen() called, but the screen stack was empty!");
+        }
+
+        return stackScreen;
     }
     
     /**

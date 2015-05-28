@@ -7,6 +7,7 @@ package releasethekraken.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import releasethekraken.GameAssets;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * Represents a borderless text box on the screen. Draws the text centered on
@@ -20,14 +21,14 @@ public class UiText extends UiObject
 
     /**
      * Constructs a new UiText
-     * @param renderer The GameRenderer instance
+     * @param renderer The UiRenderer instance
      * @param x The X coordinate, in pixels
      * @param y The Y coordinate, in pixels
      * @param width The width, in percentage of the screen
      * @param height The height, in percentage of the screen
      * @param text The text to display
      */
-    public UiText(GameRenderer renderer, float x, float y, float width, float height, String text)
+    public UiText(UiRenderer renderer, float x, float y, float width, float height, String text)
     {
         super(renderer, x, y, width, height);
         this.text = text;

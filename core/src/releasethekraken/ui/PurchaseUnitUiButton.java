@@ -5,10 +5,10 @@
  */
 package releasethekraken.ui;
 
+import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import releasethekraken.GameAssets;
-import releasethekraken.GameWorld;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.ui.tooltip.PurchaseUnitToolTip;
 
@@ -68,23 +68,23 @@ public class PurchaseUnitUiButton extends UiButton
     }
     
     @Override
-    public void update(GameWorld world)
+    public void onUpdate()
     {
-        super.update(world);
+        super.onUpdate();
         
         //Disable the button if the unit can't be afforded, or enable it if it can be
-        this.setDisabled(world.getCoins() < this.seaCreatureStats.cost);
+        this.setDisabled(this.world.getCoins() < this.seaCreatureStats.cost);
     }
     
     @Override
-    public void onClick(int mouseButton, GameWorld world)
+    public void onClick(int mouseButton)
     {
-        super.onClick(mouseButton, world);
+        super.onClick(mouseButton);
         
         //Purchase the unit
-        if (this.state != ButtonState.DISABLED && world.getCoins() >= this.seaCreatureStats.cost)
+        if (this.state != ButtonState.DISABLED && this.world.getCoins() >= this.seaCreatureStats.cost)
         {
-            world.removeCoins(this.seaCreatureStats.cost); //Remove how many coins it costs
+            this.world.removeCoins(this.seaCreatureStats.cost); //Remove how many coins it costs
             
             //TODO: spawn the sea creature in x seconds
         }

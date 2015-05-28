@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import java.util.HashMap;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
  *
@@ -88,6 +89,13 @@ public class EntityPowerUp extends Entity
         fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
+        fixtureDef.isSensor = true; //Make it not collide, but still make collision events
+        
+        //Set which collision type this object is
+        fixtureDef.filter.categoryBits = COL_POWERUP;
+        //Set which collision types this object collides with
+        fixtureDef.filter.maskBits = COL_PLAYER; //Only collide with the player
+        
         this.physBody.createFixture(fixtureDef);
         
         //Set the linear damping

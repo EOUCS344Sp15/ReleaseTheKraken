@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
-import releasethekraken.ui.GameRenderer;
+import releasethekraken.ui.renderer.GameRenderer;
 
 /**
  * 
