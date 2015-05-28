@@ -4,9 +4,11 @@
 package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.MathUtils;
 import java.util.HashMap;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
+import releasethekraken.entity.EntityPowerUp;
 
 /**
  *
@@ -26,6 +28,12 @@ public abstract class EntitySeaCreature extends EntityLiving
         addStat(EntityOrca.class, new SeaCreatureStats(150, 100, 20, 10*60, "Orca", "A description of an orca should probably go here..."));
     }
     
+    /** The current power up applied; can be null */
+    protected EntityPowerUp.Ability appliedPowerUp = null;
+    
+    /** The amount of time left that the power up is applied for (ticks) */
+    protected int powerUpTime = 0;
+    
     //Primary constructor
     public EntitySeaCreature(GameWorld world, float xLocation, float yLocation)
     {
@@ -37,6 +45,40 @@ public abstract class EntitySeaCreature extends EntityLiving
     {
         super(world, mapObject);
         //This will be implemented when the level loader is written
+    }
+    
+    @Override
+    public void update()
+    {
+        super.update();
+        
+        if (this.powerUpTime > 0)
+        {
+            this.powerUpTime--;
+            
+            switch (this.appliedPowerUp)
+            {
+                case HEALUP:
+                    this.health = MathUtils.clamp(this.health+10, 0, this.maxHealth);
+                case SPEEDUP:
+                    //TODO: add functionality for speeding up entities
+                case ATTACKUP:
+                    //TODO: add functionalility for increasing enemy attack
+                case DEFENSEUP:
+                    //TODO: add functionality for incre
+            }
+        }
+    }
+    
+    /**
+     * Applies a power up to the entity
+     * @param powerUp The power up being applied
+     * @param time The amount of time the power up will last
+     */
+    public void applyPowerUp(EntityPowerUp.Ability powerUp, int time)
+    {
+        this.appliedPowerUp = powerUp;
+        this.powerUpTime = time;
     }
     
     /**
