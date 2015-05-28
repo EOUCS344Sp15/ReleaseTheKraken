@@ -89,12 +89,12 @@ public class EntityPowerUp extends Entity
         fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
-        fixtureDef.isSensor = true; //Make it not collide, but still make collision events
+        //fixtureDef.isSensor = true; //Make it not collide, but still make collision events
         
         //Set which collision type this object is
         fixtureDef.filter.categoryBits = COL_POWERUP;
         //Set which collision types this object collides with
-        fixtureDef.filter.maskBits = COL_PLAYER; //Only collide with the player
+        fixtureDef.filter.maskBits = COL_ALL ^ (COL_PIRATE_PROJECTILE | COL_SEA_PROJECTILE);
         
         this.physBody.createFixture(fixtureDef);
         

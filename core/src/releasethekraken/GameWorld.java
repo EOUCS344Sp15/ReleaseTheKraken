@@ -110,10 +110,10 @@ public class GameWorld implements Disposable
         a power up will drop within a small radius above and to the right of the player.
         TODO: Have power ups spawn within certain radius of player and put clamp on world size.
         */
-        int answer = ran.nextInt(2) + 1;
-        int power = ran.nextInt(4) + 1;
-        int xrange = ran.nextInt(5) + 5;
-        int yrange = ran.nextInt(5) + 5;
+        int answer = random.nextInt(2) + 1;
+        int power = random.nextInt(4) + 1;
+        int xrange = random.nextInt(5) + 5;
+        int yrange = random.nextInt(5) + 5;
         Vector2 playerPos = this.player.getPos();
         
         if((this.worldTime % (ReleaseTheKraken.TICK_RATE*5)) == 299 && answer == 1)
