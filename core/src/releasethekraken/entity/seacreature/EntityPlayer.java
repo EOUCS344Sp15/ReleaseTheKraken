@@ -8,6 +8,7 @@ package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -153,7 +154,12 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
             
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         }
-        
+       /* shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(this.getPos().x - (this.maxHealth * .25f), this.getPos().y + 1.1f, this.maxHealth * .5f, 0.5f);
+
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(this.getPos().x - (this.maxHealth * .25f), this.getPos().y + 1.1f, this.health * .5f, 0.5f);
+*/
         //Draw crosshair
         //shapeRenderer.setColor(Color.RED);
         //shapeRenderer.x(this.aimPos, 1);
@@ -245,9 +251,17 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                     this.physBody.applyForceToCenter(this.MOVE_FORCE, 0, true);
                     this.rightPressedThisTick = true;
                 }
-               
                 break;
-            
+            case Input.Keys.Z:
+                if(this.health > 1)
+                    this.health = this.health - 1;
+                break;
+            case Input.Keys.X:
+                if(this.health == this.maxHealth)
+                    this.health = this.maxHealth;
+                else
+                    this.health = this.health + 1;
+                break;
         }
     }
 }

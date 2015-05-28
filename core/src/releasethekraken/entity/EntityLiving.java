@@ -5,6 +5,9 @@
  */
 package releasethekraken.entity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
 
@@ -100,5 +103,18 @@ public abstract class EntityLiving extends Entity
     public int getMaxHealth()
     {
         return maxHealth;
+    }
+    
+    @Override
+    public void renderShapes(ShapeRenderer shapeRenderer)
+    {
+        super.renderShapes(shapeRenderer);
+       
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(this.getPos().x - (this.maxHealth * .25f), this.getPos().y + 1.1f, 5f, 0.5f);
+
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(this.getPos().x - (this.maxHealth * .25f), this.getPos().y + 1.1f, ((float)this.health/(float)this.maxHealth) * 5f, 0.5f);
+
     }
 }
