@@ -5,11 +5,13 @@
  */
 package releasethekraken.ui;
 
+import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import releasethekraken.GameWorld;
 import releasethekraken.InputHandler;
 import releasethekraken.ReleaseTheKraken;
+import releasethekraken.ui.renderer.UiRenderer;
 import releasethekraken.ui.tooltip.ToolTip;
 
 /**
@@ -23,19 +25,19 @@ public class InteractiveUiObject extends UiObject implements InputHandler.TouchL
     protected ToolTip toolTip = null; //The UI object's tooltip.  Can be null.
     
     //Constructor
-    public InteractiveUiObject(GameRenderer renderer)
+    public InteractiveUiObject(UiRenderer renderer)
     {
         this(renderer, 0.0F, 0.0F, 0.0F, 0.0F);
     }
     
     //Constructor
-    public InteractiveUiObject(GameRenderer renderer, GameWorld world, float x, float y)
+    public InteractiveUiObject(UiRenderer renderer, GameWorld world, float x, float y)
     {
         this(renderer, x, y, 0.0F, 0.0F);
     }
     
     //Constructor
-    public InteractiveUiObject(GameRenderer renderer, float x, float y, float width, float height)
+    public InteractiveUiObject(UiRenderer renderer, float x, float y, float width, float height)
     {
         super(renderer, x, y, width, height);
         ReleaseTheKraken.inputHandler.registerTouchListener(this); //Register this object as a touch listener

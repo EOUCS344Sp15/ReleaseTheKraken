@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import releasethekraken.GameWorld;
 import releasethekraken.LevelLoader;
 import releasethekraken.ReleaseTheKraken;
-import releasethekraken.ui.GameRenderer;
+import releasethekraken.ui.renderer.GameRenderer;
 
 /**
  * This screen is the actual game.
@@ -30,7 +30,7 @@ public class GameScreen extends AbstractScreen
         this.world = levelLoader.loadWorld();
         
         //Create game renderer for the world
-        this.renderer = new GameRenderer(this.world);
+        this.renderer = new GameRenderer(rtk, this.world);
     }
 
     @Override

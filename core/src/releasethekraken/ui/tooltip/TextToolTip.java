@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
-import releasethekraken.ui.GameRenderer;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * Represents a ToolTip that displays text.
@@ -21,7 +21,7 @@ public class TextToolTip extends ToolTip
     protected String text; //The text to display
     protected Color color;
     
-    public TextToolTip(GameRenderer renderer, String text)
+    public TextToolTip(UiRenderer renderer, String text)
     {
         super(renderer, 0.0F, 0.0F);
         this.text = text;

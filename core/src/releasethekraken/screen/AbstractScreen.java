@@ -10,6 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.InputHandler;
 import releasethekraken.ReleaseTheKraken;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * Represents an abstract screen for the game.  Each game screen should extend this
@@ -23,6 +24,8 @@ public abstract class AbstractScreen implements Screen
     protected Array<InputHandler.TouchListener> touchListeners = new Array<InputHandler.TouchListener>();
     /** The ReleaseTheKraken instance */
     protected ReleaseTheKraken rtk;
+    /** The Renderer for the screen */
+    protected UiRenderer renderer;
     
     /**
      * Constructs a new screen
@@ -42,6 +45,10 @@ public abstract class AbstractScreen implements Screen
     public void show()
     {
         Gdx.app.log(this.getClass().getSimpleName(), "show() called");
+        
+        //Set the InputHandler's listener lists to this screen's lists
+        ReleaseTheKraken.inputHandler.setKeyListeners(this.keyListeners);
+        ReleaseTheKraken.inputHandler.setTouchListeners(this.touchListeners);
     }
 
     @Override
@@ -50,6 +57,9 @@ public abstract class AbstractScreen implements Screen
         //Gdx.app.log(this.getClass().getSimpleName(), "render() called!");
         
         ReleaseTheKraken.inputHandler.update();
+        
+        if (this.renderer != null)
+            this.renderer.render();
     }
 
     @Override
@@ -80,5 +90,6 @@ public abstract class AbstractScreen implements Screen
     public void dispose()
     {
         Gdx.app.log(this.getClass().getSimpleName(), "dispose() called");
+        this.renderer.dispose();
     }
 }

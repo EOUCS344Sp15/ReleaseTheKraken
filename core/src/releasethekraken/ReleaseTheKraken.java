@@ -80,6 +80,9 @@ public class ReleaseTheKraken extends Game
     {
         this.screenStack.push(screen);
         this.setScreen(screen); //Update the screen being rendered
+        
+        Gdx.app.log("ReleaseTheKraken", "pushScreen(" + screen.getClass().getSimpleName() + ") called");
+        Gdx.app.log("ReleaseTheKraken", "Screen Stack: " + this.screenStack);
     }
     
     /**
@@ -99,7 +102,10 @@ public class ReleaseTheKraken extends Game
             Gdx.app.log("ReleaseTheKraken", "popScreen() called, but the screen stack was empty!");
         }
         
-        this.setScreen(stackScreen); //Update the screen being rendered
+        this.setScreen(this.screenStack.peek()); //Update the screen being rendered
+        
+        Gdx.app.log("ReleaseTheKraken", "popScreen() called");
+        Gdx.app.log("ReleaseTheKraken", "Screen Stack: " + this.screenStack);
 
         return stackScreen;
     }

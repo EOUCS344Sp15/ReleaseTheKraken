@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import releasethekraken.GameAssets;
-import releasethekraken.GameWorld;
+import releasethekraken.ui.renderer.UiRenderer;
 
 /**
  * Represents a UI button.  Most of the code was taken from Dalton's CS 310 Android App
@@ -27,7 +27,7 @@ public class UiButton extends InteractiveUiObject
     
     /**
      * Constructs a new UI button.
-     * @param renderer The GameRenderer instance
+     * @param renderer The UiRenderer instance
      * @param x The X coordinate, in pixels, on the screen
      * @param y The Y coordinate, in pixels, on the screen
      * @param width The width of the button, in percentage of screen width
@@ -35,7 +35,7 @@ public class UiButton extends InteractiveUiObject
      * @param text The text displayed on the button
      * @param color The color of the button.  <strong>IMPORTANT:</strong> The button won't display properly if the color is highly saturated!
      */
-    public UiButton(GameRenderer renderer, float x, float y, float width, float height, String text, Color color)
+    public UiButton(UiRenderer renderer, float x, float y, float width, float height, String text, Color color)
     {
         super(renderer, x, y, width, height);
         this.text = text;
@@ -103,7 +103,7 @@ public class UiButton extends InteractiveUiObject
     {
         super.onUpdate();
         
-        if (this.state == ButtonState.PRESSED && world.getWorldTime() - this.lastClickTime > 5) //Unpress the button
+        if (this.state == ButtonState.PRESSED && this.renderer.getRenderTime() - this.lastClickTime > 5) //Unpress the button
         {
             this.state = ButtonState.UNPRESSED;
             this.onStoppedClicking();
@@ -117,7 +117,7 @@ public class UiButton extends InteractiveUiObject
         
         if (this.state != ButtonState.DISABLED)
         {
-            this.lastClickTime = world.getWorldTime();
+            this.lastClickTime = this.renderer.getRenderTime();
             this.state = ButtonState.PRESSED;
             this.currentColorIndex = 1; //Change colors to pressed colors
         }
@@ -131,7 +131,7 @@ public class UiButton extends InteractiveUiObject
         
         if (this.state != ButtonState.DISABLED)
         {
-            this.lastClickTime = world.getWorldTime();
+            this.lastClickTime = this.renderer.getRenderTime();
             this.state = ButtonState.PRESSED;
             this.currentColorIndex = 1; //Change colors to pressed colors
         }
