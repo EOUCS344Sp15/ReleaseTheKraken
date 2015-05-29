@@ -105,9 +105,10 @@ public class GameRenderer extends UiRenderer
                     {
                         super.onClick(mouseButton);
                         
+                        //Take a screenshot of the game
                         Pixmap pixmap = Screenshots.getScreenshot(true);
                         
-                        //Go back to the pause menu for now
+                        //Push a new pause screen onto the screen stack
                         rtk.pushScreen(new PauseScreen(rtk, pixmap));
                     }
                 };

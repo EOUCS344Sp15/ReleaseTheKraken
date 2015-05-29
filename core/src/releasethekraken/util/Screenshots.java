@@ -90,6 +90,7 @@ public class Screenshots
             
             pixels.clear();
             pixels.put(lines);
+            pixels.rewind(); //Reset the buffer so it can be used again
         }
         
         return pixmap;

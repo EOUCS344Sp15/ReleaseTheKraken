@@ -7,9 +7,11 @@ package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import java.nio.ByteBuffer;
 import releasethekraken.ReleaseTheKraken;
-import releasethekraken.ui.UiBackground;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiText;
 import releasethekraken.ui.renderer.UiRenderer;
@@ -21,22 +23,52 @@ import releasethekraken.ui.tooltip.TextToolTip;
  */
 public class PauseScreen extends AbstractScreen
 {
+    /** The background texture */
+    private static final Texture background;
+    
+    static //Initialize the background texture to some default
+    {
+        Pixmap backgroundPixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
+        background = new Texture(backgroundPixmap);
+        
+        backgroundPixmap.dispose(); //Dispose of the temporary pixmap
+    }
+    
     /**
      * Constructs a new MainMenuScreen
      * @param rtk The ReleaseTheKraken instance.  This is final so that the
      * anonymous inner classes can access it.
+     * @param pixmap The Pixmap for the background screenshot
      */
-    public PauseScreen(final ReleaseTheKraken rtk, Pixmap background)
+    public PauseScreen(final ReleaseTheKraken rtk, final Pixmap pixmap)
     {
         super(rtk);
         
-        this.renderer = new UiRenderer();
+        applyBackgroundEffect(pixmap); //Modify the screenshot to make it look different
+        background.draw(pixmap, 0, 0); //Draw the pixmap to the texture
+        
+        this.renderer = new UiRenderer()
+        {
+            @Override
+            public void render()
+            {
+                this.renderTime++;
+
+                //Clears screen buffer
+                Gdx.gl.glClearColor(0, 0, 0, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                
+                //Draw the background
+                this.uiSpriteBatch.begin();
+                this.uiSpriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                this.uiSpriteBatch.end();
+
+                this.renderUi();
+            }
+        };
         
         float scrWidth = Gdx.graphics.getWidth();
         float scrHeight = Gdx.graphics.getHeight();
-        
-        // Creates the background for Ui
-        this.renderer.uiObjects.add(new UiBackground(this.renderer, background));
         
         float textWidth = 0.2F;
         float textHeight = 0.2F;
@@ -153,5 +185,32 @@ public class PauseScreen extends AbstractScreen
         this.renderer.uiObjects.add(quitButton);
         
         this.renderer.uiObjects.sort(); //Sort the UI objects once they are all added
+    }
+    
+    /**
+     * Applies a background effect to the background, so it is obviously the background
+     * @param pixmap The pixmap representing the background
+     */
+    private static void applyBackgroundEffect(final Pixmap pixmap)
+    {        
+        Gdx.app.log("PauseScreen.applyBackgroundEffect", "Format: " + pixmap.getFormat());
+        ByteBuffer pixels = pixmap.getPixels();
+        int numBytes = pixmap.getWidth() * pixmap.getHeight() * 4;
+        byte[] lines = new byte[numBytes];
+        int numBytesPerLine = pixmap.getWidth() * 4;
+
+        for (int i=0; i<pixmap.getHeight(); i++)
+        {
+            pixels.position((i) * numBytesPerLine);
+            pixels.get(lines, i * numBytesPerLine, numBytesPerLine);
+        }
+        
+        //TODO: Find out how to make the pixels darker or something
+        //for (int i=0; i<lines.length; i+= 4)
+        //    Gdx.app.log("PauseScreen.applyBackgroundEffect", "Pixel " + i/4 + ": " + lines[i] + " " + lines[i+1] + " " + lines[i+2] + " " + lines[i+3]);
+
+        pixels.clear();
+        pixels.put(lines);
+        pixels.rewind(); //Reset the buffer so it can be used again
     }
 }
