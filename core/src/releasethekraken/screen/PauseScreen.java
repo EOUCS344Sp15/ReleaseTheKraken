@@ -6,12 +6,14 @@
 package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import java.nio.ByteBuffer;
 import releasethekraken.GameAssets;
+import releasethekraken.InputHandler;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiText;
@@ -22,7 +24,7 @@ import releasethekraken.ui.tooltip.TextToolTip;
  * This screen is the main menu screen
  * @author Lucas Schuetz
  */
-public class PauseScreen extends AbstractScreen
+public class PauseScreen extends AbstractScreen implements InputHandler.KeyListener
 {
     /** The background texture */
     private static final Texture background;
@@ -188,6 +190,8 @@ public class PauseScreen extends AbstractScreen
         this.renderer.uiObjects.add(quitButton);
         
         this.renderer.uiObjects.sort(); //Sort the UI objects once they are all added
+        
+        ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a key listener
     }
     
     /**
@@ -216,4 +220,21 @@ public class PauseScreen extends AbstractScreen
         pixels.put(lines);
         pixels.rewind(); //Reset the buffer so it can be used again
     }
+    
+    @Override
+    public void keyDown(int keycode)
+    {
+        switch (keycode)
+        {
+        case Input.Keys.ESCAPE:
+            this.rtk.popScreen(); //Pop the pause menu off of the stack
+            break;
+        }
+    }
+
+    @Override
+    public void keyUp(int keycode) {}
+
+    @Override
+    public void keyHeld(int keycode) {}
 }

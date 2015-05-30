@@ -8,7 +8,6 @@ package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -149,7 +148,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
             
             shapeRenderer.end();
             
-             //Disable OpenGL blending so everything else doesn't get messed up
+            //Disable OpenGL blending so everything else doesn't get messed up
             Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
             
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

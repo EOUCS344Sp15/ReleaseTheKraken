@@ -6,17 +6,21 @@
 package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector3;
 import releasethekraken.GameWorld;
+import releasethekraken.InputHandler;
 import releasethekraken.LevelLoader;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.ui.renderer.GameRenderer;
+import releasethekraken.util.Screenshots;
 
 /**
  * This screen is the actual game.
  * @author Dalton
  */
-public class GameScreen extends AbstractScreen
+public class GameScreen extends AbstractScreen implements InputHandler.KeyListener
 {
     private GameWorld world;
     private GameRenderer renderer;
@@ -31,6 +35,8 @@ public class GameScreen extends AbstractScreen
         
         //Create game renderer for the world
         this.renderer = new GameRenderer(rtk, this.world);
+        
+        ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a key listener
     }
 
     @Override
@@ -57,4 +63,25 @@ public class GameScreen extends AbstractScreen
         this.world.dispose();
         this.renderer.dispose();
     }
+
+    @Override
+    public void keyDown(int keycode)
+    {
+        switch (keycode)
+        {
+        case Input.Keys.ESCAPE:
+            //Take a screenshot of the game
+            Pixmap pixmap = Screenshots.getScreenshot(true);
+
+            //Push a new pause screen onto the screen stack
+            this.rtk.pushScreen(new PauseScreen(rtk, pixmap));
+            break;
+        }
+    }
+
+    @Override
+    public void keyUp(int keycode) {}
+
+    @Override
+    public void keyHeld(int keycode) {}
 }

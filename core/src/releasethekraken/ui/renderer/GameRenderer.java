@@ -10,13 +10,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.BSpline;
+import com.badlogic.gdx.math.Bezier;
+import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
+import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.Entity;
@@ -55,6 +61,11 @@ public class GameRenderer extends UiRenderer
     /** A list of all paths to render */
     private Array<SeaCreaturePath> seaCreaturePaths = new Array<SeaCreaturePath>();
     
+    /** The pixmap that will be generated to show the path */
+    private Pixmap pathPixmap;
+    /** The texture that the pixmap will be drawn to */
+    private Texture pathTexture;
+    
     /**
      * Constructs a new GameRenderer
      * @param rtk The ReleaseTheKraken instance.  This is final so that the
@@ -90,6 +101,7 @@ public class GameRenderer extends UiRenderer
         
         //Create the tile map renderer
         this.tiledMapRenderer = new OrthogonalTiledMapRenderer(world.getTiledMap(), 1/(world.getTiledMapUnitScale()));
+        //this.tiledMapRenderer.getBatch().setShader(GameAssets.tilemapShader); //Set the shader //Don't use the shader for now
         
         this.debugOverlay = new DebugOverlay(this);
         this.uiObjects.add(this.debugOverlay);
@@ -140,6 +152,45 @@ public class GameRenderer extends UiRenderer
         this.uiObjects.add(new Sidebar(this)); //Add the sidebar
         
         this.uiObjects.sort(); //Sort the UI objects so that they render in the order of their render depths
+        
+        //Generate path pixmap and texture
+        
+        Pixmap.setBlending(Pixmap.Blending.None); //Disable Pixmap blending, because it causes weird lines
+        
+        this.pathPixmap = new Pixmap((int)(this.world.getWidth()*this.world.getTiledMapUnitScale()),
+                (int)(this.world.getHeight()*this.world.getTiledMapUnitScale()), Pixmap.Format.RGBA8888);
+        
+        //Make sure the pixmap is clear
+        this.pathPixmap.setColor(new Color(0, 0, 0, 0)); //Completely clear
+        this.pathPixmap.fill();
+        
+        this.pathPixmap.setColor(Color.valueOf("61B5FF66")); //Partial transparency with color
+        
+        //Draw the path for every path
+        for (SeaCreaturePath path : this.seaCreaturePaths)
+        {
+            CatmullRomSpline smoothPath = path.getSmoothPath();
+            Vector2 pathPoint = new Vector2();
+            
+            //Move across the path from 0 to 1, drawing circles along the way
+            for (float f=-0.1F; f<1.1F; f+= 0.001F)
+            {
+                smoothPath.valueAt(pathPoint, f); //Stores the value of the path at the point in the vector
+                
+                this.pathPixmap.fillCircle(
+                        (int)(pathPoint.x*this.world.getTiledMapUnitScale()),
+                        (int) (this.world.getHeight()*this.world.getTiledMapUnitScale() - (pathPoint.y*this.world.getTiledMapUnitScale())),
+                        (int)this.world.getTiledMapUnitScale());
+            }
+            
+        }
+        
+        //Create texture to hold pixmap data
+        this.pathTexture = new Texture(this.pathPixmap);
+        this.pathTexture.draw(this.pathPixmap, 0, 0); //Draw the pixmap to the texture
+        
+        this.pathTexture.bind(1); //Bind the texture to texture unit 1
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0); //Set the active texture back to the normal one
     }
     
     @Override
@@ -178,6 +229,20 @@ public class GameRenderer extends UiRenderer
         //Render tiles
         this.tiledMapRenderer.setView(this.camera);
         this.tiledMapRenderer.render();
+        
+        //Render paths
+        //Enable OpenGL alpha blending
+        Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+        Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+        
+        this.worldSpriteBatch.begin();
+        
+        this.worldSpriteBatch.draw(this.pathTexture, 0, 0, this.world.getWidth(), this.world.getHeight());
+        
+        this.worldSpriteBatch.end();
+        
+        //Disable OpenGL blending so everything else doesn't get messed up
+        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         
         this.worldShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         
@@ -249,5 +314,7 @@ public class GameRenderer extends UiRenderer
         this.worldShapeRenderer.dispose();
         this.tiledMapRenderer.dispose();
         this.box2DDebugRenderer.dispose();
+        this.pathPixmap.dispose();
+        this.pathTexture.dispose();
     }
 }

@@ -44,6 +44,7 @@ public class GameAssets extends AssetManager
     public static BitmapFont fontDebug;
     
     public static ShaderProgram pauseBackgroundShader;
+    public static ShaderProgram tilemapShader;
     
     //Constructor
     public GameAssets()
@@ -70,6 +71,15 @@ public class GameAssets extends AssetManager
         this.finishLoading(); //Waits until all assets are loaded
         
         pauseBackgroundShader = loadShader("pause"); //Load the pause background shaders
+        
+        ShaderProgram.pedantic = false; //TODO: Change back
+        tilemapShader = loadShader("tilemap"); //Load the tilemap shaders
+        
+        // Configure shader settings. See http://javadocmd.com/blog/libgdx-dynamic-textures-with-pixmap/
+        tilemapShader.begin();
+        tilemapShader.setUniformi("u_texture", 0);
+        tilemapShader.setUniformi("u_mask", 1);
+        tilemapShader.end();
         
         entityTextures = this.get("entities.png", Texture.class);
         uiTextures = this.get("hudSprites.png", Texture.class);
