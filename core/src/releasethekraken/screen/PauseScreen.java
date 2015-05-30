@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import java.nio.ByteBuffer;
+import releasethekraken.GameAssets;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiText;
@@ -59,9 +60,11 @@ public class PauseScreen extends AbstractScreen
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 
                 //Draw the background
+                this.uiSpriteBatch.setShader(GameAssets.pauseBackgroundShader); //Use the custom shader
                 this.uiSpriteBatch.begin();
                 this.uiSpriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 this.uiSpriteBatch.end();
+                this.uiSpriteBatch.setShader(null); //Set the shader back to default
 
                 this.renderUi();
             }

@@ -8,9 +8,11 @@ package releasethekraken;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 /**
  * Loads the game assets and provides static references to them
@@ -41,6 +43,8 @@ public class GameAssets extends AssetManager
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
     
+    public static ShaderProgram pauseBackgroundShader;
+    
     //Constructor
     public GameAssets()
     {
@@ -64,6 +68,8 @@ public class GameAssets extends AssetManager
         this.load("hudSprites.png", Texture.class);
         
         this.finishLoading(); //Waits until all assets are loaded
+        
+        pauseBackgroundShader = loadShader("pause"); //Load the pause background shaders
         
         entityTextures = this.get("entities.png", Texture.class);
         uiTextures = this.get("hudSprites.png", Texture.class);
@@ -98,5 +104,27 @@ public class GameAssets extends AssetManager
         heartTexture = new TextureRegion(uiTextures, 16, 32, 16, 16);
         strengthTexture = new TextureRegion(uiTextures, 32, 32, 16, 16);
         clockTexture = new TextureRegion(uiTextures, 48, 32, 16, 16);
+    }
+    
+    /**
+     * Loads a ShaderProgram from the vertex and fragment shader files.  Crashes
+     * the game if they fail to compile.
+     * @param name The name of the prefix of the shader files
+     * @return The loaded, compiled ShaderProgram
+     * @throws RuntimeException if the shaders fail to compile
+     */
+    private static ShaderProgram loadShader(String name) throws RuntimeException
+    {
+        FileHandle vertexShader = Gdx.files.internal("shaders/" + name + "_vertex.glsl");
+        FileHandle fragmentShader = Gdx.files.internal("shaders/" + name + "_fragment.glsl");
+        
+        ShaderProgram shader = new ShaderProgram(vertexShader.readString(), fragmentShader.readString());
+        
+        //Crash if the shader wasn't able to be compiled
+        if (!shader.isCompiled())
+            throw new RuntimeException("Failed to compile " + name + " shader files!\nDetails:\n\n"
+                    + shader.getLog());
+        
+        return shader;
     }
 }
