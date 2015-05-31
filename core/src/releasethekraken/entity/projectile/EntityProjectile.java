@@ -7,8 +7,6 @@ package releasethekraken.entity.projectile;
 
 import releasethekraken.GameWorld;
 import releasethekraken.entity.Entity;
-import releasethekraken.entity.pirate.EntityPirate;
-import releasethekraken.entity.seacreature.EntitySeaCreature;
 
 /**
  * A base projectile class that can be extended to provide unique projectile types.
@@ -94,30 +92,13 @@ public class EntityProjectile extends Entity
     {
         this.despawnTimer = despawnTimer;
     }
-
-    //@Override //TODO: Move this code to the PhysicsContactListener
-    public void onCollide(Entity other)
+    
+    /**
+     * Gets the amount of damage that the projectile deals
+     * @return The integer amount of damage that the projectile deals
+     */
+    public int getDamage()
     {
-        if (other == this.owner) //Ignore collisions with the projectile's owner
-            return;
-        
-        if (other instanceof EntitySeaCreature) //If the other entity is a sea creature
-        {
-            if (this.owner instanceof EntityPirate) //Only deal damage if this projectile's owner is a pirate
-            {
-                ((EntitySeaCreature)other).onDamage(this.damage);
-                this.dispose();
-            }
-        }
-        else if (other instanceof EntityPirate) //If the other entity is a pirate
-        {
-            if (this.owner instanceof EntitySeaCreature) //Only deal damage if this projectile's owner is a sea creature
-            {
-                ((EntityPirate)owner).onDamage(this.damage);
-                this.dispose();
-            }
-        }
-        else
-            this.dispose(); //Collide with anything else
+        return this.damage;
     }
 }

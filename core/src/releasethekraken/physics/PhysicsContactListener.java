@@ -12,8 +12,12 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityPirate;
+import releasethekraken.entity.projectile.EntityProjectile;
 import releasethekraken.entity.seacreature.EntityPlayer;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 
 /**
  * Listens to physics contact events, handling them if required
@@ -65,6 +69,37 @@ public class PhysicsContactListener implements ContactListener
                 
                 powerUp.onPickUp(); //Tell powerUp about the collision
             }
+        }
+        
+        //Projectile collisions
+        if (contactAUserData instanceof EntityProjectile || contactBUserData instanceof EntityProjectile)
+        {
+            boolean aIsProjectile = contactAUserData instanceof EntityProjectile;
+            EntityProjectile projectile = null;
+            
+            if (aIsProjectile)
+                projectile = (EntityProjectile)contactAUserData;
+            else
+                projectile = (EntityProjectile)contactBUserData;
+            
+            Entity other = (Entity)(aIsProjectile ? contactBUserData : contactAUserData);
+            
+            if (other instanceof EntitySeaCreature) //If the other entity is a sea creature
+        {
+            if (projectile.getOwner() instanceof EntityPirate) //Only deal damage if this projectile's owner is a pirate
+            {
+                ((EntitySeaCreature)other).onDamage(projectile.getDamage());
+                projectile.dispose();
+            }
+        }
+        else if (other instanceof EntityPirate) //If the other entity is a pirate
+        {
+            if (projectile.getOwner() instanceof EntitySeaCreature) //Only deal damage if this projectile's owner is a sea creature
+            {
+                ((EntityPirate)other).onDamage(projectile.getDamage());
+                projectile.dispose();
+            }
+        }
         }
         
     }

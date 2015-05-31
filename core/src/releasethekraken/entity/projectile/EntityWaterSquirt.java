@@ -26,6 +26,7 @@ public class EntityWaterSquirt extends EntityProjectile
         super(world, xLoc, yLoc, xVel, yVel, owner);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
+        this.damage = 1;
     }
     
     
@@ -72,17 +73,18 @@ public class EntityWaterSquirt extends EntityProjectile
     {
         super.renderSprites(batch);
         
-        float spriteUnitWidth = 0.5F;
-        batch.draw(GameAssets.entityOrcaTexture,
+        float spriteUnitWidth = 1.0F;
+        float spriteUnitHegiht = 0.5F;
+        batch.draw(GameAssets.waterSquirtTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
-                this.physBody.getPosition().y - spriteUnitWidth/2,
-                1/4F, //X point to rotate around
+                this.physBody.getPosition().y - spriteUnitHegiht/2,
+                1/2F, //X point to rotate around
                 1/4F, //Y point to rotate around
                 spriteUnitWidth,
-                spriteUnitWidth,
+                spriteUnitHegiht,
                 1.0F, //X scale
                 1.0F, //Y scale
-                (float) Math.toDegrees(this.physBody.getAngle()));
+                (float) this.physBody.getLinearVelocity().angle());
         
     }
 }

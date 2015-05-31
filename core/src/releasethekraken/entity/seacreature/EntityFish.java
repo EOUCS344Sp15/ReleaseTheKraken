@@ -61,12 +61,9 @@ public class EntityFish extends EntitySeaCreature
     {
         super.update();
         
-      
-        
+        //Attack every second
         if (this.world.getWorldTime() % 60 == 0)
-        {
             attack();
-        }
     }
     
     @Override
@@ -137,9 +134,13 @@ public class EntityFish extends EntitySeaCreature
     {
         EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
         //System.out.println(target.toString());
+        
+        float newtonForce = 100F; //The amount of force applied to the projectile
+        
+        Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
+        difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
+        
         if(target != null)
-        {
-            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, target.getPos().x, target.getPos().y, this); 
-        }
+            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this); 
     }
 }

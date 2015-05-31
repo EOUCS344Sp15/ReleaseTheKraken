@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 import releasethekraken.GameWorld;
-import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.ui.Renderable;
 /**
  * The skeleton class for all entities.
@@ -153,5 +152,14 @@ public abstract class Entity implements Disposable, Renderable
     public Vector2 getVel()
     {
         return this.physBody.getLinearVelocity();
+    }
+    
+    /**
+     * Gets the GameWorld that the entity is in
+     * @return The GameWorld that the entity is in
+     */
+    public GameWorld getWorld()
+    {
+        return this.world;
     }
 }
