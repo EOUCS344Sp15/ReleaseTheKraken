@@ -9,11 +9,14 @@ package releasethekraken.entity.seacreature;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.projectile.EntityWaterSquirt;
+import releasethekraken.entity.pirate.EntityPirate;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
@@ -51,6 +54,19 @@ public class EntityFish extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
+    }
+    
+    @Override
+    public void update()
+    {
+        super.update();
+        
+      
+        
+        if (this.world.getWorldTime() % 60 == 0)
+        {
+            attack();
+        }
     }
     
     @Override
@@ -119,6 +135,11 @@ public class EntityFish extends EntitySeaCreature
      */
     public void attack()
     {
-        //this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
+        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
+        //System.out.println(target.toString());
+        if(target != null)
+        {
+            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, target.getPos().x, target.getPos().y, this); 
+        }
     }
 }
