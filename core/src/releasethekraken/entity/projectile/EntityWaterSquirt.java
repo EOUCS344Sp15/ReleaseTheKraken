@@ -25,20 +25,9 @@ public class EntityWaterSquirt extends EntityProjectile
     {
         super(world, xLoc, yLoc, xVel, yVel, owner);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
+        this.despawnTimer = 16*60;
     }
     
-    @Override
-    public void renderSprites(SpriteBatch batch)
-    {
-        super.renderSprites(batch);
-        
-        float spriteUnitWidth = 2F;
-        batch.draw(GameAssets.entityFishTexture, //TODO: Need a sprite for WaterSquirt
-                this.physBody.getPosition().x - spriteUnitWidth/2,
-                this.physBody.getPosition().y - spriteUnitWidth/2,
-                spriteUnitWidth,
-                spriteUnitWidth);
-    }
     
     @Override
     protected void spawnInWorld(float x, float y, float xVel, float yVel)
@@ -62,7 +51,7 @@ public class EntityWaterSquirt extends EntityProjectile
         fixtureDef.shape = hitbox;
         fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
         fixtureDef.friction = 0.1F; //friction with other objects
-        fixtureDef.restitution = 0.0F; //Bouncyness
+        fixtureDef.restitution = 0.2F; //Bouncyness
         
         //Set which collision type this object is
         fixtureDef.filter.categoryBits = COL_SEA_PROJECTILE;
@@ -71,13 +60,29 @@ public class EntityWaterSquirt extends EntityProjectile
         
         this.physBody.createFixture(fixtureDef);
         
-        //Set the linear damping
-        this.physBody.setLinearDamping(5F);
-        
         //Apply impulse
         this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
+    }
+    
+    @Override
+    public void renderSprites(SpriteBatch batch)
+    {
+        super.renderSprites(batch);
+        
+        float spriteUnitWidth = 0.5F;
+        batch.draw(GameAssets.entityOrcaTexture,
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitWidth/2,
+                1/4F, //X point to rotate around
+                1/4F, //Y point to rotate around
+                spriteUnitWidth,
+                spriteUnitWidth,
+                1.0F, //X scale
+                1.0F, //Y scale
+                (float) Math.toDegrees(this.physBody.getAngle()));
+        
     }
 }
