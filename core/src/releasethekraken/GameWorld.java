@@ -181,12 +181,12 @@ public class GameWorld implements Disposable
         }
         
         this.physWorld.step(1F/ReleaseTheKraken.TICK_RATE, 6, 2); //Calculate physics
-        
+                
         //Remove physics bodies that need to be destroyed
         for (Body body : this.physBodiesToRemove)
         {
-            this.physBodiesToRemove.removeValue(body, true);
             this.physWorld.destroyBody(body);
+            this.physBodiesToRemove.removeValue(body, true);
         }
         
         /*
@@ -399,7 +399,10 @@ public class GameWorld implements Disposable
     {
         if (entity.getPhysBody() != null)
         {
-            this.physBodiesToRemove.add(entity.getPhysBody());
+            if (!this.physBodiesToRemove.contains(entity.getPhysBody(), true))
+                this.physBodiesToRemove.add(entity.getPhysBody());
+            //else
+            //    Gdx.app.log("GameWorld", "WARNING: Attempt to remove a physbody that is already scheduled to be removed! Owner: " + entity);
             //Gdx.app.log("GameWorld", "removeEntity(" + entity + ");");
         }
     }
