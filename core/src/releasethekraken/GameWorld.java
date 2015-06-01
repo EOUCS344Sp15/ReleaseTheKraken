@@ -20,6 +20,7 @@ import java.util.Random;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityPlayer;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.path.SeaCreaturePath;
 import releasethekraken.util.EntityDistanceComparator;
 import releasethekraken.physics.PhysicsContactListener;
@@ -576,19 +577,33 @@ public class GameWorld implements Disposable
      * Gets the target position that a sea creature should move towards, based on
      * where the sea creature currently is.  At the end of the path, it will be
      * the last point on the path.
-     * @param currentPos The current position of the sea creature
-     * @param currentPath The path that the sea creature is currently on
+     * @param entity The sea creature
      * @return The position the sea creature should move towards
      */
-    public Vector2 getPathTargetPos(final Vector2 currentPos, final SeaCreaturePath currentPath)
+    public Vector2 getPathTargetPos(EntitySeaCreature entity)
     {
-        if (currentPath == null) //Immediately return if there is no path to follow
-            return currentPos;
+        if (entity.getCurrentPath() == null) //Immediately return if there is no path to follow
+            return entity.getPos();
         
         //TODO: The target position doesn't seem to be that great
-        CatmullRomSpline smoothPath = currentPath.getSmoothPath();
+        CatmullRomSpline smoothPath = entity.getCurrentPath().getSmoothPath();
         Vector2 targetPos = new Vector2();
-        smoothPath.valueAt(targetPos, smoothPath.approximate(currentPos));
+        
+        float pathProgress = smoothPath.locate(entity.getPos());
+        
+        if (pathProgress >= 0.9F) //Randomly choose a next path.  TODO: Allow for choosing
+        {
+            //Gdx.app.log(entity.toString(), "At the end of the path! ****************************************************************");
+            SeaCreaturePath nextPath = entity.getCurrentPath().getNextPaths().random();
+            
+            if (nextPath != null)
+            {
+                entity.setCurrentPath(nextPath);
+                return getPathTargetPos(entity);
+            }
+        }
+        
+        smoothPath.valueAt(targetPos, pathProgress);
         
         return targetPos;
     }

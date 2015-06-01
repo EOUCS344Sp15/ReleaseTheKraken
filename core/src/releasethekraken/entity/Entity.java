@@ -77,27 +77,7 @@ public abstract class Entity implements Disposable, Renderable
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
-        float healthBar = 0.015f;
-        float health = 1.5f;
-        
         //render shapes
-        shapeRenderer.end();
-            
-            //Enable OpenGL alpha blending
-            Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
-            Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
-            
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            
-            shapeRenderer.setColor(Color.RED);
-  
-            
-            shapeRenderer.end();
-            
-             //Disable OpenGL blending so everything else doesn't get messed up
-            Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
-            
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     }
     
     @Override

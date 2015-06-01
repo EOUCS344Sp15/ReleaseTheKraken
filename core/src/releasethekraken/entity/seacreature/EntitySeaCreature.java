@@ -3,10 +3,14 @@
  */
 package releasethekraken.entity.seacreature;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import java.util.HashMap;
+import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 import releasethekraken.entity.EntityPowerUp;
@@ -65,7 +69,7 @@ public abstract class EntitySeaCreature extends EntityLiving
         //Make the sea creatures move
         if (!(this instanceof EntityPlayer))
         {        
-            Vector2 targetPos = this.world.getPathTargetPos(this.getPos(), this.currentPath);
+            Vector2 targetPos = this.world.getPathTargetPos(this);
             Vector2 difference = targetPos.sub(this.getPos());
             difference.nor().scl(this.moveForce);
             this.physBody.applyForce(difference, Vector2.Zero, true);
@@ -98,6 +102,51 @@ public abstract class EntitySeaCreature extends EntityLiving
     {
         this.appliedPowerUp = powerUp;
         this.powerUpTime = time;
+    }
+
+    /**
+     * Gets the current path that the sea creature is on
+     * @return The current SeaCreaturePath
+     */
+    public SeaCreaturePath getCurrentPath()
+    {
+        return currentPath;
+    }
+
+    /**
+     * Sets the current path that the sea creature is on
+     * @param currentPath The new SeaCreaturePath
+     */
+    public void setCurrentPath(SeaCreaturePath currentPath)
+    {
+        this.currentPath = currentPath;
+    }
+    
+    @Override
+    public void renderShapes(ShapeRenderer shapeRenderer)
+    {
+        super.renderShapes(shapeRenderer);
+        
+        /*if (true) //Render target position  TODO: Comment this out
+        {
+            Vector2 targetPos = this.world.getPathTargetPos(this);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.x(targetPos, 1);
+        }*/
+    }
+    
+    @Override
+    public void renderSprites(SpriteBatch batch)
+    {
+        super.renderSprites(batch);
+        
+        /*if (true) //Render target position value  TODO: Comment this out
+        {
+            Vector2 targetPos = this.world.getPathTargetPos(this);
+            float pathProgress = this.getCurrentPath().getSmoothPath().locate(this.getPos());
+            GameAssets.fontMain.getData().setScale(0.1F);
+            GameAssets.fontMain.draw(batch, "" + pathProgress, targetPos.x, targetPos.y);
+        }*/
     }
     
     /**
