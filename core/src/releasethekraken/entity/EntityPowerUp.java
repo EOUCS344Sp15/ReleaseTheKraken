@@ -32,10 +32,10 @@ public class EntityPowerUp extends Entity
     static //Add stats for each type of power up here
     {
         //TODO: adjust the values
-        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 10, "Damage\nBoost", "A description of the power up should probably go here...", Color.valueOf("FF6A00A6")));
-        addStat(Ability.HEALUP, new PowerUpStats(60*20, 20, "Heal", "A description of the power up should probably go here...", Color.CYAN.cpy().sub(0, 0, 0, 0.35F)));
-        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 30, "Speed\nBoost", "A description of the power up should probably go here...", Color.WHITE.cpy().sub(0, 0, 0, 0.35F)));
-        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense\nBoost", "A description of the power up should probably go here...", Color.TEAL.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 10, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6")));
+        addStat(Ability.HEALUP, new PowerUpStats(60*20, 20, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 30, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F)));
     }
     
     protected Ability type; //tracks the type of power up
