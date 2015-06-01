@@ -5,10 +5,14 @@
  */
 package releasethekraken.ui;
 
+import com.badlogic.gdx.Gdx;
 import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import java.lang.reflect.Constructor;
 import releasethekraken.GameAssets;
+import releasethekraken.GameWorld;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.ui.tooltip.PurchaseUnitToolTip;
 
@@ -87,6 +91,20 @@ public class PurchaseUnitUiButton extends UiButton
             this.world.removeCoins(this.seaCreatureStats.cost); //Remove how many coins it costs
             
             //TODO: spawn the sea creature in x seconds
+            Gdx.app.log("PurchaseUnitUiButton", "Attempting to spawn new " + this.seaCreature.getSimpleName());
+            try
+            {
+                Vector2 spawnPos = new Vector2();
+                this.world.getFirstPath().getSmoothPath().valueAt(spawnPos, 0);
+                
+                Constructor constructor = this.seaCreature.getConstructor(GameWorld.class, float.class, float.class);
+                constructor.newInstance(this.world, spawnPos.x, spawnPos.y);
+            }
+            catch (Exception e)
+            {
+                Gdx.app.error("Error spawning " + this.seaCreature.getSimpleName(), "");
+                e.printStackTrace();
+            }
         }
     }
 }

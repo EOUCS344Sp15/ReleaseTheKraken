@@ -31,6 +31,7 @@ public class EntityGunTower extends EntityPirate
         this.health = 10;
         this.maxHealth = 10;
         this.points = 5;
+        this.coins = 10;
         this.attackRate = 5;
     }
     
@@ -43,6 +44,8 @@ public class EntityGunTower extends EntityPirate
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
+        this.points = 5;
+        this.coins = 10;
     }
 
     @Override

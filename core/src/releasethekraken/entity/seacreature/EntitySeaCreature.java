@@ -5,10 +5,13 @@ package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import java.util.HashMap;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityPirate;
+import releasethekraken.path.SeaCreaturePath;
 
 /**
  *
@@ -34,23 +37,39 @@ public abstract class EntitySeaCreature extends EntityLiving
     /** The amount of time left that the power up is applied for (ticks) */
     protected int powerUpTime = 0;
     
+    /** The force, in newtons, that is applied to move the sea creature */
+    protected float moveForce = 0F;
+    
+    /** The path that the sea creature is currently following */
+    protected SeaCreaturePath currentPath;
+    
     //Primary constructor
     public EntitySeaCreature(GameWorld world, float xLocation, float yLocation)
     {
         super(world, xLocation, yLocation);
+        this.currentPath = world.getFirstPath();
     }
     
     //Secondary constructor
     public EntitySeaCreature(GameWorld world, TextureMapObject mapObject)
     {
         super(world, mapObject);
-        //This will be implemented when the level loader is written
+        this.currentPath = world.getFirstPath();
     }
     
     @Override
     public void update()
     {
         super.update();
+        
+        //Make the sea creatures move
+        if (!(this instanceof EntityPlayer))
+        {        
+            Vector2 targetPos = this.world.getPathTargetPos(this.getPos(), this.currentPath);
+            Vector2 difference = targetPos.sub(this.getPos());
+            difference.nor().scl(this.moveForce);
+            this.physBody.applyForce(difference, Vector2.Zero, true);
+        }
         
         if (this.powerUpTime > 0)
         {

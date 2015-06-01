@@ -90,8 +90,6 @@
  </objectgroup>
  <objectgroup name="entities">
   <object id="4" gid="25" x="496" y="1482" width="32" height="32"/>
-  <object id="5" gid="26" x="602" y="1538" width="32" height="32"/>
-  <object id="6" gid="26" x="469" y="1381" width="32" height="32"/>
   <object id="7" gid="29" x="907" y="1389" width="32" height="32"/>
   <object id="8" gid="29" x="1031" y="1373" width="32" height="32"/>
   <object id="9" gid="29" x="1026" y="861" width="32" height="32"/>
@@ -104,8 +102,6 @@
   <object id="16" gid="29" x="382.667" y="654.667" width="32" height="32"/>
   <object id="19" gid="29" x="1061" y="764" width="32" height="32"/>
   <object id="94" gid="78" x="1056" y="336" width="32" height="32"/>
-  <object id="95" gid="27" x="563" y="1334" width="32" height="32"/>
-  <object id="96" gid="34" x="351" y="1360" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="physics">
   <object id="22" x="160" y="960">

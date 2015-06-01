@@ -104,52 +104,7 @@ public class LevelLoader
             Gdx.app.log("LevelLoader", "Tile ID: " + tile.getId() + " type: " + type);
         }
         
-        //Load world entities
-        Gdx.app.log("LevelLoader", "Parsing world entities");
-        MapLayer entityLayer = map.getLayers().get("entities");
-        
-        //If the layer doesn't exist, throw an exception
-        if (entityLayer == null)
-            throw new NullPointerException("entities layer is null");
-        
-        MapObjects entityObjects = entityLayer.getObjects();
-        Iterator<MapObject> entityObjIterator = entityObjects.iterator();
-        
-        while (entityObjIterator.hasNext()) //Iterate over entities on the map
-        {
-            MapObject entityObject = entityObjIterator.next();
-            
-            //Gdx.app.log("LevelLoader", "Parsing map object: " + entityObject);
-            
-            if (entityObject instanceof TextureMapObject) //If the mapObject is of the correct type
-            {
-                //Get the entity class from the mapObject's tile ID
-                int gid = ((TextureMapObject)entityObject).getProperties().get("gid", Integer.class);
-                Class<? extends Entity> entityClass = this.entityTileIDs.get(gid);
-                
-                if (entityClass != null)
-                {
-                    Gdx.app.log("LevelLoader", "Attempting to spawn " + entityClass.getSimpleName());
-                    
-                    try
-                    {
-                        //Construct a new entity by finding the correct constructor from its class, and reflectively instantiating it.  Magic!
-                        Constructor<? extends Entity> constructor = entityClass.getConstructor(GameWorld.class, TextureMapObject.class);
-                        Entity entity = constructor.newInstance(newWorld, entityObject);
-                        //newWorld.addEntity(entity); //Add the entity to the world //With Box2D, the entity should add itself to the world
-                        
-                        if (entity instanceof EntityPlayer) //Set the player if the entity is the player
-                            newWorld.setPlayer((EntityPlayer)entity);
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        
-        //If you thought entity loading was complicated, wait until you see what's next: paths!
+        //If you thought that was complicated, wait until you see what's next: paths!
         
         //Load world paths
         Gdx.app.log("LevelLoader", "Parsing world paths");
@@ -245,6 +200,52 @@ public class LevelLoader
         }
         
         newWorld.setFirstPath(firstPath); //Set the first path in the world
+        //Done loading paths
+        
+        //Load world entities
+        Gdx.app.log("LevelLoader", "Parsing world entities");
+        MapLayer entityLayer = map.getLayers().get("entities");
+        
+        //If the layer doesn't exist, throw an exception
+        if (entityLayer == null)
+            throw new NullPointerException("entities layer is null");
+        
+        MapObjects entityObjects = entityLayer.getObjects();
+        Iterator<MapObject> entityObjIterator = entityObjects.iterator();
+        
+        while (entityObjIterator.hasNext()) //Iterate over entities on the map
+        {
+            MapObject entityObject = entityObjIterator.next();
+            
+            //Gdx.app.log("LevelLoader", "Parsing map object: " + entityObject);
+            
+            if (entityObject instanceof TextureMapObject) //If the mapObject is of the correct type
+            {
+                //Get the entity class from the mapObject's tile ID
+                int gid = ((TextureMapObject)entityObject).getProperties().get("gid", Integer.class);
+                Class<? extends Entity> entityClass = this.entityTileIDs.get(gid);
+                
+                if (entityClass != null)
+                {
+                    Gdx.app.log("LevelLoader", "Attempting to spawn " + entityClass.getSimpleName());
+                    
+                    try
+                    {
+                        //Construct a new entity by finding the correct constructor from its class, and reflectively instantiating it.  Magic!
+                        Constructor<? extends Entity> constructor = entityClass.getConstructor(GameWorld.class, TextureMapObject.class);
+                        Entity entity = constructor.newInstance(newWorld, entityObject);
+                        //newWorld.addEntity(entity); //Add the entity to the world //With Box2D, the entity should add itself to the world
+                        
+                        if (entity instanceof EntityPlayer) //Set the player if the entity is the player
+                            newWorld.setPlayer((EntityPlayer)entity);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         
         Gdx.app.log("LevelLoader", "Successfully loaded the world!");
         Gdx.app.log("LevelLoader", newWorld.toString());

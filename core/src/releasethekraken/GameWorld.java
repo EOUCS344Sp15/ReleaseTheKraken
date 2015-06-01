@@ -7,6 +7,7 @@ package releasethekraken;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -198,7 +199,7 @@ public class GameWorld implements Disposable
         //    this.entities.get(i).update();
         
         //Update the points from the dev position for testing purposes.  TODO: Remove
-        this.points = (int) InputHandler.DEV_POS.y * 10;
+        //this.points = (int) InputHandler.DEV_POS.y * 10;
         
         //Print the paths for debugging purposes.
         if (this.worldTime == 10)
@@ -566,5 +567,26 @@ public class GameWorld implements Disposable
             target = targets.get(0);
         
         return target;
+    }
+    
+    /**
+     * Gets the target position that a sea creature should move towards, based on
+     * where the sea creature currently is.  At the end of the path, it will be
+     * the last point on the path.
+     * @param currentPos The current position of the sea creature
+     * @param currentPath The path that the sea creature is currently on
+     * @return The position the sea creature should move towards
+     */
+    public Vector2 getPathTargetPos(final Vector2 currentPos, final SeaCreaturePath currentPath)
+    {
+        if (currentPath == null) //Immediately return if there is no path to follow
+            return currentPos;
+        
+        //TODO: The target position doesn't seem to be that great
+        CatmullRomSpline smoothPath = currentPath.getSmoothPath();
+        Vector2 targetPos = new Vector2();
+        smoothPath.valueAt(targetPos, smoothPath.approximate(currentPos));
+        
+        return targetPos;
     }
 }

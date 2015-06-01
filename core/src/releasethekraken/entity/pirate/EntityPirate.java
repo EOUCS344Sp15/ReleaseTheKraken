@@ -5,6 +5,7 @@
  */
 package releasethekraken.entity.pirate;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
@@ -17,6 +18,8 @@ public abstract class EntityPirate extends EntityLiving
 {
     /** The amount of points the pirate is worth if killed */
     protected int points;
+    /** How many coins you get for killing the pirate */
+    protected int coins;
     /** The amount of time between attack function calls (measured in seconds).*/
     protected int attackRate;
     
@@ -45,7 +48,9 @@ public abstract class EntityPirate extends EntityLiving
     @Override
     public void onDeath()
     {
+        //Gdx.app.log(this.toString(), "onDeath() Adding " + this.points + " points!");
         this.world.addPoints(this.points); //Add the points when this entity dies
+        this.world.addCoins(this.coins); //Add the coins when this entity dies
         super.onDeath();
     }
 }
