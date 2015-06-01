@@ -9,7 +9,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Shape;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.pirate.EntityPirateBase;
+import releasethekraken.entity.seacreature.EntityOrca;
 
 /**
  * Represents a living entity with health that can die.
@@ -109,12 +113,36 @@ public abstract class EntityLiving extends Entity
     public void renderShapes(ShapeRenderer shapeRenderer)
     {
         super.renderShapes(shapeRenderer);
+        
+        float width = 5F;
+        float height = 0.5F;
+        float healthRatio = this.health/((float)this.maxHealth);
+        float yOffset = 1.1F;
+        
+        if (this instanceof EntityOrca)
+            yOffset += 1.0F;
+        else if (this instanceof EntityPirateBase)
+            yOffset += 3.0F;
        
+        //Draw background
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(this.getPos().x - (this.maxHealth * .25f), this.getPos().y + 1.1f, 5f, 0.5f);
+        shapeRenderer.rect(
+                this.getPos().x - (width/2),
+                this.getPos().y + yOffset,
+                width,
+                height);
+        
+        //Calculate the healthbar color
+        final Color fullColor = Color.valueOf("0FB300");
+        Color healthColor = Color.RED.cpy().lerp(fullColor, healthRatio);
 
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(this.getPos().x - (this.maxHealth * .25f), this.getPos().y + 1.1f, ((float)this.health/(float)this.maxHealth) * 5f, 0.5f);
+        //Draw health bar
+        shapeRenderer.setColor(healthColor);
+        shapeRenderer.rect(
+                this.getPos().x - (width/2), 
+                this.getPos().y + yOffset, 
+                healthRatio * width, 
+                height);
 
     }
 }
