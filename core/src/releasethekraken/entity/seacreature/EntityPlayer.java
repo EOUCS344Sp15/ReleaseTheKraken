@@ -32,7 +32,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     /** The maximum speed the player can move */
     public final float MAX_SPEED = 4.0F;
     /** The player's movement force, in newtons */
-    public final float MOVE_FORCE = 7500.0F;
+    public final float MOVE_FORCE = 17500.0F;//was 7500, altered for quicker testing 
     
     /** Which power up to preview the radius for, or null for none */
     public EntityPowerUp.Ability powerUpPreview = null;
