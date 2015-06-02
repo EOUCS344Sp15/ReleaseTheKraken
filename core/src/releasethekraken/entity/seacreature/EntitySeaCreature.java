@@ -88,9 +88,6 @@ public abstract class EntitySeaCreature extends EntityLiving
                     this.health = MathUtils.clamp(this.health+5, 0, this.maxHealth); //add a single instance of 5 health
                 case SPEEDUP:
                     this.moveForce = 2*this.defaultMoveForce;
-                    //TODO: add functionality for speeding up entities
-                case ATTACKUP:
-                    //TODO: add functionalility for increasing enemy attack
             }
         }
         else if (this.moveForce != this.defaultMoveForce)//after speed boost is done, set back to default speed
@@ -179,6 +176,14 @@ public abstract class EntitySeaCreature extends EntityLiving
     public static void addStat(Class<? extends EntitySeaCreature> seaCreature, SeaCreatureStats stats)
     {
         unitStats.put(seaCreature, stats);
+    }
+    
+    /**
+     * Builds and returns a new projectile
+     */
+    public void attack(int damage)
+    {
+        
     }
     
     /**

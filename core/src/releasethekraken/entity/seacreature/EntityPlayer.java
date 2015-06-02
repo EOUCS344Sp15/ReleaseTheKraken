@@ -194,15 +194,26 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     }
 
     @Override
+    public void attack(int damage)
+    {
+            Vector2 velocity = this.aimPos.cpy().sub(this.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
+            float spread = 10F; //The amount of possible spread, in degrees
+            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
+            new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this);
+    }
+    
+    @Override
     public void keyDown(int keycode)
     {
         switch (keycode)
         {
         case Input.Keys.SPACE: //Projectile firing
-            Vector2 velocity = this.aimPos.cpy().sub(this.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
-            float spread = 10F; //The amount of possible spread, in degrees
-            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
-            new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this);
+            int damage = 1;
+            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            {
+                damage*=1.5F;
+            }
+            attack(damage);
             break;
         }
     }
