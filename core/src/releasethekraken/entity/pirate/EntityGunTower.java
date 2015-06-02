@@ -48,8 +48,8 @@ public class EntityGunTower extends EntityPirate
         //This will be implemented when the level loader is written
         
         //TODO: Change these
-        this.health = 200;
-        this.maxHealth = 200;
+        this.health = 50;
+        this.maxHealth = 50;
         this.points = 5;
         this.coins = 10;
     }
