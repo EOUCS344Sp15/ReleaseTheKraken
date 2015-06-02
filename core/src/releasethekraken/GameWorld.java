@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.Random;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.path.SeaCreaturePath;
@@ -65,6 +66,9 @@ public class GameWorld implements Disposable
     /** A reference to the player */
     private EntityPlayer player;
     
+    /** A reference to the PirateBase */
+    private EntityPirateBase pirateBase;
+    
     /** The beginning of the chain of paths that sea creatures can take */
     private SeaCreaturePath firstPath;
     
@@ -107,68 +111,71 @@ public class GameWorld implements Disposable
      */
     public void update()
     {     
-        /*
-        Temporary power up generator. Every 5 seconds there is a 50% chance
-        a power up will drop within a radius around the player.
-        TODO: Figure out how to make sure they don't spawn on coral/obstacles
-        & balancing once needed
-        */
-        int spawn = random.nextInt(2) + 1;
-        int makeXNegative = random.nextInt(2) + 1;
-        int makeYNegative = random.nextInt(2) + 1;
-        int power = random.nextInt(4) + 1;
-        int xrange = random.nextInt(10) + 5;
-        int yrange = random.nextInt(10) + 5;
-        float yPos, xPos;
-        Vector2 playerPos = this.player.getPos();
-        
-        if(makeXNegative == 1)
-            xrange *= -1;
-        
-        if(makeYNegative == 1)
-            yrange *= -1;
-        
-        //clamp to world size
-        if((playerPos.y + yrange) < 2)
+        if(this.getPlayer() != null)
         {
-            yPos = 3;
-        }
-        else if((playerPos.y + yrange) > this.height)
-        {
-            yPos = this.height - 3;
-        }
-        else
-        {
-            yPos = playerPos.y + yrange;
-        }
-        
-        if((playerPos.x + xrange) < 2)
-        {
-            xPos = 3;
-        }
-        else if((playerPos.x + xrange) > this.width)
-        {
-            xPos = this.width - 3;
-        }
-        else
-        {
-            xPos = playerPos.x + xrange;
-        }
-            
-        //For testing purposes
-        //Gdx.app.log("PlayerPos", "X: " + xrange + "Y: " + yrange);
-        
-        if((this.worldTime % (ReleaseTheKraken.TICK_RATE*1)) == 59 && spawn == 1)
-        {
-            if(power == 1)
-                new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.HEALUP, 20);
-            else if(power == 2)
-                new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.ATTACKUP, 10);
-            else if(power == 3)
-                new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.SPEEDUP, 30);
-            else if(power == 4)      
-                new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.DEFENSEUP, 40);           
-        }
+                        /*
+            Temporary power up generator. Every 5 seconds there is a 50% chance
+            a power up will drop within a radius around the player.
+            TODO: Figure out how to make sure they don't spawn on coral/obstacles
+            & balancing once needed
+            */
+            int spawn = random.nextInt(2) + 1;
+            int makeXNegative = random.nextInt(2) + 1;
+            int makeYNegative = random.nextInt(2) + 1;
+            int power = random.nextInt(4) + 1;
+            int xrange = random.nextInt(10) + 5;
+            int yrange = random.nextInt(10) + 5;
+            float yPos, xPos;
+            Vector2 playerPos = this.player.getPos();
+
+            if(makeXNegative == 1)
+                xrange *= -1;
+
+            if(makeYNegative == 1)
+                yrange *= -1;
+
+            //clamp to world size
+            if((playerPos.y + yrange) < 2)
+            {
+                yPos = 3;
+            }
+            else if((playerPos.y + yrange) > this.height)
+            {
+                yPos = this.height - 3;
+            }
+            else
+            {
+                yPos = playerPos.y + yrange;
+            }
+
+            if((playerPos.x + xrange) < 2)
+            {
+                xPos = 3;
+            }
+            else if((playerPos.x + xrange) > this.width)
+            {
+                xPos = this.width - 3;
+            }
+            else
+            {
+                xPos = playerPos.x + xrange;
+            }
+
+            //For testing purposes
+            //Gdx.app.log("PlayerPos", "X: " + xrange + "Y: " + yrange);
+
+            if((this.worldTime % (ReleaseTheKraken.TICK_RATE*1)) == 59 && spawn == 1)
+            {
+                if(power == 1)
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.HEALUP, 20);
+                else if(power == 2)
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.ATTACKUP, 10);
+                else if(power == 3)
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.SPEEDUP, 30);
+                else if(power == 4)      
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.DEFENSEUP, 40);           
+            }
+        } // end if
         
         this.physWorld.getBodies(this.physBodies); //Refreshes the physBodies array
         this.worldTime++;
@@ -494,6 +501,24 @@ public class GameWorld implements Disposable
     public void setPlayer(EntityPlayer entityPlayer)
     {
         this.player = entityPlayer;
+    }
+    
+    /**
+     * Gets the EntityPirateBase reference
+     * @return The EntityPirateBase reference
+     */
+    public EntityPirateBase getPirateBase()
+    {
+        return this.pirateBase;
+    }
+    
+    /**
+     * Sets the pirate base reference
+     * @param entityPirateBase The EntityPirateBase object that will be the pirate base
+     */
+    public void setPirateBase(EntityPirateBase entityPirateBase)
+    {
+        this.pirateBase = entityPirateBase;
     }
     
     /**

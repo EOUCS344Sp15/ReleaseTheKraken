@@ -3,18 +3,15 @@
  */
 package releasethekraken.entity.seacreature;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import java.util.HashMap;
-import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 import releasethekraken.entity.EntityPowerUp;
-import releasethekraken.entity.pirate.EntityPirate;
 import releasethekraken.path.SeaCreaturePath;
 
 /**
@@ -41,8 +38,11 @@ public abstract class EntitySeaCreature extends EntityLiving
     /** The amount of time left that the power up is applied for (ticks) */
     protected int powerUpTime = 0;
     
+    /** The default move force */
+    protected float defaultMoveForce = 0F;
+    
     /** The force, in newtons, that is applied to move the sea creature */
-    protected float moveForce = 0F;
+    protected float moveForce = defaultMoveForce;
     
     /** The path that the sea creature is currently following */
     protected SeaCreaturePath currentPath;
@@ -82,15 +82,21 @@ public abstract class EntitySeaCreature extends EntityLiving
             switch (this.appliedPowerUp)
             {
                 case HEALUP:
-                    this.health = MathUtils.clamp(this.health+10, 0, this.maxHealth);
+                    this.health = MathUtils.clamp(this.health+5, 0, this.maxHealth); //add a single instance of 5 health
                 case SPEEDUP:
-                    //TODO: add functionality for speeding up entities
-                case ATTACKUP:
-                    //TODO: add functionalility for increasing enemy attack
-                case DEFENSEUP:
-                    //TODO: add functionality for incre
+                    this.moveForce = 2*this.defaultMoveForce;
             }
         }
+        else if (this.moveForce != this.defaultMoveForce)//after speed boost is done, set back to default speed
+            this.moveForce = this.defaultMoveForce;
+    }
+    
+    @Override
+    public boolean onDamage(int damage)
+    {
+        if (this.appliedPowerUp == EntityPowerUp.Ability.DEFENSEUP)
+            damage /= 2;
+        return super.onDamage(damage);
     }
     
     /**
@@ -167,6 +173,15 @@ public abstract class EntitySeaCreature extends EntityLiving
     public static void addStat(Class<? extends EntitySeaCreature> seaCreature, SeaCreatureStats stats)
     {
         unitStats.put(seaCreature, stats);
+    }
+    
+    /**
+     * Builds and returns a new projectile
+     * @param damage The damage multiplier for dealing damage to an entity
+     */
+    public void attack(int damage)
+    {
+        
     }
     
     /**

@@ -5,7 +5,6 @@
  */
 package releasethekraken.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector3;
@@ -44,11 +43,30 @@ public class GameScreen extends AbstractScreen implements InputHandler.KeyListen
     {
         super.render(delta);
         
-        //Update player's aim position
-        Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
-        Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
-        this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
-        this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
+        if(this.world.getPlayer() != null)
+        {
+            //Update player's aim position
+            Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
+            Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
+            this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
+            this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
+        } // end if
+        
+        if(this.world.getPirateBase() == null)
+        {
+            //Take a screenshot of the game
+            Pixmap pixmap = Screenshots.getScreenshot(true);
+            
+            this.rtk.pushScreen(new GameOverScreen(rtk, pixmap, true));
+        } // end if
+        
+        if(this.world.getPlayer() == null)
+        {
+            //Take a screenshot of the game
+            Pixmap pixmap = Screenshots.getScreenshot(true);
+            
+            this.rtk.pushScreen(new GameOverScreen(rtk, pixmap, false));
+        } // end if
         
         this.world.update();
         this.renderer.render();

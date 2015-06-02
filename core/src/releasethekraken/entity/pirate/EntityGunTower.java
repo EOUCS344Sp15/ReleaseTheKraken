@@ -8,11 +8,17 @@ package releasethekraken.entity.pirate;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.projectile.EntityBullet;
+import releasethekraken.entity.projectile.EntitySeaShell;
+import releasethekraken.entity.projectile.EntityWaterSquirt;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
@@ -42,8 +48,8 @@ public class EntityGunTower extends EntityPirate
         //This will be implemented when the level loader is written
         
         //TODO: Change these
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 50;
+        this.maxHealth = 50;
         this.points = 5;
         this.coins = 10;
     }
@@ -53,33 +59,13 @@ public class EntityGunTower extends EntityPirate
     {
         super.update();
         
-        /*
-            I suggest that you make use of the EntityProjectile class.  You can
-            set the owner to "this" to specify the entity that shot the projectile,
-            which will be used in determining what the projectile can collide with
-            and damage.  Maybe subclass it to provide different types of projectiles
-            such as: EntityBullet, EntityCannonBall, EntityWaterSquirt, etc, each
-            with their own unique properties.
-                - Dalton
-        */
-        
-        /* This was getting REALLY annoying, so I commented it out :P
-        //Code for testing the getClosestTarget method
-        if (this.world.getWorldTime() % (5*60) == 0)
+        //Attack every second
+        if (this.world.getWorldTime() % 15 == 0)
         {
-            EntitySeaCreature target = this.world.getClosestTarget(this, EntitySeaCreature.class);
-            
-            Gdx.app.log(this.toString(), "Closest target: " + target);
-        }*/
-        
-        /**                         */
-        /*
-        if (this.world.getWorldTime() % (attackRate*60) == 0)
-        {
-            attack();
+           attack();
         }
-                */
     }
+    
     
     @Override
     protected void spawnInWorld(float x, float y, float xVel, float yVel)
@@ -144,6 +130,16 @@ public class EntityGunTower extends EntityPirate
     
     public void attack()
     {
-        // Create Projectile
+        EntitySeaCreature target = this.world.getClosestTarget(this, EntitySeaCreature.class);
+        //System.out.println(target.toString());
+        
+        float newtonForce = 150F; //The amount of force applied to the projectile
+        
+        if(target != null)
+        {
+            Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
+            difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
+            new EntityBullet(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this, 2); 
+        } // target
     }
 }

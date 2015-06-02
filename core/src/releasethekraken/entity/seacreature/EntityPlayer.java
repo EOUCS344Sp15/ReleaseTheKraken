@@ -31,8 +31,6 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
 {
     /** The maximum speed the player can move */
     public final float MAX_SPEED = 4.0F;
-    /** The player's movement force, in newtons */
-    public final float MOVE_FORCE = 17500.0F;//was 7500, altered for quicker testing 
     
     /** Which power up to preview the radius for, or null for none */
     public EntityPowerUp.Ability powerUpPreview = null;
@@ -60,6 +58,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         
         this.health = 15;
         this.maxHealth = 15;
+        this.defaultMoveForce = 17500F;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
@@ -70,6 +69,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         
         this.health = 15;
         this.maxHealth = 15;
+        this.defaultMoveForce = 17500F;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
@@ -194,15 +194,26 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     }
 
     @Override
+    public void attack(int damage)
+    {
+            Vector2 velocity = this.aimPos.cpy().sub(this.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
+            float spread = 10F; //The amount of possible spread, in degrees
+            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
+            new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this, damage);
+    }
+    
+    @Override
     public void keyDown(int keycode)
     {
         switch (keycode)
         {
         case Input.Keys.SPACE: //Projectile firing
-            Vector2 velocity = this.aimPos.cpy().sub(this.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
-            float spread = 10F; //The amount of possible spread, in degrees
-            velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
-            new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this);
+            int damage = 1;
+            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            {
+                damage*=2F;
+            }
+            attack(damage);
             break;
         }
     }
@@ -220,7 +231,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 if (!this.upPressedThisTick)
                 {
                 //if (this.physBody.getLinearVelocity().y < this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(0, this.MOVE_FORCE, true);
+                    this.physBody.applyForceToCenter(0, this.moveForce, true);
                     this.upPressedThisTick = true;
                 }
                 break;
@@ -229,7 +240,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 if (!this.downPressedThisTick)
                 {
                 //if (this.physBody.getLinearVelocity().y > 0 - this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(0, -this.MOVE_FORCE, true);
+                    this.physBody.applyForceToCenter(0, -this.moveForce, true);
                     this.downPressedThisTick = true;
                 }
                 break;
@@ -238,7 +249,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 if(!this.leftPressedThisTick)
                 {
                 //if (this.physBody.getLinearVelocity().x > 0 - this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(-this.MOVE_FORCE, 0, true);
+                    this.physBody.applyForceToCenter(-this.moveForce, 0, true);
                     this.leftPressedThisTick = true;
                 }
                 break;
@@ -247,20 +258,28 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 if(!this.rightPressedThisTick)
                 {
                     //if (this.physBody.getLinearVelocity().x < this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(this.MOVE_FORCE, 0, true);
+                    this.physBody.applyForceToCenter(this.moveForce, 0, true);
                     this.rightPressedThisTick = true;
                 }
                 break;
             case Input.Keys.Z:
-                if(this.health > 1)
+                if(this.health > 0)
                     this.health = this.health - 1;
                 break;
             case Input.Keys.X:
-                if(this.health == this.maxHealth)
+                if(this.health >= this.maxHealth)
                     this.health = this.maxHealth;
                 else
                     this.health = this.health + 1;
                 break;
         }
+    }
+    
+    @Override
+    public void onDeath()
+    {
+        this.world.setPlayer(null);
+        
+        super.onDeath();
     }
 }

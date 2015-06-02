@@ -9,11 +9,15 @@ package releasethekraken.entity.seacreature;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityPirate;
+import releasethekraken.entity.projectile.EntityWaterSquirt;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
@@ -35,7 +39,7 @@ public class EntityTurtle extends EntitySeaCreature
         
         this.health = 20;
         this.maxHealth = 20;
-        this.moveForce = 1500F;
+        this.defaultMoveForce = 1500F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -51,7 +55,24 @@ public class EntityTurtle extends EntitySeaCreature
         
         this.health = 20;
         this.maxHealth = 20;
-        this.moveForce = 1500F;
+        this.defaultMoveForce = 1500F;
+    }
+    
+    @Override
+    public void update()
+    {
+        super.update();
+        
+        //Attack every second
+        if (this.world.getWorldTime() % 120 == 0)
+        {
+            int damage = 1;
+            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            {
+                damage*=1.5F;
+            }
+            attack(damage);
+        }
     }
     
     @Override
@@ -115,11 +136,19 @@ public class EntityTurtle extends EntitySeaCreature
                 spriteUnitWidth);
     }
     
-    /**
-     * Builds and returns a new projectile
-     */
-    public void attack()
+    @Override
+    public void attack(int damage)
     {
-        //this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
+        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
+        //System.out.println(target.toString());
+        
+        float newtonForce = 100F; //The amount of force applied to the projectile
+        
+        if(target != null)
+        {
+            Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
+            difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
+            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this, damage); 
+        } // target
     }
 }

@@ -31,13 +31,14 @@ public class EntityProjectile extends Entity
      * @param xVel The X velocity of the projectile
      * @param yVel The Y velocity of the projectile
      * @param owner The owner of the projectile, or null
+     * @param damage The damage that the projectile does
      */
-    public EntityProjectile(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
+    public EntityProjectile(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner, int damage)
     {
         super(world, xLoc, yLoc);
         this.owner = owner; //Sets the owner of the projectile
         this.despawnTimer = -1; //Default despawn timer (never despawns)
-        this.damage = 5; //Default damage
+        this.damage = damage;
         //Call spawnInWorld() in subclasses!
     }
     

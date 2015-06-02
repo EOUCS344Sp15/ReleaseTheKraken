@@ -29,8 +29,8 @@ public class EntityPirateBase extends EntityPirate
         super(world, xLocation, yLocation);
         
         //Override variables for this type of entity
-        this.health = 1000000;
-        this.maxHealth = 1000000;
+        this.health = 2000;//OLD VALUE 1000000
+        this.maxHealth = 2000;
         this.points = 500;
         
         this.spawnInWorld(xLocation, yLocation, 0, 0);
@@ -43,8 +43,8 @@ public class EntityPirateBase extends EntityPirate
         //This will be implemented when the level loader is written
         
         //TODO: Change these
-        this.health = 1000000;
-        this.maxHealth = 1000000;
+        this.health = 2000;
+        this.maxHealth = 2000;
         this.points = 500;
     }
     
@@ -55,7 +55,7 @@ public class EntityPirateBase extends EntityPirate
      */
     public void regenerateHealth()
     {
-        this.health += 1000;
+        this.health += 15;//New health regen, old was 1000
         if (this.health > this.maxHealth)
         {
             this.health = this.maxHealth;
@@ -133,5 +133,13 @@ public class EntityPirateBase extends EntityPirate
                 this.physBody.getPosition().y - spriteUnitHeight/2,
                 spriteUnitWidth,
                 spriteUnitHeight);
+    }
+    
+    @Override
+    public void onDeath()
+    {
+        this.world.setPirateBase(null);
+        
+        super.onDeath();
     }
 }

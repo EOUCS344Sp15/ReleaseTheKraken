@@ -14,15 +14,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.BSpline;
-import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
-import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.Entity;
@@ -204,19 +201,22 @@ public class GameRenderer extends UiRenderer
         //The amount to offset the player focus so that it is centered on the screen taking into account the sidebar
         float playerXOffset = sidebarLocalWidth/2;
         
-        //Calculate the center position of the camera
-        float cameraX = MathUtils.clamp(
-                this.world.getPlayer().getPos().x - playerXOffset,
-                this.camera.viewportWidth/2 - sidebarLocalWidth,
-                this.world.getWidth() - this.camera.viewportWidth/2);
-        float cameraY = MathUtils.clamp(
-                this.world.getPlayer().getPos().y,
-                this.camera.viewportHeight/2,
-                this.world.getHeight() - this.camera.viewportHeight/2);
+        if(this.world.getPlayer() != null)
+        {
+            //Calculate the center position of the camera
+            float cameraX = MathUtils.clamp(
+            this.world.getPlayer().getPos().x - playerXOffset,
+            this.camera.viewportWidth/2 - sidebarLocalWidth,
+            this.world.getWidth() - this.camera.viewportWidth/2);
+            float cameraY = MathUtils.clamp(
+            this.world.getPlayer().getPos().y,
+            this.camera.viewportHeight/2,
+            this.world.getHeight() - this.camera.viewportHeight/2);
         
-        //Position the camera
-        this.camera.position.set(cameraX, cameraY, 0);
-        this.camera.update();
+            //Position the camera
+            this.camera.position.set(cameraX, cameraY, 0);
+            this.camera.update();
+        } // end if
         
         //Clears screen buffer
         Gdx.gl.glClearColor(0, 0, 0, 1);

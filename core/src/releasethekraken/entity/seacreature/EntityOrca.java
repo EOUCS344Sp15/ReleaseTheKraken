@@ -9,11 +9,16 @@ package releasethekraken.entity.seacreature;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityPirate;
+import releasethekraken.entity.projectile.EntityWaterBomb;
+import releasethekraken.entity.projectile.EntityWaterSquirt;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
@@ -30,7 +35,7 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 3000F;
+        this.defaultMoveForce = 3000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -43,8 +48,27 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 3000F;
+        this.defaultMoveForce = 3000F;
     }
+    
+    
+    @Override
+    public void update()
+    {
+        super.update();
+        
+        //Attack every second
+        if (this.world.getWorldTime() % 60 == 0)
+        {
+            int damage = 1;
+            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            {
+                damage*=1.5F;
+            }
+            attack(damage);
+        }
+    }
+    
     
     @Override
     protected void spawnInWorld(float x, float y, float xVel, float yVel)
@@ -111,9 +135,19 @@ public class EntityOrca extends EntitySeaCreature
     /**
      * Builds and adds a new projectile to the world
      */
-    public void attack()
+    @Override
+    public void attack(int damage)
     {
-        //TODO: Make EntityWaterBomb for the Orca attack
-        //this.world.addEntity(new EntityWaterSquirt(world, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this));
+        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
+        //System.out.println(target.toString());
+        
+        float newtonForce = 100F; //The amount of force applied to the projectile
+        
+        if(target != null)
+        {
+            Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
+            difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
+            new EntityWaterBomb(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this, damage); 
+        } // target
     }
 }

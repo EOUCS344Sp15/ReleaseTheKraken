@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.projectile.EntityWaterSquirt;
 import releasethekraken.entity.pirate.EntityPirate;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
@@ -38,7 +39,7 @@ public class EntityFish extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 2500F;
+        this.defaultMoveForce = 2500F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -55,7 +56,7 @@ public class EntityFish extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 2500F;
+        this.defaultMoveForce = 2500F;
     }
     
     @Override
@@ -65,7 +66,14 @@ public class EntityFish extends EntitySeaCreature
         
         //Attack every second
         if (this.world.getWorldTime() % 60 == 0)
-            attack();
+        {
+            int damage = 1;
+            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            {
+                damage*=1.5F;
+            }
+            attack(damage);
+        }
     }
     
     @Override
@@ -129,10 +137,8 @@ public class EntityFish extends EntitySeaCreature
                 spriteUnitWidth);
     }
     
-    /**
-     * Builds and returns a new projectile
-     */
-    public void attack()
+    @Override
+    public void attack(int damage)
     {
         EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
         //System.out.println(target.toString());
@@ -143,7 +149,7 @@ public class EntityFish extends EntitySeaCreature
         {
             Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
             difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
-            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this); 
+            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this, damage); 
         } // target
     }
 }

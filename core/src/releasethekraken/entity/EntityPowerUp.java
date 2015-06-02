@@ -11,12 +11,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import java.util.HashMap;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import static releasethekraken.entity.EntityPowerUp.getStats;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
 /**
@@ -32,10 +35,10 @@ public class EntityPowerUp extends Entity
     static //Add stats for each type of power up here
     {
         //TODO: adjust the values
-        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 10, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6")));
-        addStat(Ability.HEALUP, new PowerUpStats(60*20, 20, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F)));
-        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 30, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F)));
-        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 15, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 15, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6")));
+        addStat(Ability.HEALUP, new PowerUpStats(1, 10, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 25, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 20, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F)));
     }
     
     protected Ability type; //tracks the type of power up
@@ -114,6 +117,17 @@ public class EntityPowerUp extends Entity
     {
         //TODO: use the power up.  Use the values in PowerUpStats.
         Gdx.app.log("EntityPowerUp", "onUse(world, " + powerUpType + ")");
+        
+        for (Body body : world.getPhysBodies())//search for entities on the map
+        {
+            Object o = body.getUserData();
+            
+            if (o instanceof EntitySeaCreature)//apply power up if seacreature TODO: Check range
+            {
+                if(world.getPlayer().getPos().dst(body.getPosition()) < getStats(powerUpType).radius)
+                   ((EntitySeaCreature)o).applyPowerUp(powerUpType, getStats(powerUpType).duration);
+            }
+        }
     }
     
     @Override
