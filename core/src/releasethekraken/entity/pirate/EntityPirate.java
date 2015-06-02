@@ -5,7 +5,6 @@
  */
 package releasethekraken.entity.pirate;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;

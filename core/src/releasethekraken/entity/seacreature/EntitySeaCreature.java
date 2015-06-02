@@ -3,18 +3,15 @@
  */
 package releasethekraken.entity.seacreature;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import java.util.HashMap;
-import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 import releasethekraken.entity.EntityPowerUp;
-import releasethekraken.entity.pirate.EntityPirate;
 import releasethekraken.path.SeaCreaturePath;
 
 /**
