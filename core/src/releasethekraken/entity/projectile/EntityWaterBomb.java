@@ -21,9 +21,9 @@ import static releasethekraken.physics.CollisionFilter.*; //Import the collision
 public class EntityWaterBomb extends EntityProjectile
 {
 
-    public EntityWaterBomb(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
+    public EntityWaterBomb(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner, int damage)
     {
-        super(world, xLoc, yLoc, xVel, yVel, owner);
+        super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
         this.damage = 1;
