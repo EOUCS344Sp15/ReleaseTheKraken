@@ -35,7 +35,7 @@ public class EntityTurtle extends EntitySeaCreature
         
         this.health = 20;
         this.maxHealth = 20;
-        this.moveForce = 1500F;
+        this.defaultMoveForce = 1500F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -51,7 +51,7 @@ public class EntityTurtle extends EntitySeaCreature
         
         this.health = 20;
         this.maxHealth = 20;
-        this.moveForce = 1500F;
+        this.defaultMoveForce = 1500F;
     }
     
     @Override

@@ -38,7 +38,7 @@ public class EntityFish extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 2500F;
+        this.defaultMoveForce = 2500F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -55,7 +55,7 @@ public class EntityFish extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 2500F;
+        this.defaultMoveForce = 2500F;
     }
     
     @Override

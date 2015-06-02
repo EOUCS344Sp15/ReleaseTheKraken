@@ -41,8 +41,11 @@ public abstract class EntitySeaCreature extends EntityLiving
     /** The amount of time left that the power up is applied for (ticks) */
     protected int powerUpTime = 0;
     
+    /** The default move force */
+    protected float defaultMoveForce = 0F;
+    
     /** The force, in newtons, that is applied to move the sea creature */
-    protected float moveForce = 0F;
+    protected float moveForce = defaultMoveForce;
     
     /** The path that the sea creature is currently following */
     protected SeaCreaturePath currentPath;
@@ -82,15 +85,24 @@ public abstract class EntitySeaCreature extends EntityLiving
             switch (this.appliedPowerUp)
             {
                 case HEALUP:
-                    this.health = MathUtils.clamp(this.health+10, 0, this.maxHealth);
+                    this.health = MathUtils.clamp(this.health+5, 0, this.maxHealth); //add a single instance of 5 health
                 case SPEEDUP:
+                    this.moveForce = 2*this.defaultMoveForce;
                     //TODO: add functionality for speeding up entities
                 case ATTACKUP:
                     //TODO: add functionalility for increasing enemy attack
-                case DEFENSEUP:
-                    //TODO: add functionality for incre
             }
         }
+        else if (this.moveForce != this.defaultMoveForce)//after speed boost is done, set back to default speed
+            this.moveForce = this.defaultMoveForce;
+    }
+    
+    @Override
+    public boolean onDamage(int damage)
+    {
+        if (this.appliedPowerUp == EntityPowerUp.Ability.DEFENSEUP)
+            damage /= 2;
+        return super.onDamage(damage);
     }
     
     /**

@@ -30,7 +30,7 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 3000F;
+        this.defaultMoveForce = 3000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -43,7 +43,7 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 10;
         this.maxHealth = 10;
-        this.moveForce = 3000F;
+        this.defaultMoveForce = 3000F;
     }
     
     @Override
