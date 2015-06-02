@@ -35,7 +35,7 @@ public class EntityWaterBomb extends EntityProjectile
     {
         //Set up hitbox shape - Defines the hitbox
         CircleShape hitbox = new CircleShape();
-        hitbox.setRadius(0.25F);
+        hitbox.setRadius(0.65F);
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
