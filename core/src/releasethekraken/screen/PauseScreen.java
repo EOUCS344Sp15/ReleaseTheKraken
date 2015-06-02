@@ -21,7 +21,7 @@ import releasethekraken.ui.renderer.UiRenderer;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
- * This screen is the main menu screen
+ * This screen is the pause screen
  * @author Lucas Schuetz
  */
 public class PauseScreen extends AbstractScreen implements InputHandler.KeyListener
@@ -38,7 +38,7 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
     }
     
     /**
-     * Constructs a new MainMenuScreen
+     * Constructs a new PauseScreen
      * @param rtk The ReleaseTheKraken instance.  This is final so that the
      * anonymous inner classes can access it.
      * @param pixmap The Pixmap for the background screenshot
