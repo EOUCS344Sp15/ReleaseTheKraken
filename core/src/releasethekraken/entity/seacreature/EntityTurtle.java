@@ -64,7 +64,7 @@ public class EntityTurtle extends EntitySeaCreature
         super.update();
         
         //Attack every second
-        if (this.world.getWorldTime() % 60 == 0)
+        if (this.world.getWorldTime() % 120 == 0)
         {
             int damage = 1;
             if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
