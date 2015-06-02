@@ -21,12 +21,11 @@ import static releasethekraken.physics.CollisionFilter.*; //Import the collision
 public class EntityWaterSquirt extends EntityProjectile
 {
 
-    public EntityWaterSquirt(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
+    public EntityWaterSquirt(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner, int damage)
     {
-        super(world, xLoc, yLoc, xVel, yVel, owner);
+        super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
-        this.damage = 1;
     }
     
     

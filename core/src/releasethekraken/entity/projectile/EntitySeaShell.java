@@ -24,12 +24,11 @@ public class EntitySeaShell extends EntityProjectile
     /** The index of the array of sea shell textures */
     private int textureIndex;
     
-    public EntitySeaShell(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner)
+    public EntitySeaShell(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner, int damage)
     {
-        super(world, xLoc, yLoc, xVel, yVel, owner);
+        super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 2*60;
-        this.damage = 2;
         
         //Set the texture index to a random index
         this.textureIndex = world.random.nextInt(GameAssets.seaShellTextures.length);
