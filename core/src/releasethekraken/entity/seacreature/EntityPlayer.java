@@ -263,11 +263,11 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 }
                 break;
             case Input.Keys.Z:
-                if(this.health > 1)
+                if(this.health > 0)
                     this.health = this.health - 1;
                 break;
             case Input.Keys.X:
-                if(this.health == this.maxHealth)
+                if(this.health >= this.maxHealth)
                     this.health = this.maxHealth;
                 else
                     this.health = this.health + 1;

@@ -43,11 +43,14 @@ public class GameScreen extends AbstractScreen implements InputHandler.KeyListen
     {
         super.render(delta);
         
-        //Update player's aim position
-        Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
-        Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
-        this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
-        this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
+        if(this.world.getPlayer() != null)
+        {
+            //Update player's aim position
+            Vector3 mousePos3D = new Vector3(ReleaseTheKraken.inputHandler.getPointerLocations().first(), 0); //Convert mouse 0 to Vector 3
+            Vector3 worldMousePos3D = this.renderer.getCamera().unproject(mousePos3D); //Have the camera unproject the coordinates
+            this.world.getPlayer().getAimPos().x = worldMousePos3D.x;
+            this.world.getPlayer().getAimPos().y = worldMousePos3D.y;
+        } // end if
         
         if(this.world.getPirateBase() == null)
         {
