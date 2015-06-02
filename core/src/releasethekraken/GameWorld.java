@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.Random;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.path.SeaCreaturePath;
@@ -64,6 +65,9 @@ public class GameWorld implements Disposable
     
     /** A reference to the player */
     private EntityPlayer player;
+    
+    /** A reference to the PirateBase */
+    private EntityPirateBase pirateBase;
     
     /** The beginning of the chain of paths that sea creatures can take */
     private SeaCreaturePath firstPath;
@@ -494,6 +498,24 @@ public class GameWorld implements Disposable
     public void setPlayer(EntityPlayer entityPlayer)
     {
         this.player = entityPlayer;
+    }
+    
+    /**
+     * Gets the EntityPirateBase reference
+     * @return The EntityPirateBase reference
+     */
+    public EntityPirateBase getPirateBase()
+    {
+        return this.pirateBase;
+    }
+    
+    /**
+     * Sets the pirate base reference
+     * @param entityPirateBase The EntityPirateBase object that will be the pirate base
+     */
+    public void setPirateBase(EntityPirateBase entityPirateBase)
+    {
+        this.pirateBase = entityPirateBase;
     }
     
     /**

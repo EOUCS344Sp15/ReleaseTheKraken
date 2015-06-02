@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import releasethekraken.entity.Entity;
+import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.path.SeaCreaturePath;
 import releasethekraken.util.MapBodyManager;
@@ -238,6 +239,8 @@ public class LevelLoader
                         
                         if (entity instanceof EntityPlayer) //Set the player if the entity is the player
                             newWorld.setPlayer((EntityPlayer)entity);
+                        else if (entity instanceof EntityPirateBase) //Set the pirate base if the entity is the pirate base
+                            newWorld.setPirateBase((EntityPirateBase)entity);
                     }
                     catch (Exception e)
                     {

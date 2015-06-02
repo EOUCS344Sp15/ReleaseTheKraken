@@ -134,4 +134,12 @@ public class EntityPirateBase extends EntityPirate
                 spriteUnitWidth,
                 spriteUnitHeight);
     }
+    
+    @Override
+    public void onDeath()
+    {
+        this.world.setPirateBase(null);
+        
+        super.onDeath();
+    }
 }
