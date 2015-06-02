@@ -18,14 +18,15 @@ import static releasethekraken.physics.CollisionFilter.*; //Import the collision
  *
  * @author sbartlett
  */
-public class EntityWaterSquirt extends EntityProjectile
+public class EntityWaterBomb extends EntityProjectile
 {
 
-    public EntityWaterSquirt(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner, int damage)
+    public EntityWaterBomb(GameWorld world, float xLoc, float yLoc, float xVel, float yVel, Entity owner, int damage)
     {
         super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
+        this.damage = 1;
     }
     
     
@@ -72,9 +73,9 @@ public class EntityWaterSquirt extends EntityProjectile
     {
         super.renderSprites(batch);
         
-        float spriteUnitWidth = 1.0F;
-        float spriteUnitHegiht = 0.5F;
-        batch.draw(GameAssets.waterSquirtTexture,
+        float spriteUnitWidth = 2.0F;
+        float spriteUnitHegiht = 2.0F;
+        batch.draw(GameAssets.waterBombTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitHegiht/2,
                 1/2F, //X point to rotate around

@@ -148,7 +148,7 @@ public class EntityTurtle extends EntitySeaCreature
         {
             Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
             difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
-            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this); 
+            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this, damage); 
         } // target
     }
 }
