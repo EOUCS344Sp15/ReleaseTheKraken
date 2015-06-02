@@ -78,7 +78,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     {
         //Set up hitbox shape - Defines the hitbox
         CircleShape hitbox = new CircleShape();
-        hitbox.setRadius(1);
+        hitbox.setRadius(0.95F);
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
