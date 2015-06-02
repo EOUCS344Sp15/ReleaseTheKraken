@@ -133,6 +133,18 @@ public class EntityPowerUp extends Entity
     @Override
     public void update()
     {
+         //power ups slowly move away from playetr
+        if(world.getPlayer() != null)
+        {
+            if(world.getPlayer().getPos().x > this.physBody.getPosition().x && world.getPlayer().getPos().y > this.physBody.getPosition().y) 
+                this.physBody.applyForceToCenter(-500f, -500f, true);
+            else if(world.getPlayer().getPos().x > this.physBody.getPosition().x && world.getPlayer().getPos().y < this.physBody.getPosition().y) 
+                this.physBody.applyForceToCenter(-500f, 500f, true);
+            else if(world.getPlayer().getPos().x < this.physBody.getPosition().x && world.getPlayer().getPos().y > this.physBody.getPosition().y) 
+                this.physBody.applyForceToCenter(500f, -500f, true);
+            else if(world.getPlayer().getPos().x < this.physBody.getPosition().x && world.getPlayer().getPos().y < this.physBody.getPosition().y) 
+                this.physBody.applyForceToCenter(500f, 500f, true);
+        }
         super.update();
         despawnTimer--;
         if (despawnTimer <= 0)
