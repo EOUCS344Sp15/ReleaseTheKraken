@@ -274,4 +274,12 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                 break;
         }
     }
+    
+    @Override
+    public void onDeath()
+    {
+        this.world.setPlayer(null);
+        
+        super.onDeath();
+    }
 }
