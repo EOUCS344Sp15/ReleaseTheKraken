@@ -177,6 +177,7 @@ public abstract class EntitySeaCreature extends EntityLiving
     
     /**
      * Builds and returns a new projectile
+     * @param damage The damage multiplier for dealing damage to an entity
      */
     public void attack(int damage)
     {
