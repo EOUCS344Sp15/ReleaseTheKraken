@@ -35,6 +35,7 @@ public class GameAssets extends AssetManager
     public static TextureRegion[] seaShellTextures;
     public static TextureRegion waterSquirtTexture;
     public static TextureRegion waterBombTexture;
+    public static TextureRegion cannonBallTexture;
     
     public static TextureRegion[] powerupTextures;
     public static TextureRegion coinTexture;
@@ -106,6 +107,7 @@ public class GameAssets extends AssetManager
         
         waterSquirtTexture = new TextureRegion(entityTextures, 0, 96, 16, 8);
         waterBombTexture = new TextureRegion(entityTextures, 0, 112, 32, 32);
+        cannonBallTexture = new TextureRegion(entityTextures, 16, 96, 16, 16);
         
         seaShellTextures = new TextureRegion[6];
         for (int i=0; i<seaShellTextures.length; i++)
