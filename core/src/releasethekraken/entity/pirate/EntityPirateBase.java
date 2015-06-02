@@ -55,7 +55,7 @@ public class EntityPirateBase extends EntityPirate
      */
     public void regenerateHealth()
     {
-        this.health += 1000;
+        this.health += 10;
         if (this.health > this.maxHealth)
         {
             this.health = this.maxHealth;
