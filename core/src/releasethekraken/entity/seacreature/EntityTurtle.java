@@ -37,8 +37,8 @@ public class EntityTurtle extends EntitySeaCreature
     {
         super(world, xLocation, yLocation);
         
-        this.health = 20;
-        this.maxHealth = 20;
+        this.health = 100;
+        this.maxHealth = 100;
         this.defaultMoveForce = 1500F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
@@ -53,8 +53,8 @@ public class EntityTurtle extends EntitySeaCreature
         super(world, mapObject);
         //This will be implemented when the level loader is written
         
-        this.health = 20;
-        this.maxHealth = 20;
+        this.health = 100;
+        this.maxHealth = 100;
         this.defaultMoveForce = 1500F;
     }
     

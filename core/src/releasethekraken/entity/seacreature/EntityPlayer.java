@@ -56,8 +56,8 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         super(world, xLocation, yLocation);
         this.spawnInWorld(xLocation, yLocation, 0, 0);
         
-        this.health = 15;
-        this.maxHealth = 15;
+        this.health = 40;
+        this.maxHealth = 40;
         this.defaultMoveForce = 17500F;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
@@ -67,8 +67,8 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     {
         super(world, mapObject);
         
-        this.health = 15;
-        this.maxHealth = 15;
+        this.health = 40;
+        this.maxHealth = 40;
         this.defaultMoveForce = 17500F;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
@@ -261,16 +261,6 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
                     this.physBody.applyForceToCenter(this.moveForce, 0, true);
                     this.rightPressedThisTick = true;
                 }
-                break;
-            case Input.Keys.Z:
-                if(this.health > 0)
-                    this.health = this.health - 1;
-                break;
-            case Input.Keys.X:
-                if(this.health >= this.maxHealth)
-                    this.health = this.maxHealth;
-                else
-                    this.health = this.health + 1;
                 break;
         }
     }

@@ -14,10 +14,8 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
-import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.projectile.EntityBullet;
-import releasethekraken.entity.projectile.EntitySeaShell;
-import releasethekraken.entity.projectile.EntityWaterSquirt;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
 
@@ -34,11 +32,11 @@ public class EntityGunTower extends EntityPirate
         super(world, xLocation, yLocation);
         
         //Override variables for this type of entity
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 50;
+        this.maxHealth = 50;
         this.points = 5;
         this.coins = 10;
-        this.attackRate = 5;
+        this.attackRate = 2;
     }
     
     //Secondary constructor
@@ -52,6 +50,7 @@ public class EntityGunTower extends EntityPirate
         this.maxHealth = 50;
         this.points = 5;
         this.coins = 10;
+        this.attackRate = 2;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class EntityGunTower extends EntityPirate
         super.update();
         
         //Attack every second
-        if (this.world.getWorldTime() % 15 == 0)
+        if (this.world.getWorldTime() % (this.attackRate*ReleaseTheKraken.TICK_RATE) == 0)
         {
            attack();
         }

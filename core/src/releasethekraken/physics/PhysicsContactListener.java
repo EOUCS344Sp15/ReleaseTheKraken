@@ -89,7 +89,7 @@ public class PhysicsContactListener implements ContactListener
             if (projectile.getOwner() instanceof EntityPirate) //Only deal damage if this projectile's owner is a pirate
             {
                 ((EntitySeaCreature)other).onDamage(projectile.getDamage());
-                projectile.dispose();
+                projectile.onImpact();
             }
         }
         else if (other instanceof EntityPirate) //If the other entity is a pirate
@@ -97,7 +97,7 @@ public class PhysicsContactListener implements ContactListener
             if (projectile.getOwner() instanceof EntitySeaCreature) //Only deal damage if this projectile's owner is a sea creature
             {
                 ((EntityPirate)other).onDamage(projectile.getDamage());
-                projectile.dispose();
+                projectile.onImpact();
             }
         }
         }

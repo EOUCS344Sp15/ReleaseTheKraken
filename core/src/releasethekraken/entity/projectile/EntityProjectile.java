@@ -55,7 +55,7 @@ public class EntityProjectile extends Entity
         this.despawnTimer--; //Update despawn timer
         
         if (this.despawnTimer == 0) //Destroy the projectile if the timer reaches 0
-            this.dispose();
+            this.onDespawn();
     }
 
     /**
@@ -101,5 +101,21 @@ public class EntityProjectile extends Entity
     public int getDamage()
     {
         return this.damage;
+    }
+    
+    /**
+     * Called when the projectile impacts something
+     */
+    public void onImpact()
+    {
+        this.dispose();
+    }
+    
+    /**
+     * Called when the projectile despawns due to leaving the world or existing for too long
+     */
+    public void onDespawn()
+    {
+        this.dispose();
     }
 }

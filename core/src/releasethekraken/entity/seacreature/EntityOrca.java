@@ -33,8 +33,8 @@ public class EntityOrca extends EntitySeaCreature
         super(world, xLocation, yLocation);
         
         //TODO: Change these
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 200;
+        this.maxHealth = 200;
         this.defaultMoveForce = 3000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
@@ -46,8 +46,8 @@ public class EntityOrca extends EntitySeaCreature
         //This will be implemented when the level loader is written
         
         //TODO: Change these
-        this.health = 10;
-        this.maxHealth = 10;
+        this.health = 200;
+        this.maxHealth = 200;
         this.defaultMoveForce = 3000F;
     }
     
@@ -141,7 +141,7 @@ public class EntityOrca extends EntitySeaCreature
         EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
         //System.out.println(target.toString());
         
-        float newtonForce = 100F; //The amount of force applied to the projectile
+        float newtonForce = 500F; //The amount of force applied to the projectile
         
         if(target != null)
         {

@@ -6,6 +6,7 @@
 package releasethekraken.entity.projectile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -41,7 +42,6 @@ public class EntityWaterBomb extends EntityProjectile
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyDef.fixedRotation = true;
         
         //Set up physics body - Defines the actual physics body
         this.physBody = this.world.getPhysWorld().createBody(bodyDef);
@@ -78,13 +78,29 @@ public class EntityWaterBomb extends EntityProjectile
         batch.draw(GameAssets.waterBombTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitHegiht/2,
-                1/2F, //X point to rotate around
-                1/4F, //Y point to rotate around
+                1F, //X point to rotate around
+                1F, //Y point to rotate around
                 spriteUnitWidth,
                 spriteUnitHegiht,
                 1.0F, //X scale
                 1.0F, //Y scale
-                (float) this.physBody.getLinearVelocity().angle());
+                (float) this.physBody.getAngle());
         
+    }
+    
+    @Override
+    public void onImpact()
+    {
+        //"Splash" with some water squirts!
+        /*int splashes = 12;
+        Vector2 splashVel = new Vector2(100, 0);
+        
+        for (int i=0; i<splashes; i++)
+        {
+            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, splashVel.x, splashVel.y, this.owner, 1);
+            splashVel.rotate(((float)splashes/i)*360);
+        }
+        */ //TODO: This doesn't work, as you can't alter the body list during contacts.
+        super.onImpact();
     }
 }
