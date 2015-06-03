@@ -9,10 +9,12 @@ package releasethekraken.entity.seacreature;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
@@ -63,6 +65,21 @@ public class EntityTurtle extends EntitySeaCreature
     {
         super.update();
         
+        //Get the angle difference
+        float angle = this.getVel().angle() - (this.physBody.getAngle()*MathUtils.radiansToDegrees);
+        
+        //Convert to -180 to 180
+        while (angle > 180)
+            angle -= 180;
+        while (angle < -180)
+            angle += 180;
+        
+        //Calculate torque to apply
+        float torque = (angle > 0 ? 500F : -500F);
+        
+        //Rotate towards velocity
+        this.physBody.applyTorque(torque, true);
+        
         //Attack every second
         if (this.world.getWorldTime() % 120 == 0)
         {
@@ -78,16 +95,14 @@ public class EntityTurtle extends EntitySeaCreature
     @Override
     protected void spawnInWorld(float x, float y, float xVel, float yVel)
     {
-        //TODO: Copy and modify the code from EntityPlayer
         //Set up hitbox shape - Defines the hitbox
-        CircleShape hitbox = new CircleShape();
-        hitbox.setRadius(1);
+        PolygonShape hitbox = new PolygonShape();
+        hitbox.setAsBox(1.0F, 0.5F, new Vector2(0, 0), 0);
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyDef.fixedRotation = true;
         
         //Set up physics body - Defines the actual physics body
         this.physBody = this.world.getPhysWorld().createBody(bodyDef);
@@ -110,8 +125,11 @@ public class EntityTurtle extends EntitySeaCreature
         //Set the linear damping
         this.physBody.setLinearDamping(5F);
         
+        //Set the angular damping
+        this.physBody.setAngularDamping(2.5F);
+        
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
@@ -128,12 +146,17 @@ public class EntityTurtle extends EntitySeaCreature
     {
         super.renderSprites(batch);
         
-        float spriteUnitWidth = 2F;
+        float spriteUnitWidth = 2.0F;
         batch.draw(GameAssets.entityTurtleTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitWidth/2,
+                1F, //X point to rotate around
+                1F, //Y point to rotate around
                 spriteUnitWidth,
-                spriteUnitWidth);
+                spriteUnitWidth,
+                1.0F, //X scale
+                1.0F, //Y scale
+                (float) Math.toDegrees(this.physBody.getAngle()));
     }
     
     @Override

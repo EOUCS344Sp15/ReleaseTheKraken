@@ -9,9 +9,11 @@ package releasethekraken.entity.pirate;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
@@ -67,8 +69,8 @@ public class EntityPirateBase extends EntityPirate
     {
         //TODO: Copy and modify the code from EntityPlayer
         //Set up hitbox shape - Defines the hitbox
-        CircleShape hitbox = new CircleShape();
-        hitbox.setRadius(4);
+         PolygonShape hitbox1 = new PolygonShape();
+        hitbox1.setAsBox(4, 3-0.1F);
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
@@ -82,7 +84,7 @@ public class EntityPirateBase extends EntityPirate
         
         //Set up physics fixture - Defines physical properties
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = hitbox;
+        fixtureDef.shape = hitbox1;
         fixtureDef.density = 80.0F;
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.1F; //Bouncyness
@@ -94,14 +96,27 @@ public class EntityPirateBase extends EntityPirate
         
         this.physBody.createFixture(fixtureDef);
         
+        //Other fixtures
+        CircleShape hitbox2 = new CircleShape();
+        hitbox2.setRadius(3);
+        hitbox2.setPosition(new Vector2(-3, 0));
+        
+        fixtureDef.shape = hitbox2;
+        this.physBody.createFixture(fixtureDef);
+
+        hitbox2.setPosition(new Vector2(3, 0));
+        
+        fixtureDef.shape = hitbox2;
+        this.physBody.createFixture(fixtureDef);
+        
         //Set the linear damping
         this.physBody.setLinearDamping(7F);
         
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
-        hitbox.dispose();
+        hitbox1.dispose();
     }
     
     @Override

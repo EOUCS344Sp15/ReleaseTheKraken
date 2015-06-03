@@ -9,10 +9,12 @@ package releasethekraken.entity.seacreature;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityPowerUp;
@@ -35,7 +37,7 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 200;
         this.maxHealth = 200;
-        this.defaultMoveForce = 3000F;
+        this.defaultMoveForce = 4000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -48,7 +50,7 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 200;
         this.maxHealth = 200;
-        this.defaultMoveForce = 3000F;
+        this.defaultMoveForce = 4000F;
     }
     
     
@@ -57,10 +59,25 @@ public class EntityOrca extends EntitySeaCreature
     {
         super.update();
         
-        //Attack every second
-        if (this.world.getWorldTime() % 60 == 0)
+        //Get the angle difference
+        float angle = this.getVel().angle() - (this.physBody.getAngle()*MathUtils.radiansToDegrees);
+        
+        //Convert to -180 to 180
+        while (angle > 180)
+            angle -= 180;
+        while (angle < -180)
+            angle += 180;
+        
+        //Calculate torque to apply
+        float torque = (angle > 0 ? 1000F : -1000F);
+        
+        //Rotate towards velocity
+        this.physBody.applyTorque(torque, true);
+        
+        //Attack every 2 seconds
+        if (this.world.getWorldTime() % (60*3) == 0)
         {
-            int damage = 1;
+            int damage = 25;
             if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
             {
                 damage*=1.5F;
@@ -73,16 +90,14 @@ public class EntityOrca extends EntitySeaCreature
     @Override
     protected void spawnInWorld(float x, float y, float xVel, float yVel)
     {
-        //TODO: Copy and modify the code from EntityPlayer
         //Set up hitbox shape - Defines the hitbox
-        CircleShape hitbox = new CircleShape();
-        hitbox.setRadius(2);
+        PolygonShape hitbox = new PolygonShape();
+        hitbox.setAsBox(2.0F, 1.25F, new Vector2(0, 0), 0);
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyDef.fixedRotation = true;
         
         //Set up physics body - Defines the actual physics body
         this.physBody = this.world.getPhysWorld().createBody(bodyDef);
@@ -105,8 +120,11 @@ public class EntityOrca extends EntitySeaCreature
         //Set the linear damping
         this.physBody.setLinearDamping(5F);
         
+        //Set the angular damping
+        this.physBody.setAngularDamping(2.5F);
+        
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
@@ -128,8 +146,13 @@ public class EntityOrca extends EntitySeaCreature
         batch.draw(GameAssets.entityOrcaTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitHeight/2,
+                3F, //X point to rotate around
+                2F, //Y point to rotate around
                 spriteUnitWidth,
-                spriteUnitHeight);
+                spriteUnitHeight,
+                1.0F, //X scale
+                1.0F, //Y scale
+                (float) Math.toDegrees(this.physBody.getAngle()));
     }
     
     /**
@@ -141,7 +164,7 @@ public class EntityOrca extends EntitySeaCreature
         EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
         //System.out.println(target.toString());
         
-        float newtonForce = 500F; //The amount of force applied to the projectile
+        float newtonForce = 1200F; //The amount of force applied to the projectile
         
         if(target != null)
         {

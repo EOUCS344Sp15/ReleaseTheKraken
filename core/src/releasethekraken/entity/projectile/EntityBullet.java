@@ -25,7 +25,7 @@ public class EntityBullet extends EntityProjectile
     {
         super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
-        this.despawnTimer = 16*60;
+        this.despawnTimer = 8*60;
     }
     
     
@@ -61,7 +61,7 @@ public class EntityBullet extends EntityProjectile
         this.physBody.createFixture(fixtureDef);
         
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();

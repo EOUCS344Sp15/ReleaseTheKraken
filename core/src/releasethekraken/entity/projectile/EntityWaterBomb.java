@@ -27,7 +27,6 @@ public class EntityWaterBomb extends EntityProjectile
         super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
-        this.damage = 1;
     }
     
     
@@ -50,7 +49,7 @@ public class EntityWaterBomb extends EntityProjectile
         //Set up physics fixture - Defines physical properties
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = hitbox;
-        fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
+        fixtureDef.density = 200.0F; //This should plow through stuff
         fixtureDef.friction = 0.1F; //friction with other objects
         fixtureDef.restitution = 0.2F; //Bouncyness
         
@@ -62,7 +61,7 @@ public class EntityWaterBomb extends EntityProjectile
         this.physBody.createFixture(fixtureDef);
         
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();

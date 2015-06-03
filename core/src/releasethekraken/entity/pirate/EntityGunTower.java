@@ -102,7 +102,7 @@ public class EntityGunTower extends EntityPirate
         this.physBody.setLinearDamping(7F);
         
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();

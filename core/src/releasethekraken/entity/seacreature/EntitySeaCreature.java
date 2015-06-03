@@ -72,7 +72,7 @@ public abstract class EntitySeaCreature extends EntityLiving
             Vector2 targetPos = this.world.getPathTargetPos(this);
             Vector2 difference = targetPos.sub(this.getPos());
             difference.nor().scl(this.moveForce);
-            this.physBody.applyForce(difference, Vector2.Zero, true);
+            this.physBody.applyForce(difference, this.getPos(), true);
         }
         
         if (this.powerUpTime > 0)

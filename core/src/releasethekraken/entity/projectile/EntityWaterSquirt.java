@@ -61,7 +61,7 @@ public class EntityWaterSquirt extends EntityProjectile
         this.physBody.createFixture(fixtureDef);
         
         //Apply impulse
-        this.physBody.applyLinearImpulse(xVel, yVel, 0, 0, true);
+        this.physBody.applyLinearImpulse(xVel, yVel, x, y, true);
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
