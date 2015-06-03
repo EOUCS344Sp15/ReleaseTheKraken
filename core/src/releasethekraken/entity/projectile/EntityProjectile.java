@@ -112,7 +112,7 @@ public class EntityProjectile extends Entity
     }
     
     /**
-     * Called when the projectile despawns due to leaving the world or existing for too long
+     * Called when the projectile despawns from existing too long
      */
     public void onDespawn()
     {

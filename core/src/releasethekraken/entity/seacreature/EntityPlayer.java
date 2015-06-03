@@ -58,7 +58,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         
         this.health = 40;
         this.maxHealth = 40;
-        this.defaultMoveForce = 17500F;
+        this.defaultMoveForce = 7500F;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
@@ -69,7 +69,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         
         this.health = 40;
         this.maxHealth = 40;
-        this.defaultMoveForce = 17500F;
+        this.defaultMoveForce = 7500F;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
@@ -199,7 +199,8 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
             Vector2 velocity = this.aimPos.cpy().sub(this.getPos()).nor().scl(500); //Calculate direction and velocity to fire at
             float spread = 10F; //The amount of possible spread, in degrees
             velocity.rotate(this.world.random.nextFloat()*spread - spread/2); //Add +- spread/2 degrees of spread
-            new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this, damage);
+            EntitySeaShell projectile = new EntitySeaShell(this.world, this.getPos().x, this.getPos().y, velocity.x, velocity.y, this, damage);
+            projectile.getPhysBody().applyAngularImpulse(this.world.random.nextFloat()*50 - 25, true); //Randomly spin it a bit
     }
     
     @Override

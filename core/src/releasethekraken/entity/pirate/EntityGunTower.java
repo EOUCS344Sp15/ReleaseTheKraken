@@ -58,6 +58,10 @@ public class EntityGunTower extends EntityPirate
     {
         super.update();
         
+        //Acquire a target every second
+        if (this.world.getWorldTime() % (1*ReleaseTheKraken.TICK_RATE) == 0)
+            this.target = this.world.getClosestTarget(this, EntitySeaCreature.class);
+        
         //Attack every second
         if (this.world.getWorldTime() % (this.attackRate*ReleaseTheKraken.TICK_RATE) == 0)
         {
@@ -119,24 +123,32 @@ public class EntityGunTower extends EntityPirate
     {
         super.renderSprites(batch);
         
-        float spriteUnitWidth = 2F;
+        float angle = 0;
+        
+        //Look at target
+        if (this.target != null)
+            angle = this.target.getPos().cpy().sub(this.getPos()).angle();
+        
+        float spriteUnitWidth = 2.0F;
         batch.draw(GameAssets.entityGunTowerTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitWidth/2,
+                1F, //X point to rotate around
+                1F, //Y point to rotate around
                 spriteUnitWidth,
-                spriteUnitWidth);
+                spriteUnitWidth,
+                1.0F, //X scale
+                1.0F, //Y scale
+                angle);
     }
     
     public void attack()
     {
-        EntitySeaCreature target = this.world.getClosestTarget(this, EntitySeaCreature.class);
-        //System.out.println(target.toString());
-        
         float newtonForce = 150F; //The amount of force applied to the projectile
         
         if(target != null)
         {
-            Vector2 difference = target.getPos().cpy().sub(this.getPos()); //Get the difference vector
+            Vector2 difference = this.target.getPos().cpy().sub(this.getPos()); //Get the difference vector
             difference.nor().scl(newtonForce); //Normalize it to a unit vector, and scale it
             new EntityBullet(this.world, this.getPos().x, this.getPos().y, difference.x, difference.y, this, 2); 
         } // target

@@ -7,7 +7,9 @@ package releasethekraken.entity.pirate;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
+import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityLiving;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
 
 /**
  * Last Edit: 
@@ -21,6 +23,8 @@ public abstract class EntityPirate extends EntityLiving
     protected int coins;
     /** The amount of time between attack function calls (measured in seconds).*/
     protected int attackRate;
+    /** What the pirate is currently targeting */
+    protected Entity target;
     
     //Primary constructor
     public EntityPirate(GameWorld world, float xLocation, float yLocation)

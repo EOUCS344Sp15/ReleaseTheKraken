@@ -192,7 +192,7 @@ public class GameWorld implements Disposable
                 
         //Remove physics bodies that need to be destroyed
         for (Body body : this.physBodiesToRemove)
-        {
+        {            
             this.physWorld.destroyBody(body);
             this.physBodiesToRemove.removeValue(body, true);
         }
@@ -590,7 +590,15 @@ public class GameWorld implements Disposable
             }
         }
         
-        targets.sort(new EntityDistanceComparator<E>(source)); //Sort the array of entities based on distance
+        try
+        {
+            targets.sort(new EntityDistanceComparator<E>(source)); //Sort the array of entities based on distance
+        }
+        catch (Exception e)
+        {
+            Gdx.app.error("GameWorld", "Error sorting targets: ", e);
+        }
+        
         
         if (targets.size > 0 && targets.get(0) != null) //Return the closest target
             target = targets.get(0);
