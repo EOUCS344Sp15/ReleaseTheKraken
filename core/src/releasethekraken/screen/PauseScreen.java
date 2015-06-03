@@ -159,10 +159,10 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
                         super.onClick(mouseButton);
                         
                         //Open the settings screen
-                        //rtk.pushScreen(new SettingsScreen(rtk));
+                        rtk.pushScreen(new SettingsScreen(rtk));
                     }
                 };
-        
+       
         settingsButton.setToolTip(new TextToolTip(this.renderer, "Change settings"));
         this.renderer.uiObjects.add(settingsButton);
         
