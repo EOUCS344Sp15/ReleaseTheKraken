@@ -202,4 +202,24 @@ public class UiButton extends InteractiveUiObject
             this.currentColorIndex = 0;
         }
     }
+    
+    /** getText gets the text of button
+     * 
+     * @return String the button's text
+     */    
+    public String getText()
+    {
+        return text;
+    }
+
+    /** setText sets the text of the button.
+     * 
+     * @param string the text of the button.
+     */ 
+    public void setText(String text)
+    {
+        this.text = text;
+    }
+    
+    
 }

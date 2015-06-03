@@ -93,7 +93,7 @@ public class MainMenuScreen extends AbstractScreen
                         super.onClick(mouseButton);
                         
                         //Open the settings screen
-                        //rtk.pushScreen(new SettingsScreen(rtk));
+                        rtk.pushScreen(new SettingsScreen(rtk));
                     }
                 };
         
