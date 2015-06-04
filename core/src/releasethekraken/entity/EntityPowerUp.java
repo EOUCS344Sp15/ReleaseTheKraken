@@ -35,10 +35,10 @@ public class EntityPowerUp extends Entity
     static //Add stats for each type of power up here
     {
         //TODO: adjust the values
-        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 15, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6")));
-        addStat(Ability.HEALUP, new PowerUpStats(1, 10, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F)));
-        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 25, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F)));
-        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 20, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F)));
+        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 15, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6"), Color.RED));
+        addStat(Ability.HEALUP, new PowerUpStats(1, 10, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F), Color.WHITE));
+        addStat(Ability.SPEEDUP, new PowerUpStats(60*30, 25, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F), Color.GREEN));
+        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 20, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F), Color.YELLOW));
     }
     
     protected Ability type; //tracks the type of power up
@@ -248,6 +248,8 @@ public class EntityPowerUp extends Entity
         public final String description;
         /** The color of the radius preview, with transparency */
         public final Color previewColor;
+        /** The color of the power up.  Should be same as sprite */
+        public final Color mainColor;
         
         /**
          * Constructs a new PowerUpStats object.  Register it with EntityPowerUp
@@ -256,14 +258,16 @@ public class EntityPowerUp extends Entity
          * @param name The name of the power up
          * @param description A description of the power up
          * @param previewColor The color of the radius preview, with transparency
+         * @param mainColor The color of the power up.  Should be same as sprite
          */
-        public PowerUpStats(int duration, int radius, String name, String description, Color previewColor)
+        public PowerUpStats(int duration, int radius, String name, String description, Color previewColor, Color mainColor)
         {
             this.duration = duration;
             this.radius = radius;
             this.name = name;
             this.description = description;
             this.previewColor = previewColor;
+            this.mainColor = mainColor;
         }
     }
 }

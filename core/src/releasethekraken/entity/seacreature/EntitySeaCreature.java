@@ -49,10 +49,6 @@ public abstract class EntitySeaCreature extends EntityLiving
     /** The path that the sea creature is currently following */
     protected SeaCreaturePath currentPath;
     
-    /** Temporary variable used in conjuction with the power ups so you know what one is active*/
-    protected int speedUp = -1;
-
-    
     //Primary constructor
     public EntitySeaCreature(GameWorld world, float xLocation, float yLocation)
     {
@@ -91,7 +87,6 @@ public abstract class EntitySeaCreature extends EntityLiving
                     this.health = MathUtils.clamp(this.health+5, 0, this.maxHealth); //add a single instance of 5 health
                     break;
                 case SPEEDUP:
-                    speedUp = 1;
                     this.moveForce = 2*this.defaultMoveForce;
                     break;
                 
@@ -146,16 +141,9 @@ public abstract class EntitySeaCreature extends EntityLiving
         
         if(this.powerUpTime > 0)
         {
-            if(speedUp == 1){
-            shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.rect(this.getPos().x - 1, this.getPos().y + 1.75f, 1f, .5f);
-            speedUp = -1;
-            }
-            else
-            {
-                shapeRenderer.setColor(Color.RED);
-                shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f, 1f, .5f);
-            }
+            //Set the color to the power up's color
+            shapeRenderer.setColor(EntityPowerUp.getStats(this.appliedPowerUp).mainColor);
+            shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f, 1f, .5f);
         }
         
         /*if (true) //Render target position  TODO: Comment this out
