@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityOrca;
+import releasethekraken.entity.seacreature.kraken.EntityKraken;
 
 /**
  * Represents a living entity with health that can die.
@@ -120,6 +121,8 @@ public abstract class EntityLiving extends Entity
             yOffset += 1.0F;
         else if (this instanceof EntityPirateBase)
             yOffset += 3.0F;
+        else if (this instanceof EntityKraken)
+            yOffset += 2.0F;
        
         //Draw background
         shapeRenderer.setColor(Color.BLACK);

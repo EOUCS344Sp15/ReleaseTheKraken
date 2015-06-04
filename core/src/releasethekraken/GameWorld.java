@@ -83,7 +83,7 @@ public class GameWorld implements Disposable
         this.name = "DefaultWorldName";
         this.width = 0;
         this.height = 0;
-        this.points = 0;
+        this.points = 250; //TODO: Change this back to 0!
         
         Vector2 gravity = new Vector2(0, 0); //The world's gravity.  Since this is top down, it is 0
         this.physWorld = new World(gravity, true); //Create the physics world
@@ -96,14 +96,8 @@ public class GameWorld implements Disposable
         for (int i=0; i<this.powerUps.length; i++)
             this.powerUps[i] = 0;
         
-        //Add powerups for testing purposes
-       // new EntityPowerUp(this, 20, 20, EntityPowerUp.Ability.ATTACKUP, 10);
-       // new EntityPowerUp(this, 25, 25, EntityPowerUp.Ability.HEALUP, 20);
-        //new EntityPowerUp(this, 30, 30, EntityPowerUp.Ability.SPEEDUP, 30);
-       // new EntityPowerUp(this, 35, 25, EntityPowerUp.Ability.DEFENSEUP, 40);
-        
-        //Add coins for testing purposes
-        this.coins = 1337;
+        //Add coins
+        this.coins = 50;
     }
     
     /**
@@ -476,7 +470,7 @@ public class GameWorld implements Disposable
      */
     public boolean removeCoins(int cost)
     {
-        if (cost < this.coins)
+        if (cost <= this.coins)
         {
             this.coins -= cost;
             return true;

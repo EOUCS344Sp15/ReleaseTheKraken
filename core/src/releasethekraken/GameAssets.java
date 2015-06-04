@@ -34,6 +34,11 @@ public class GameAssets extends AssetManager
     public static TextureRegion entityGunTowerTexture;
     public static TextureRegion entityPirateBaseTexture;
     
+    public static TextureRegion entityKrakenBodyTexture;
+    public static TextureRegion entityKrakenTenticle1Texture;
+    public static TextureRegion entityKrakenTenticle2Texture;
+    public static TextureRegion entityKrakenGripperTexture;
+    
     public static TextureRegion[] seaShellTextures;
     public static TextureRegion waterSquirtTexture;
     public static TextureRegion waterBombTexture;
@@ -108,6 +113,11 @@ public class GameAssets extends AssetManager
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityGunTowerTexture = new TextureRegion(entityTextures, 128, 0, 32, 32);
         entityPirateBaseTexture = new TextureRegion(entityTextures, 96, 160, 160, 96);
+        
+        entityKrakenBodyTexture = new TextureRegion(entityTextures, 256, 0, 112, 64);
+        entityKrakenTenticle1Texture = new TextureRegion(entityTextures, 368, 0, 48, 16);
+        entityKrakenTenticle2Texture = new TextureRegion(entityTextures, 368, 16, 64, 16);
+        entityKrakenGripperTexture = new TextureRegion(entityTextures, 368, 32, 64, 32);
         
         waterSquirtTexture = new TextureRegion(entityTextures, 0, 176, 16, 8);
         waterBombTexture = new TextureRegion(entityTextures, 0, 192, 32, 32);

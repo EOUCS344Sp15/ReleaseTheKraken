@@ -13,6 +13,8 @@ import java.util.HashMap;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
 import releasethekraken.entity.EntityPowerUp;
+import releasethekraken.entity.seacreature.kraken.EntityKrakenGripper;
+import releasethekraken.entity.seacreature.kraken.EntityKrakenTenticle;
 import releasethekraken.path.SeaCreaturePath;
 
 /**
@@ -69,7 +71,7 @@ public abstract class EntitySeaCreature extends EntityLiving
         super.update();
         
         //Make the sea creatures move
-        if (!(this instanceof EntityPlayer))
+        if (!(this instanceof EntityPlayer) & !(this instanceof EntityKrakenTenticle) && !(this instanceof EntityKrakenGripper))
         {        
             Vector2 targetPos = this.world.getPathTargetPos(this);
             Vector2 difference = targetPos.sub(this.getPos());

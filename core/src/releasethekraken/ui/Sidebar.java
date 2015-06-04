@@ -9,11 +9,13 @@ import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityOrca;
 import releasethekraken.entity.seacreature.EntityTurtle;
+import releasethekraken.entity.seacreature.kraken.EntityKraken;
 import releasethekraken.ui.tooltip.TextToolTip;
 
 /**
@@ -76,7 +78,7 @@ public class Sidebar extends UiObject
                     buttonHeight, purchaseableUnits[i]));
         }
         
-        for (int i=0; i<4; i++) //Temporary, until we get actual powerups to represent
+        for (int i=0; i<4; i++)
         {
             //Calculate X and Y offsets for the buttons based on the counter variable i
             xOffset = (i % 2 == 1 ? 0.098F*scrWidth : 0);
@@ -91,7 +93,25 @@ public class Sidebar extends UiObject
         }
         
         //Create the Release the Kraken button
-        this.krakenButton = new UiButton(renderer, 0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN", Color.GREEN.cpy().sub(0.5F, 0.5F, 0.5F, 0));
+        this.krakenButton = new UiButton(renderer, 0.0F, 0.0F, 0.2F, 0.15F, "RELEASE\nTHE KRAKEN", Color.GREEN.cpy().sub(0.5F, 0.5F, 0.5F, 0))
+                {
+                    @Override
+                    public void onClick(int mouseButton)
+                    {
+                        super.onClick(mouseButton);
+
+                        if (this.world.getPoints() >= this.world.getPointsForKraken())
+                        {
+                            Vector2 spawnPos = new Vector2();
+                            this.world.getFirstPath().getSmoothPath().valueAt(spawnPos, 0.02F);
+                            
+                            Gdx.app.log(this.getClass().getName(), "Attempting to RELEASE THE KRAKEN!");
+                            
+                            new EntityKraken(this.world, spawnPos.x, spawnPos.y);
+                            this.world.addPoints(0 - this.world.getPointsForKraken()); //Subtract points
+                        }
+                    }
+                };
         this.krakenButton.setToolTip(new TextToolTip(renderer, "Click to RELEASE THE KRAKEN!")); //Just for testing tooltips
         //this.krakenButton.setDisabled(true);
         

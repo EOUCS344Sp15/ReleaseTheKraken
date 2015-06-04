@@ -34,7 +34,7 @@ public class EntityGunTower extends EntityPirate
         //Override variables for this type of entity
         this.health = 50;
         this.maxHealth = 50;
-        this.points = 5;
+        this.points = 50;
         this.coins = 10;
         this.attackRate = 2;
     }
@@ -48,7 +48,7 @@ public class EntityGunTower extends EntityPirate
         //TODO: Change these
         this.health = 50;
         this.maxHealth = 50;
-        this.points = 5;
+        this.points = 50;
         this.coins = 10;
         this.attackRate = 2;
     }

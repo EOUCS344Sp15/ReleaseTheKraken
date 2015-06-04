@@ -18,6 +18,7 @@ import releasethekraken.entity.pirate.EntityPirate;
 import releasethekraken.entity.projectile.EntityProjectile;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
+import releasethekraken.entity.seacreature.kraken.EntityKrakenGripper;
 
 /**
  * Listens to physics contact events, handling them if required
@@ -85,23 +86,22 @@ public class PhysicsContactListener implements ContactListener
             Entity other = (Entity)(aIsProjectile ? contactBUserData : contactAUserData);
             
             if (other instanceof EntitySeaCreature) //If the other entity is a sea creature
-        {
-            if (projectile.getOwner() instanceof EntityPirate) //Only deal damage if this projectile's owner is a pirate
             {
-                ((EntitySeaCreature)other).onDamage(projectile.getDamage());
-                projectile.onImpact();
+                if (projectile.getOwner() instanceof EntityPirate) //Only deal damage if this projectile's owner is a pirate
+                {
+                    ((EntitySeaCreature)other).onDamage(projectile.getDamage());
+                    projectile.onImpact();
+                }
             }
-        }
-        else if (other instanceof EntityPirate) //If the other entity is a pirate
-        {
-            if (projectile.getOwner() instanceof EntitySeaCreature) //Only deal damage if this projectile's owner is a sea creature
+            else if (other instanceof EntityPirate) //If the other entity is a pirate
             {
-                ((EntityPirate)other).onDamage(projectile.getDamage());
-                projectile.onImpact();
+                if (projectile.getOwner() instanceof EntitySeaCreature) //Only deal damage if this projectile's owner is a sea creature
+                {
+                    ((EntityPirate)other).onDamage(projectile.getDamage());
+                    projectile.onImpact();
+                }
             }
-        }
-        }
-        
+        }        
     }
 
     @Override
@@ -119,7 +119,26 @@ public class PhysicsContactListener implements ContactListener
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse)
     {
+        Fixture contactA = contact.getFixtureA();
+        Fixture contactB = contact.getFixtureB();
+        Body contactABody = contactA.getBody();
+        Body contactBBody = contactB.getBody();
+        Object contactAUserData = null;
+        Object contactBUserData = null;
         
+        if (contactABody != null)
+            contactAUserData = contactABody.getUserData();
+        if (contactBBody != null)
+            contactBUserData = contactBBody.getUserData();
+        
+        //Kraken collision damage
+        if (contactAUserData instanceof EntityKrakenGripper || contactBUserData instanceof EntityKrakenGripper)
+        {
+            if (contactAUserData instanceof EntityPirate)
+                ((EntityPirate)contactAUserData).onDamage(1);
+            else if (contactBUserData instanceof EntityPirate)
+                ((EntityPirate)contactBUserData).onDamage(1);
+        }
     }
     
 }
