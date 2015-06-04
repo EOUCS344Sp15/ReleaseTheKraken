@@ -126,9 +126,9 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         //Render power up preview
         if (this.powerUpPreview != null)
@@ -165,9 +165,9 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         float spriteUnitWidth = 2F;
         batch.draw(GameAssets.entityPlayerTexture,

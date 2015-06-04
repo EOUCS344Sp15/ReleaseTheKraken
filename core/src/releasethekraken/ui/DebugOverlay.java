@@ -65,7 +65,7 @@ public class DebugOverlay extends UiObject
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
         if (this.renderer instanceof GameRenderer)
             if (((GameRenderer)this.renderer).debugScreenVisible)
@@ -76,7 +76,7 @@ public class DebugOverlay extends UiObject
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
         if (this.renderer instanceof GameRenderer)
             if (((GameRenderer)this.renderer).debugScreenVisible)

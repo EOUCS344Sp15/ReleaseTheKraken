@@ -28,6 +28,8 @@ public class UiRenderer implements Disposable
     public Array<UiObject> uiObjects;
     /** The render time, in frames (ticks) */
     protected long renderTime; 
+    /** The render time, in seconds */
+    protected float runTime;
 
     /**
      * Constructor
@@ -43,22 +45,25 @@ public class UiRenderer implements Disposable
     /**
      * Renders the game world.  This method can be completely overridden to
      * customize the order that things are rendered.
+     * @param delta The change in time since last render
      */
-    public void render()
+    public void render(float delta)
     {
         this.renderTime++;
+        this.runTime += delta;
         
         //Clears screen buffer
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        this.renderUi();
+        this.renderUi(delta);
     }
     
     /**
      * Renders the UI
+     * @param delta The change in time since last render
      */
-    protected void renderUi()
+    protected void renderUi(float delta)
     {
         //Updates UI objects
         for (UiObject obj : this.uiObjects)
@@ -69,7 +74,7 @@ public class UiRenderer implements Disposable
         
         for (UiObject obj : this.uiObjects)
             if (!(obj instanceof ToolTip))
-                obj.renderShapes(this.uiShapeRenderer);
+                obj.renderShapes(this.uiShapeRenderer, delta, this.runTime);
         
         this.uiShapeRenderer.end();
         
@@ -78,7 +83,7 @@ public class UiRenderer implements Disposable
         
         for (UiObject obj : this.uiObjects)
             if (!(obj instanceof ToolTip))
-                obj.renderSprites(this.uiSpriteBatch);
+                obj.renderSprites(this.uiSpriteBatch, delta, this.runTime);
         
         //this.uiSpriteBatch.draw(GameAssets.texBadlogic, Gdx.graphics.getWidth() - GameAssets.texBadlogic.getWidth(), 0); //Draws LibGDX logo
         
@@ -89,7 +94,7 @@ public class UiRenderer implements Disposable
         
         for (UiObject obj : this.uiObjects)
             if (obj instanceof ToolTip)
-                obj.renderShapes(this.uiShapeRenderer);
+                obj.renderShapes(this.uiShapeRenderer, delta, this.runTime);
         
         this.uiShapeRenderer.end();
         
@@ -98,7 +103,7 @@ public class UiRenderer implements Disposable
         
         for (UiObject obj : this.uiObjects)
             if (obj instanceof ToolTip)
-                obj.renderSprites(this.uiSpriteBatch);
+                obj.renderSprites(this.uiSpriteBatch, delta, this.runTime);
 
         this.uiSpriteBatch.end();
     }

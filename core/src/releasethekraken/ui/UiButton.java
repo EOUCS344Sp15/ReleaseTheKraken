@@ -69,9 +69,9 @@ public class UiButton extends InteractiveUiObject
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         float borderWidth = 0.0025F*Gdx.graphics.getWidth();
 
         shapeRenderer.setColor(this.defaultColors[0][this.currentColorIndex]);
@@ -85,9 +85,9 @@ public class UiButton extends InteractiveUiObject
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         int lines = this.text.split("\n").length; //Count the number of lines
         
         GameAssets.fontMain.draw(batch, this.text,

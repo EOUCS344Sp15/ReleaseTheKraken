@@ -69,7 +69,7 @@ public class GameScreen extends AbstractScreen implements InputHandler.KeyListen
         } // end if
         
         this.world.update();
-        this.renderer.render();
+        this.renderer.render(delta);
     }
 
     @Override

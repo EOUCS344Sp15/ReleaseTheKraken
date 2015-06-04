@@ -29,9 +29,9 @@ public class TextToolTip extends ToolTip
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer) //TODO: Make tool tip display better
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime) //TODO: Make tool tip display better
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         if (this.visible)
         {
@@ -94,9 +94,9 @@ public class TextToolTip extends ToolTip
     }
 
     @Override
-    public void renderSprites(SpriteBatch batch) //TODO: Make tool tip display better
+    public void renderSprites(SpriteBatch batch, float delta, float runTime) //TODO: Make tool tip display better
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         if (this.visible)
         {

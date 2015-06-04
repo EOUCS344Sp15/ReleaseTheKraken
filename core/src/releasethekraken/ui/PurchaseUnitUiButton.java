@@ -50,9 +50,9 @@ public class PurchaseUnitUiButton extends UiButton
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         //Draw the cost of the sea creature
         GameAssets.fontMain.draw(batch,

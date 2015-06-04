@@ -129,9 +129,9 @@ public abstract class EntitySeaCreature extends EntityLiving
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         /*if (true) //Render target position  TODO: Comment this out
         {
@@ -142,9 +142,9 @@ public abstract class EntitySeaCreature extends EntityLiving
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         /*if (true) //Render target position value  TODO: Comment this out
         {

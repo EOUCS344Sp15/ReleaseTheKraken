@@ -107,9 +107,9 @@ public abstract class EntityLiving extends Entity
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         float width = 5F;
         float height = 0.5F;

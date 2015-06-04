@@ -6,6 +6,7 @@
 
 package releasethekraken.entity.seacreature;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -136,18 +137,18 @@ public class EntityTurtle extends EntitySeaCreature
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         float spriteUnitWidth = 2.0F;
-        batch.draw(GameAssets.entityTurtleTexture,
+        batch.draw(GameAssets.entityTurtleAnimation.getKeyFrame(runTime),
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitWidth/2,
                 1F, //X point to rotate around

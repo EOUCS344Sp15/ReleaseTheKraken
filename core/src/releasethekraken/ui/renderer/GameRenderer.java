@@ -191,9 +191,10 @@ public class GameRenderer extends UiRenderer
     }
     
     @Override
-    public void render()
+    public void render(float delta)
     {
         this.renderTime++;
+        this.runTime += delta;
         
         //The width of the sidebar in local camera units
         float sidebarLocalWidth = 0.2F*this.camera.viewportWidth;
@@ -251,7 +252,7 @@ public class GameRenderer extends UiRenderer
         {
             Object object = body.getUserData();
             if (object instanceof Entity)
-                ((Entity)object).renderShapes(this.worldShapeRenderer);
+                ((Entity)object).renderShapes(this.worldShapeRenderer, delta, this.runTime);
         }
         
         this.worldShapeRenderer.end();
@@ -263,7 +264,7 @@ public class GameRenderer extends UiRenderer
         {
             Object object = body.getUserData();
             if (object instanceof Entity)
-                ((Entity)object).renderSprites(this.worldSpriteBatch);
+                ((Entity)object).renderSprites(this.worldSpriteBatch, delta, this.runTime);
         }
         
         this.worldSpriteBatch.end();
@@ -284,7 +285,7 @@ public class GameRenderer extends UiRenderer
             this.box2DDebugRenderer.render(this.world.getPhysWorld(), this.camera.combined);
         }
         
-        this.renderUi(); //Renders the UI with the code in the superclass
+        this.renderUi(delta); //Renders the UI with the code in the superclass
     }
 
     /**

@@ -21,14 +21,18 @@ public interface Renderable
      * has already been called.  Doesn't call ShapeRenderer.end()
      * 
      * @param shapeRenderer The ShapeRenderer to render with
+     * @param delta The amount of time since the last frame was rendered
+     * @param runTime The total amount of time
      */
-    public void renderShapes(ShapeRenderer shapeRenderer);
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime);
     
     /**
      * Renders the sprite layer.  Assumes that SpriteBatch.begin()
      * has already been called.  Doesn't call SpriteBatch.end()
      * 
      * @param batch The SpriteBatch to render with
+     * @param delta The amount of time since the last frame was rendered
+     * @param runTime The total amount of time
      */
-    public void renderSprites(SpriteBatch batch);
+    public void renderSprites(SpriteBatch batch, float delta, float runTime);
 }

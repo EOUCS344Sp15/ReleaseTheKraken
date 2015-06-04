@@ -6,6 +6,8 @@
 
 package releasethekraken.entity.seacreature;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -28,6 +30,20 @@ import static releasethekraken.physics.CollisionFilter.*; //Import the collision
  */
 public class EntityFish extends EntitySeaCreature
 {    
+    /** The color of the fish */
+    private Color color;
+    
+    private static final Color[] COLORS =
+    {
+        Color.RED,
+        Color.GREEN,
+        Color.BLUE,
+        Color.ORANGE,
+        Color.PURPLE,
+        Color.OLIVE,
+        Color.YELLOW
+    };
+    
     /**
      * Primary Constructor for EntityFish
      * @param world Variable containing the game world
@@ -42,6 +58,7 @@ public class EntityFish extends EntitySeaCreature
         this.health = 10;
         this.maxHealth = 10;
         this.defaultMoveForce = 2500F;
+        this.color = COLORS[world.random.nextInt(COLORS.length)]; //Assign a random color
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -59,6 +76,7 @@ public class EntityFish extends EntitySeaCreature
         this.health = 10;
         this.maxHealth = 10;
         this.defaultMoveForce = 2500F;
+        this.color = COLORS[world.random.nextInt(COLORS.length)]; //Assign a random color
     }
     
     @Override
@@ -137,26 +155,46 @@ public class EntityFish extends EntitySeaCreature
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         float spriteUnitWidth = 2.0F;
-        batch.draw(GameAssets.entityFishTexture,
+        float spriteUnitHeight = 1.0F;
+        
+        //Calculate the 0-360 degree angle
+        float angle = (this.physBody.getAngle()*MathUtils.radiansToDegrees) % 360;
+        while (angle < 0)
+            angle += 360;
+        
+        batch.setColor(this.color); //Enable color shading
+        batch.draw(GameAssets.entityFishAnimation.getKeyFrame(runTime),
                 this.physBody.getPosition().x - spriteUnitWidth/2,
-                this.physBody.getPosition().y - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitHeight/2,
                 1F, //X point to rotate around
-                1F, //Y point to rotate around
+                1/2F, //Y point to rotate around
                 spriteUnitWidth,
-                spriteUnitWidth,
+                spriteUnitHeight,
                 1.0F, //X scale
-                1.0F, //Y scale
+                (angle > 90 && angle < 270) ? -1.0F: 1.0F, //Y scale
+                (float) Math.toDegrees(this.physBody.getAngle()));
+        
+        batch.setColor(Color.WHITE); //Disable color shading
+        batch.draw(GameAssets.entityFishLayer2Animation.getKeyFrame(runTime),
+                this.physBody.getPosition().x - spriteUnitWidth/2,
+                this.physBody.getPosition().y - spriteUnitHeight/2,
+                1F, //X point to rotate around
+                1/2F, //Y point to rotate around
+                spriteUnitWidth,
+                spriteUnitHeight,
+                1.0F, //X scale
+                (angle > 90 && angle < 270) ? -1.0F: 1.0F, //Y scale
                 (float) Math.toDegrees(this.physBody.getAngle()));
     }
     

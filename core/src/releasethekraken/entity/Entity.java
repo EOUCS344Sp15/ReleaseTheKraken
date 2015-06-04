@@ -73,13 +73,13 @@ public abstract class Entity implements Disposable, Renderable
     protected abstract void spawnInWorld(float x, float y, float xVel, float yVel);
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
         //render shapes
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
         //render sprites
     }

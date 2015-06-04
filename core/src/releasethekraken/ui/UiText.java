@@ -35,7 +35,7 @@ public class UiText extends UiObject
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
         float textWidth = GameAssets.fontMain.getSpaceWidth()*this.text.length();
         

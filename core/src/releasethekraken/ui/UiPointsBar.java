@@ -55,9 +55,9 @@ public class UiPointsBar extends UiObject
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         //Draw background
         shapeRenderer.setColor(Color.LIGHT_GRAY);
@@ -74,9 +74,9 @@ public class UiPointsBar extends UiObject
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         //Draw points display
         String display = this.value + "/" + this.max;

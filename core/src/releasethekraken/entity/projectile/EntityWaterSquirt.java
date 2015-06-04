@@ -68,9 +68,9 @@ public class EntityWaterSquirt extends EntityProjectile
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         float spriteUnitWidth = 1.0F;
         float spriteUnitHegiht = 0.5F;

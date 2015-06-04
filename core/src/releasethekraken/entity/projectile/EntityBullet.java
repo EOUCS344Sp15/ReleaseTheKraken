@@ -68,9 +68,9 @@ public class EntityBullet extends EntityProjectile
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         float spriteUnitWidth = 0.5F;
         float spriteUnitHeight = 0.5F;

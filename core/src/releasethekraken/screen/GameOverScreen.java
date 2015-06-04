@@ -63,7 +63,7 @@ public class GameOverScreen extends AbstractScreen implements InputHandler.KeyLi
         this.renderer = new UiRenderer()
         {
             @Override
-            public void render()
+            public void render(float delta)
             {
                 this.renderTime++;
 
@@ -78,7 +78,7 @@ public class GameOverScreen extends AbstractScreen implements InputHandler.KeyLi
                 this.uiSpriteBatch.end();
                 this.uiSpriteBatch.setShader(null); //Set the shader back to default
 
-                this.renderUi();
+                this.renderUi(delta);
             }
         };
         

@@ -59,7 +59,7 @@ public abstract class AbstractScreen implements Screen
         ReleaseTheKraken.inputHandler.update();
         
         if (this.renderer != null)
-            this.renderer.render();
+            this.renderer.render(delta);
     }
 
     @Override

@@ -35,18 +35,18 @@ public class CoinsDisplay extends UiObject
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.rect(this.x, this.y, this.width, this.height);
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         batch.draw(GameAssets.coinTexture,
                 this.x + 0.1F*this.height,

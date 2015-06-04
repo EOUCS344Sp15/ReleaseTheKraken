@@ -10,6 +10,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -26,9 +27,10 @@ public class GameAssets extends AssetManager
     public static Texture uiTextures;
     
     public static TextureRegion entityPlayerTexture;
-    public static TextureRegion entityFishTexture;
-    public static TextureRegion entityTurtleTexture;
-    public static TextureRegion entityOrcaTexture;
+    public static TextureRegion[] entityFishTextures;
+    public static TextureRegion[] entityFishLayer2Textures;
+    public static TextureRegion[] entityTurtleTextures;
+    public static TextureRegion[] entityOrcaTextures;
     public static TextureRegion entityGunTowerTexture;
     public static TextureRegion entityPirateBaseTexture;
     
@@ -42,6 +44,11 @@ public class GameAssets extends AssetManager
     public static TextureRegion heartTexture;
     public static TextureRegion strengthTexture;
     public static TextureRegion clockTexture;
+    
+    public static Animation entityFishAnimation;
+    public static Animation entityFishLayer2Animation;
+    public static Animation entityTurtleAnimation;
+    public static Animation entityOrcaAnimation;
     
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
@@ -99,19 +106,40 @@ public class GameAssets extends AssetManager
         fontDebug.getData().markupEnabled = true;
         
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
-        entityFishTexture = new TextureRegion(entityTextures, 32, 0, 32, 32);
-        entityTurtleTexture = new TextureRegion(entityTextures, 64, 0, 32, 32);
-        entityOrcaTexture = new TextureRegion(entityTextures, 0, 32, 128, 64);
         entityGunTowerTexture = new TextureRegion(entityTextures, 128, 0, 32, 32);
         entityPirateBaseTexture = new TextureRegion(entityTextures, 96, 160, 160, 96);
         
-        waterSquirtTexture = new TextureRegion(entityTextures, 0, 96, 16, 8);
-        waterBombTexture = new TextureRegion(entityTextures, 0, 112, 32, 32);
-        cannonBallTexture = new TextureRegion(entityTextures, 16, 96, 16, 16);
+        waterSquirtTexture = new TextureRegion(entityTextures, 0, 176, 16, 8);
+        waterBombTexture = new TextureRegion(entityTextures, 0, 192, 32, 32);
+        cannonBallTexture = new TextureRegion(entityTextures, 16, 176, 16, 16);
+        
+        entityFishTextures = new TextureRegion[2];
+        for (int i=0; i<entityFishTextures.length; i++)
+            entityFishTextures[i] = new TextureRegion(entityTextures, i*32, 48, 32, 16);
+        entityFishAnimation = new Animation(0.1F, entityFishTextures);
+        entityFishAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        
+        entityFishLayer2Textures = new TextureRegion[2];
+        for (int i=0; i<entityFishLayer2Textures.length; i++)
+            entityFishLayer2Textures[i] = new TextureRegion(entityTextures, 64 + i*32, 48, 32, 16);
+        entityFishLayer2Animation = new Animation(0.1F, entityFishLayer2Textures);
+        entityFishLayer2Animation.setPlayMode(Animation.PlayMode.LOOP);
+        
+        entityTurtleTextures = new TextureRegion[2];
+        for (int i=0; i<entityTurtleTextures.length; i++)
+            entityTurtleTextures[i] = new TextureRegion(entityTextures, i*32, 64, 32, 32);
+        entityTurtleAnimation = new Animation(0.2F, entityTurtleTextures);
+        entityTurtleAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        
+        entityOrcaTextures = new TextureRegion[2];
+        for (int i=0; i<entityOrcaTextures.length; i++)
+            entityOrcaTextures[i] = new TextureRegion(entityTextures, i*112, 96, 112, 64);
+        entityOrcaAnimation = new Animation(0.5F, entityOrcaTextures);
+        entityOrcaAnimation.setPlayMode(Animation.PlayMode.LOOP);
         
         seaShellTextures = new TextureRegion[6];
         for (int i=0; i<seaShellTextures.length; i++)
-            seaShellTextures[i] = new TextureRegion(entityTextures, 32 + i*8, 96, 8, 8);
+            seaShellTextures[i] = new TextureRegion(entityTextures, 32 + i*8, 176, 8, 8);
         
         powerupTextures = new TextureRegion[4];
         for (int i=0; i<powerupTextures.length; i++)

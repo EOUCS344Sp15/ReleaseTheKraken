@@ -52,9 +52,9 @@ public class PowerUpToolTip extends ToolTip
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
         
         if (this.visible)
         {
@@ -125,9 +125,9 @@ public class PowerUpToolTip extends ToolTip
     }
 
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
         if (this.visible)
         {

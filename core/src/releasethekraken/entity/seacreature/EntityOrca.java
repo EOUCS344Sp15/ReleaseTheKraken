@@ -6,6 +6,7 @@
 
 package releasethekraken.entity.seacreature;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -69,7 +70,7 @@ public class EntityOrca extends EntitySeaCreature
             angle += 180;
         
         //Calculate torque to apply
-        float torque = (angle > 0 ? 1000F : -1000F);
+        float torque = (angle > 0 ? 2000F : -2000F);
         
         //Rotate towards velocity
         this.physBody.applyTorque(torque, true);
@@ -92,7 +93,7 @@ public class EntityOrca extends EntitySeaCreature
     {
         //Set up hitbox shape - Defines the hitbox
         PolygonShape hitbox = new PolygonShape();
-        hitbox.setAsBox(2.0F, 1.25F, new Vector2(0, 0), 0);
+        hitbox.setAsBox(3.0F, 1.0F, new Vector2(0, 0), 0);
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
@@ -131,27 +132,33 @@ public class EntityOrca extends EntitySeaCreature
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        super.renderShapes(shapeRenderer);
+        super.renderShapes(shapeRenderer, delta, runTime);
     }
     
     @Override
-    public void renderSprites(SpriteBatch batch)
+    public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        super.renderSprites(batch);
+        super.renderSprites(batch, delta, runTime);
         
-        float spriteUnitWidth = 6F;
+        float spriteUnitWidth = 7F;
         float spriteUnitHeight = 4F;
-        batch.draw(GameAssets.entityOrcaTexture,
+        
+        //Calculate the 0-360 degree angle
+        float angle = (this.physBody.getAngle()*MathUtils.radiansToDegrees) % 360;
+        while (angle < 0)
+            angle += 360;
+        
+        batch.draw(GameAssets.entityOrcaAnimation.getKeyFrame(runTime),
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitHeight/2,
-                3F, //X point to rotate around
+                3.5F, //X point to rotate around
                 2F, //Y point to rotate around
                 spriteUnitWidth,
                 spriteUnitHeight,
                 1.0F, //X scale
-                1.0F, //Y scale
+                (angle > 90 && angle < 270) ? -1.0F: 1.0F, //Y scale
                 (float) Math.toDegrees(this.physBody.getAngle()));
     }
     

@@ -53,7 +53,7 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
         this.renderer = new UiRenderer()
         {
             @Override
-            public void render()
+            public void render(float delta)
             {
                 this.renderTime++;
 
@@ -68,7 +68,7 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
                 this.uiSpriteBatch.end();
                 this.uiSpriteBatch.setShader(null); //Set the shader back to default
 
-                this.renderUi();
+                this.renderUi(delta);
             }
         };
         

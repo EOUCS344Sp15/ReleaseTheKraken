@@ -150,7 +150,7 @@ public class Sidebar extends UiObject
     }
     
     @Override
-    public void renderShapes(ShapeRenderer shapeRenderer)
+    public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
         shapeRenderer.setColor(this.color);
         shapeRenderer.rect(this.x, this.y, this.width, this.height);
