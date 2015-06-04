@@ -3,6 +3,7 @@
  */
 package releasethekraken.entity.seacreature;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -20,6 +21,7 @@ import releasethekraken.path.SeaCreaturePath;
  */
 public abstract class EntitySeaCreature extends EntityLiving
 {
+    
     /** A HashMap to map SeaCreatureStats to SeaCreature classes */
     private static final HashMap<Class<? extends EntitySeaCreature>, SeaCreatureStats> unitStats 
             = new HashMap<Class<? extends EntitySeaCreature>, SeaCreatureStats>();
@@ -46,6 +48,10 @@ public abstract class EntitySeaCreature extends EntityLiving
     
     /** The path that the sea creature is currently following */
     protected SeaCreaturePath currentPath;
+    
+    /** Temporary variable used in conjuction with the power ups so you know what one is active*/
+    protected int speedUp = -1;
+
     
     //Primary constructor
     public EntitySeaCreature(GameWorld world, float xLocation, float yLocation)
@@ -83,13 +89,18 @@ public abstract class EntitySeaCreature extends EntityLiving
             {
                 case HEALUP:
                     this.health = MathUtils.clamp(this.health+5, 0, this.maxHealth); //add a single instance of 5 health
+                    break;
                 case SPEEDUP:
+                    speedUp = 1;
                     this.moveForce = 2*this.defaultMoveForce;
+                    break;
+                
             }
         }
         else if (this.moveForce != this.defaultMoveForce)//after speed boost is done, set back to default speed
             this.moveForce = this.defaultMoveForce;
     }
+    
     
     @Override
     public boolean onDamage(int damage)
@@ -132,6 +143,20 @@ public abstract class EntitySeaCreature extends EntityLiving
     public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
         super.renderShapes(shapeRenderer, delta, runTime);
+        
+        if(this.powerUpTime > 0)
+        {
+            if(speedUp == 1){
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.rect(this.getPos().x - 1, this.getPos().y + 1.75f, 1f, .5f);
+            speedUp = -1;
+            }
+            else
+            {
+                shapeRenderer.setColor(Color.RED);
+                shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f, 1f, .5f);
+            }
+        }
         
         /*if (true) //Render target position  TODO: Comment this out
         {
