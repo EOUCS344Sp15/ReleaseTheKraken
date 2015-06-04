@@ -86,7 +86,12 @@ public abstract class EntitySeaCreature extends EntityLiving
             switch (this.appliedPowerUp)
             {
                 case HEALUP:
-                    this.health = MathUtils.clamp(this.health+5, 0, this.maxHealth); //add a single instance of 5 health
+                    if(this instanceof EntityPlayer || this instanceof EntityFish)
+                        this.health = MathUtils.clamp(this.health+(this.maxHealth/2), 0, this.maxHealth);
+                    else if(this instanceof EntityTurtle)
+                        this.health = MathUtils.clamp(this.health+(this.maxHealth/4), 0, this.maxHealth);
+                     else
+                        this.health = MathUtils.clamp(this.health+(this.maxHealth/5), 0, this.maxHealth);
                     break;
                 case SPEEDUP:
                     this.moveForce = 2*this.defaultMoveForce;

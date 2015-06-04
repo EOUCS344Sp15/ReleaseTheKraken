@@ -116,9 +116,9 @@ public class GameWorld implements Disposable
             int spawn = random.nextInt(2) + 1;
             int makeXNegative = random.nextInt(2) + 1;
             int makeYNegative = random.nextInt(2) + 1;
-            int power = random.nextInt(4) + 1;
-            int xrange = random.nextInt(10) + 5;
-            int yrange = random.nextInt(10) + 5;
+            int power = random.nextInt(20) + 1;
+            int xrange = random.nextInt(7) + 10;
+            int yrange = random.nextInt(7) + 10;
             float yPos, xPos;
             Vector2 playerPos = this.player.getPos();
 
@@ -160,14 +160,14 @@ public class GameWorld implements Disposable
 
             if((this.worldTime % (ReleaseTheKraken.TICK_RATE*1)) == 59 && spawn == 1)
             {
-                if(power == 1)
-                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.HEALUP, 20);
-                else if(power == 2)
-                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.ATTACKUP, 10);
-                else if(power == 3)
-                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.SPEEDUP, 30);
-                else if(power == 4)      
-                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.DEFENSEUP, 40);           
+                if(power <= 4)//20% chance to spawn
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.HEALUP, 15);
+                else if(power <= 9)//25% chance to spawn
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.ATTACKUP, 15);
+                else if(power <= 15)//30% chance to spawn
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.SPEEDUP, 15);
+                else if(power <= 20)//25% chance to spawn    
+                    new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.DEFENSEUP, 20);           
             }
         } // end if
         
