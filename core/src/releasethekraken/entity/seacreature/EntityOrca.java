@@ -168,7 +168,7 @@ public class EntityOrca extends EntitySeaCreature
     @Override
     public void attack(int damage)
     {
-        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
+        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class, 50, true);
         //System.out.println(target.toString());
         
         float newtonForce = 1200F; //The amount of force applied to the projectile

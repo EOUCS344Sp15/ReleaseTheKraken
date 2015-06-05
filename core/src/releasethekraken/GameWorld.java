@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -23,8 +25,10 @@ import releasethekraken.entity.pirate.EntityPirateBase;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.path.SeaCreaturePath;
+import static releasethekraken.physics.CollisionFilter.*;
 import releasethekraken.util.EntityDistanceComparator;
 import releasethekraken.physics.PhysicsContactListener;
+import releasethekraken.physics.RayCastCallbackCollider;
 
 /**
  * This class represents the game world.  When a new level is loaded, a new
@@ -566,6 +570,25 @@ public class GameWorld implements Disposable
      */
     public <E extends Entity> E getClosestTarget(Entity source, Class<E> targetType)
     {        
+        return getClosestTarget(source, targetType, Float.POSITIVE_INFINITY, false);
+    }
+    
+    /**
+     * Finds the closest entity of type E, relative to the source entity.  Also takes
+     * range and line of sight into account.
+     * 
+     * To use: <br><br>
+     * <code>SeaCreatureEntity target = this.world.getClosestTarget(this, SeaCreatureEntity.class);</code>
+     * 
+     * @param <E> Specify this with the target class. This is the entity type you are searching for
+     * @param source The entity to find the closest target from
+     * @param targetType The target entity class
+     * @param range The range, in meters, to look for targets
+     * @param useLineOfSight If line of sight to the target is required
+     * @return The closest entity of type E, or null if none exists
+     */
+    public <E extends Entity> E getClosestTarget(Entity source, Class<E> targetType, float range, boolean useLineOfSight)
+    {        
         E target = null;
         
         Array<E> targets = new Array<E>(); //Set up an array to hold all potential targets
@@ -579,8 +602,23 @@ public class GameWorld implements Disposable
             {
                 Entity ent = (Entity)object;
                 
-                if (targetType.isAssignableFrom(ent.getClass()))
-                    targets.add((E)ent);
+                float distance = source.getPos().dst(ent.getPos());
+                
+                //Th ray trace will collide with everything except sea creatures, pirates, and projectiles
+                short collisionBits = COL_ALL ^ (COL_SEA_CREATURE | COL_PIRATE | COL_SEA_CREATURE | COL_PIRATE_PROJECTILE | COL_PLAYER);
+                
+                if (targetType.isAssignableFrom(ent.getClass())) //If the target is of the correct type
+                    if (distance < range)
+                    {
+                        if (useLineOfSight) //If line of sight should be used
+                        {
+                            //Only add the target if there is line of sight
+                            if (this.hasLineOfSight(source.getPos(), ent.getPos(), collisionBits))
+                                targets.add((E)ent);
+                        }
+                        else
+                            targets.add((E)ent);
+                    }
             }
         }
         
@@ -598,6 +636,24 @@ public class GameWorld implements Disposable
             target = targets.get(0);
         
         return target;
+    }
+    
+    /**
+     * Returns true if there is line of sight from one point to the next, taking into
+     * account the specified collision bits.  Use with CollisionFilter's bit flags.
+     * @param pos1 The first position
+     * @param pos2 The second position
+     * @param collisionBits The collision bits to use
+     * @return True if there is line of sight between the two points
+     */
+    public boolean hasLineOfSight(final Vector2 pos1, final Vector2 pos2, final short collisionBits)
+    {
+        //Create the RayCastCallback that will determine what fixtures stop the ray cast
+        RayCastCallbackCollider callback = new RayCastCallbackCollider(collisionBits);
+        
+        this.physWorld.rayCast(callback, pos1, pos2); //Do the ray cast
+        
+        return !callback.wasBlocked();
     }
     
     /**

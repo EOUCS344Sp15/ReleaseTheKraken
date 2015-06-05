@@ -227,42 +227,55 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
     {
         switch (keycode)
         {
-            case Input.Keys.UP:
-            case Input.Keys.W:
-                if (!this.upPressedThisTick)
+        case Input.Keys.UP:
+        case Input.Keys.W:
+            if (!this.upPressedThisTick)
+            {
+            //if (this.physBody.getLinearVelocity().y < this.MAX_SPEED)
+                this.physBody.applyForceToCenter(0, this.moveForce, true);
+                this.upPressedThisTick = true;
+            }
+            break;
+        case Input.Keys.DOWN:
+        case Input.Keys.S:
+            if (!this.downPressedThisTick)
+            {
+            //if (this.physBody.getLinearVelocity().y > 0 - this.MAX_SPEED)
+                this.physBody.applyForceToCenter(0, -this.moveForce, true);
+                this.downPressedThisTick = true;
+            }
+            break;
+        case Input.Keys.LEFT:
+        case Input.Keys.A:
+            if(!this.leftPressedThisTick)
+            {
+            //if (this.physBody.getLinearVelocity().x > 0 - this.MAX_SPEED)
+                this.physBody.applyForceToCenter(-this.moveForce, 0, true);
+                this.leftPressedThisTick = true;
+            }
+            break;
+        case Input.Keys.RIGHT:
+        case Input.Keys.D:
+            if(!this.rightPressedThisTick)
+            {
+                //if (this.physBody.getLinearVelocity().x < this.MAX_SPEED)
+                this.physBody.applyForceToCenter(this.moveForce, 0, true);
+                this.rightPressedThisTick = true;
+            }
+            break;
+        case Input.Keys.SPACE: //Repeatable projectile firing
+            
+            //Only attack once every x ticks
+            if (this.world.getWorldTime() % 15 == 0)
+            {
+                int damage = 1;
+                if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
                 {
-                //if (this.physBody.getLinearVelocity().y < this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(0, this.moveForce, true);
-                    this.upPressedThisTick = true;
+                    damage*=2F;
                 }
-                break;
-            case Input.Keys.DOWN:
-            case Input.Keys.S:
-                if (!this.downPressedThisTick)
-                {
-                //if (this.physBody.getLinearVelocity().y > 0 - this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(0, -this.moveForce, true);
-                    this.downPressedThisTick = true;
-                }
-                break;
-            case Input.Keys.LEFT:
-            case Input.Keys.A:
-                if(!this.leftPressedThisTick)
-                {
-                //if (this.physBody.getLinearVelocity().x > 0 - this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(-this.moveForce, 0, true);
-                    this.leftPressedThisTick = true;
-                }
-                break;
-            case Input.Keys.RIGHT:
-            case Input.Keys.D:
-                if(!this.rightPressedThisTick)
-                {
-                    //if (this.physBody.getLinearVelocity().x < this.MAX_SPEED)
-                    this.physBody.applyForceToCenter(this.moveForce, 0, true);
-                    this.rightPressedThisTick = true;
-                }
-                break;
+                attack(damage);
+            }
+            break;
         }
     }
     

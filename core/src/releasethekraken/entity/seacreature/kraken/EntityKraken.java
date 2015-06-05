@@ -55,7 +55,21 @@ public class EntityKraken extends EntitySeaCreature
     {
         //Set up hitbox shape - Defines the hitbox
         PolygonShape hitbox = new PolygonShape();
-        hitbox.setAsBox(3.0F, 2.0F, new Vector2(-0.5F, 0), 0);
+        //hitbox.setAsBox(3.0F, 2.0F, new Vector2(-0.5F, 0), 0);
+        
+        float xOffset = -0.5F;
+        
+        hitbox.set(new float[]
+                {
+                    -3.0F + xOffset, 0.0F, //Left middle
+                    -2.0F + xOffset, 1.5F, //Top left
+                    0.0F + xOffset, 2.0F, //Top middle
+                    2.0F + xOffset, 1.5F, //Top right
+                    3.0F + xOffset, 0.0F, //Right middle
+                    2.0F + xOffset, -1.5F, //Bottom right
+                    0.0F + xOffset, -2.0F, //Bottom middle
+                    -2.0F + xOffset, -1.5F //Bottom left
+                });
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();

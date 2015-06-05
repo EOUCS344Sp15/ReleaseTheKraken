@@ -35,7 +35,7 @@ public class EntityKrakenGripper extends EntitySeaCreature
         this.parent = parent;
         this.health = 200;
         this.maxHealth = 200;
-        this.defaultMoveForce = 3000F;
+        this.defaultMoveForce = 5000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
 
@@ -44,7 +44,15 @@ public class EntityKrakenGripper extends EntitySeaCreature
     {        
         //Set up hitbox shape - Defines the hitbox
         PolygonShape hitbox = new PolygonShape();
-        hitbox.setAsBox(1.5F, 0.5F, new Vector2(-0.5F, 0), 0);
+        //hitbox.setAsBox(1.5F, 0.5F, new Vector2(-0.5F, 0), 0);
+        hitbox.set(new float[]
+                {
+                    -1.5F, -0.5F, //bottom left
+                    -1.5F, 0.5F, //top left
+                    0.0F, 0.5F, //top middle
+                    1.25F, 0.0F, //pointy part
+                    0.0F, -0.5F //bottom middle
+                });
         
         //Set up body definition - Defines the type of physics body that this is
         BodyDef bodyDef = new BodyDef();
@@ -95,7 +103,7 @@ public class EntityKrakenGripper extends EntitySeaCreature
         super.update();
         
         //Move towards enemies
-        Entity target = this.world.getClosestTarget(this, EntityPirate.class);
+        Entity target = this.world.getClosestTarget(this, EntityPirate.class, 25, true);
         
         if (target != null)
         {

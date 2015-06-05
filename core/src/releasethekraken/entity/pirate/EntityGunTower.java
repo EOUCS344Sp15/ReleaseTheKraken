@@ -60,7 +60,7 @@ public class EntityGunTower extends EntityPirate
         
         //Acquire a target every second
         if (this.world.getWorldTime() % (1*ReleaseTheKraken.TICK_RATE) == 0)
-            this.target = this.world.getClosestTarget(this, EntitySeaCreature.class);
+            this.target = this.world.getClosestTarget(this, EntitySeaCreature.class, 30, true);
         
         //Attack every second
         if (this.world.getWorldTime() % (this.attackRate*ReleaseTheKraken.TICK_RATE) == 0)

@@ -107,7 +107,7 @@ public class EntityKrakenTenticle extends EntitySeaCreature
         super.update();
         
         //Move towards enemies
-        Entity target = this.world.getClosestTarget(this, EntityPirate.class);
+        Entity target = this.world.getClosestTarget(this, EntityPirate.class, 15, true);
         
         if (target != null)
         {

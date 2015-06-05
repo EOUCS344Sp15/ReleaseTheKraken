@@ -163,7 +163,7 @@ public class EntityTurtle extends EntitySeaCreature
     @Override
     public void attack(int damage)
     {
-        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class);
+        EntityPirate target = this.world.getClosestTarget(this, EntityPirate.class, 35, true);
         //System.out.println(target.toString());
         
         float newtonForce = 100F; //The amount of force applied to the projectile
