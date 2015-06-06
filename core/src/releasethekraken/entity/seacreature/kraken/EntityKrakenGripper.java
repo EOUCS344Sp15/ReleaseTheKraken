@@ -82,6 +82,12 @@ public class EntityKrakenGripper extends EntitySeaCreature
         jointDef.initialize(this.parent.getPhysBody(), this.physBody, new Vector2(x - 1.5F, y));
         jointDef.collideConnected = false;
         
+        jointDef.enableLimit = true;
+        float jointRange = 240*MathUtils.degreesToRadians;
+        
+        jointDef.lowerAngle = 0 - (jointRange/2);
+        jointDef.upperAngle = (jointRange/2);
+        
         this.physBody.getWorld().createJoint(jointDef); //Create the physics joint
         
         //Set the linear damping

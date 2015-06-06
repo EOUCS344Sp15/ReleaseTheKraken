@@ -30,9 +30,9 @@ public class EntityKraken extends EntitySeaCreature
     {
         super(world, xLocation, yLocation);
         
-        this.health = 1000;
-        this.maxHealth = 1000;
-        this.defaultMoveForce = 20000F;
+        this.health = 500;
+        this.maxHealth = 500;
+        this.defaultMoveForce = 30000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
         
         //The spawn points of the tenticles
@@ -83,8 +83,8 @@ public class EntityKraken extends EntitySeaCreature
         //Set up physics fixture - Defines physical properties
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = hitbox;
-        fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
-        fixtureDef.friction = 0.1F; //friction with other objects
+        fixtureDef.density = 200.0F;
+        fixtureDef.friction = 0.05F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
         
         //Set which collision type this object is

@@ -101,7 +101,7 @@ public class GameWorld implements Disposable
             this.powerUps[i] = 0;
         
         //Add coins
-        this.coins = 50;
+        this.coins = 100;
     }
     
     /**

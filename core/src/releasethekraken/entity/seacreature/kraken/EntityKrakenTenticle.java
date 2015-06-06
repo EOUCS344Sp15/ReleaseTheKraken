@@ -71,7 +71,7 @@ public class EntityKrakenTenticle extends EntitySeaCreature
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = hitbox;
         fixtureDef.density = 100.0F; //About 1 g/cm^2 (2D), which is the density of water, which is roughly the density of humans.
-        fixtureDef.friction = 0.1F; //friction with other objects
+        fixtureDef.friction = 0.05F; //friction with other objects
         fixtureDef.restitution = 0.0F; //Bouncyness
         
         //Set which collision type this object is
@@ -85,6 +85,12 @@ public class EntityKrakenTenticle extends EntitySeaCreature
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(this.parent.getPhysBody(), this.physBody, new Vector2(x - 1.5F, y));
         jointDef.collideConnected = false;
+        
+        jointDef.enableLimit = true;
+        float jointRange = 220*MathUtils.degreesToRadians;
+        
+        jointDef.lowerAngle = 0 - (jointRange/2);
+        jointDef.upperAngle = (jointRange/2);
         
         this.physBody.getWorld().createJoint(jointDef); //Create the physics joint
         
