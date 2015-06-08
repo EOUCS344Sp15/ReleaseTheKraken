@@ -147,11 +147,18 @@ public abstract class EntitySeaCreature extends EntityLiving
     {
         super.renderShapes(shapeRenderer, delta, runTime);
         
+        float offset = 0;
+        
+        if(this instanceof EntityKraken)
+        {
+            offset = 2f;
+        }
+        
         if(this.powerUpTime > 0)
         {
             //Set the color to the power up's color
             shapeRenderer.setColor(EntityPowerUp.getStats(this.appliedPowerUp).mainColor);
-            shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f, 1f, .5f);
+            shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f + offset, 1f, .5f);
         }
         
         /*if (true) //Render target position  TODO: Comment this out
