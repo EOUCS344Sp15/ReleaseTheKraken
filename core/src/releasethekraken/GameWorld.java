@@ -605,7 +605,7 @@ public class GameWorld implements Disposable
                 float distance = source.getPos().dst(ent.getPos());
                 
                 //Th ray trace will collide with everything except sea creatures, pirates, projectiles, and powerups
-                short collisionBits = COL_ALL ^ (COL_SEA_CREATURE | COL_PIRATE | COL_SEA_CREATURE | COL_PIRATE_PROJECTILE | COL_PLAYER | COL_POWERUP);
+                short collisionBits = COL_ALL ^ (COL_SEA_CREATURE | COL_PIRATE | COL_SEA_CREATURE | COL_SEA_PROJECTILE | COL_PIRATE_PROJECTILE | COL_PLAYER | COL_POWERUP);
                 
                 if (targetType.isAssignableFrom(ent.getClass())) //If the target is of the correct type
                     if (distance < range)
