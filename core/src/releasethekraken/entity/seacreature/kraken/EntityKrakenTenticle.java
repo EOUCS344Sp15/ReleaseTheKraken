@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.pirate.EntityPirate;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
@@ -32,6 +33,8 @@ public class EntityKrakenTenticle extends EntitySeaCreature
     private EntitySeaCreature parent = null;
     /** The next thing attached to this tenticle.  Can be null. */
     private EntitySeaCreature child = null;
+    /** What the entity is targeting */
+    private Entity target = null;
 
     public EntityKrakenTenticle(GameWorld world, float xLocation, float yLocation, EntitySeaCreature parent, int segmentsLeft)
     {
@@ -39,7 +42,7 @@ public class EntityKrakenTenticle extends EntitySeaCreature
         this.parent = parent;
         this.health = 100;
         this.maxHealth = 100;
-        this.defaultMoveForce = 2000F;
+        this.defaultMoveForce = 4000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
         
         //Spawn the other segments
@@ -113,11 +116,13 @@ public class EntityKrakenTenticle extends EntitySeaCreature
         super.update();
         
         //Move towards enemies
-        Entity target = this.world.getClosestTarget(this, EntityPirate.class, 15, true);
         
-        if (target != null)
+        if (this.world.getWorldTime() % ReleaseTheKraken.TICK_RATE == 0) //Acquire a target every second
+            this.target = this.world.getClosestTarget(this, EntityPirate.class, 15, true);
+        
+        if (this.target != null)
         {
-            Vector2 targetPos = target.getPos();
+            Vector2 targetPos = this.target.getPos();
             Vector2 difference = targetPos.sub(this.getPos());
             difference.nor().scl(this.moveForce);
             this.physBody.applyForce(difference, this.getPos(), true);
@@ -215,5 +220,14 @@ public class EntityKrakenTenticle extends EntitySeaCreature
             ((EntityKrakenGripper)this.child).setParent(null);
             
         super.dispose();
+    }
+    
+    /**
+     * Gets the Entity that this entity is targeting
+     * @return The Entity being targeted
+     */
+    public Entity getTarget()
+    {
+        return this.target;
     }
 }

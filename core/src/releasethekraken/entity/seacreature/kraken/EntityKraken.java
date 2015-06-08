@@ -5,6 +5,7 @@
  */
 package releasethekraken.entity.seacreature.kraken;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.ReleaseTheKraken;
+import releasethekraken.entity.Entity;
 import releasethekraken.entity.pirate.EntityPirate;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import static releasethekraken.physics.CollisionFilter.*; //Import the collision bit constants
@@ -25,6 +28,8 @@ public class EntityKraken extends EntitySeaCreature
 {
     /** The array of Kraken tenticles */
     private EntityKrakenTenticle[] tenticles;
+    /** If the kraken has a target */
+    private boolean hasTarget = false;
 
     public EntityKraken(GameWorld world, float xLocation, float yLocation)
     {
@@ -32,7 +37,7 @@ public class EntityKraken extends EntitySeaCreature
         
         this.health = 500;
         this.maxHealth = 500;
-        this.defaultMoveForce = 30000F;
+        this.defaultMoveForce = 50000F;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
         
         //The spawn points of the tenticles
@@ -112,6 +117,58 @@ public class EntityKraken extends EntitySeaCreature
     {
         super.update();
         
+        this.hasTarget = false;
+        
+        //Find out if any of the tenticles are targeting stuff
+        for (EntityKrakenTenticle tenticle : this.tenticles)
+        {
+            EntitySeaCreature tenticlePart = tenticle;
+            
+            while (tenticlePart != null)
+            {
+                if (tenticlePart instanceof EntityKrakenTenticle)
+                {
+                    //If any of the tenticles has a target, remember it and break out of the loop
+                    if (((EntityKrakenTenticle)tenticlePart).getTarget() != null)
+                    {
+                        this.hasTarget = true;
+                        break;
+                    }
+                    tenticlePart = ((EntityKrakenTenticle)tenticlePart).getChild(); //Go to next segment
+                }
+                else if (tenticlePart instanceof EntityKrakenGripper)
+                {
+                    //If any of the tenticles has a target, remember it and break out of the loop
+                    if (((EntityKrakenGripper)tenticlePart).getTarget() != null)
+                    {
+                        this.hasTarget = true;
+                        break;
+                    }
+                    tenticlePart = null; //The gripper should be the last segment
+                }
+            }
+        }
+        
+        if (!this.hasTarget) //Only follow the path if there is no target
+        {
+            Vector2 targetPos = this.world.getPathTargetPos(this);
+            Vector2 difference = targetPos.sub(this.getPos());
+            difference.nor().scl(this.moveForce);
+            this.physBody.applyForce(difference, this.getPos(), true);
+        }
+        else //Move towards the target
+        {
+            Entity target = this.world.getClosestTarget(this, EntityPirate.class, 40, true);
+        
+            if (target != null)
+            {
+                Vector2 targetPos = target.getPos();
+                Vector2 difference = targetPos.sub(this.getPos());
+                difference.nor().scl(this.moveForce);
+                this.physBody.applyForce(difference, this.getPos(), true);
+            }
+        }
+        
         //Get the angle difference
         float angle = this.getVel().angle() - (this.physBody.getAngle()*MathUtils.radiansToDegrees);
         
@@ -136,6 +193,9 @@ public class EntityKraken extends EntitySeaCreature
         float spriteUnitWidth = 7.0F;
         float spriteUnitHeight = 4.0F;
         
+        //if (this.hasTarget) //Debug target code
+        //    batch.setColor(Color.RED);
+        
         batch.draw(GameAssets.entityKrakenBodyTexture,
                 this.physBody.getPosition().x - spriteUnitWidth/2,
                 this.physBody.getPosition().y - spriteUnitHeight/2,
@@ -146,6 +206,9 @@ public class EntityKraken extends EntitySeaCreature
                 1.0F, //X scale
                 1.0F, //Y scale
                 (float) Math.toDegrees(this.physBody.getAngle()));
+        
+        //if (this.hasTarget) //Debug target code
+        //    batch.setColor(Color.WHITE);
 
     }
     

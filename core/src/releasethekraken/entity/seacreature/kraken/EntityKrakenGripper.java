@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.Entity;
 import releasethekraken.entity.pirate.EntityPirate;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
@@ -28,6 +29,8 @@ public class EntityKrakenGripper extends EntitySeaCreature
 {
     /** The body that this tenticle are attached to.  Can be null. */
     private EntitySeaCreature parent = null;
+    /** What the entity is targeting */
+    private Entity target = null;
 
     public EntityKrakenGripper(GameWorld world, float xLocation, float yLocation, EntitySeaCreature parent)
     {
@@ -109,11 +112,13 @@ public class EntityKrakenGripper extends EntitySeaCreature
         super.update();
         
         //Move towards enemies
-        Entity target = this.world.getClosestTarget(this, EntityPirate.class, 25, true);
         
-        if (target != null)
+        if (this.world.getWorldTime() % ReleaseTheKraken.TICK_RATE == 0) //Acquire a target every second
+            this.target = this.world.getClosestTarget(this, EntityPirate.class, 25, true);
+        
+        if (this.target != null)
         {
-            Vector2 targetPos = target.getPos();
+            Vector2 targetPos = this.target.getPos();
             Vector2 difference = targetPos.sub(this.getPos());
             difference.nor().scl(this.moveForce);
             this.physBody.applyForce(difference, this.getPos(), true);
@@ -190,5 +195,14 @@ public class EntityKrakenGripper extends EntitySeaCreature
             ((EntityKrakenTenticle)this.parent).setChild(null);
             
         super.dispose();
+    }
+    
+    /**
+     * Gets the Entity that this entity is targeting
+     * @return The Entity being targeted
+     */
+    public Entity getTarget()
+    {
+        return this.target;
     }
 }

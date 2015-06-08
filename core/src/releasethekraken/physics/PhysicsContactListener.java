@@ -19,6 +19,7 @@ import releasethekraken.entity.projectile.EntityProjectile;
 import releasethekraken.entity.seacreature.EntityPlayer;
 import releasethekraken.entity.seacreature.EntitySeaCreature;
 import releasethekraken.entity.seacreature.kraken.EntityKrakenGripper;
+import releasethekraken.entity.seacreature.kraken.EntityKrakenTenticle;
 
 /**
  * Listens to physics contact events, handling them if required
@@ -131,13 +132,32 @@ public class PhysicsContactListener implements ContactListener
         if (contactBBody != null)
             contactBUserData = contactBBody.getUserData();
         
-        //Kraken collision damage
+        //Kraken gripper collision damage
         if (contactAUserData instanceof EntityKrakenGripper || contactBUserData instanceof EntityKrakenGripper)
         {
             if (contactAUserData instanceof EntityPirate)
                 ((EntityPirate)contactAUserData).onDamage(1);
             else if (contactBUserData instanceof EntityPirate)
                 ((EntityPirate)contactBUserData).onDamage(1);
+        }
+        
+        //Kraken tenticle collision damage
+        if (contactAUserData instanceof EntityKrakenTenticle || contactBUserData instanceof EntityKrakenTenticle)
+        {
+            EntityKrakenTenticle tenticle;
+            
+            if (contactAUserData instanceof EntityKrakenTenticle)
+                tenticle = (EntityKrakenTenticle) contactAUserData;
+            else
+                tenticle = (EntityKrakenTenticle) contactBUserData;
+            
+            if (tenticle.getWorld().getWorldTime() % 5 == 0) //Only deal damage once every 5 ticks
+            {
+                if (contactAUserData instanceof EntityPirate)
+                ((EntityPirate)contactAUserData).onDamage(1);
+            else if (contactBUserData instanceof EntityPirate)
+                ((EntityPirate)contactBUserData).onDamage(1);
+            }
         }
     }
     
