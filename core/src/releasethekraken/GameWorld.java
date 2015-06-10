@@ -44,6 +44,8 @@ public class GameWorld implements Disposable
     private Array<Body> physBodies;
     /** The array of physics bodies that should be removed as soon as possible */
     private Array<Body> physBodiesToRemove;
+    /** The array of spawn tasks that need to be executed as soon as it is safe to do so */
+    private Array<BodySpawnTask> spawnTasks;
     /** The world time, in ticks */
     private long worldTime = 0L;
     /** The world's TiledMap */
@@ -94,6 +96,7 @@ public class GameWorld implements Disposable
         this.physWorld.setContactListener(new PhysicsContactListener()); //Set the physics world's contact listener
         this.physBodies = new Array<Body>();
         this.physBodiesToRemove = new Array<Body>();
+        this.spawnTasks = new Array<BodySpawnTask>();
         
         //Initialize the array of power up counts
         this.powerUps = new int[4];
@@ -174,6 +177,19 @@ public class GameWorld implements Disposable
                     new EntityPowerUp(this, xPos, yPos, EntityPowerUp.Ability.DEFENSEUP, 20);           
             }
         } // end if
+        
+        /* //This doesn't work, as the task is removed while iterating over the list of tasks.  See alternate below
+        for (BodySpawnTask task : this.spawnTasks) //Does all of the spawn tasks, spawning new stuff
+        {
+            Gdx.app.log("GameWorld Tick: " + this.worldTime, "Doing BodySpawnTask: " + task);
+            
+            task.doTask();
+            this.spawnTasks.removeValue(task, true);
+        }*/
+        
+        //Pops spawn tasks off of the list "stack".  Also performs the tasks.
+        while (this.spawnTasks.size > 0)
+            this.spawnTasks.pop().doTask();
         
         this.physWorld.getBodies(this.physBodies); //Refreshes the physBodies array
         this.worldTime++;
@@ -558,6 +574,16 @@ public class GameWorld implements Disposable
     }
     
     /**
+     * Adds a new BodySpawnTask to the list of tasks to carry out as soon as possible.
+     * The task will get removed from the list when performed.
+     * @param task The BodySpawnTask to add
+     */
+    public void addSpawnTask(BodySpawnTask task)
+    {
+        this.spawnTasks.add(task);
+    }
+    
+    /**
      * Finds the closest entity of type E, relative to the source entity.
      * 
      * To use: <br><br>
@@ -689,5 +715,23 @@ public class GameWorld implements Disposable
         smoothPath.valueAt(targetPos, pathProgress);
         
         return targetPos;
+    }
+    
+    /**
+     * Static inner class that allows you to specify code to spawn physics bodies
+     * as soon as possible.  You simply declare an anonymous instance of this class,
+     * and give it to the GameWorld.  It will execute the task when it is not updating
+     * the game world.  Once executed, the task is discarded.  You can still reuse
+     * tasks though.
+     * 
+     * @author Dalton
+     */
+    public static abstract class BodySpawnTask
+    {
+        /**
+         * Does whatever task needs done.  Override this to specify what needs
+         * to be done for a certain task.
+         */
+        protected abstract void doTask();
     }
 }

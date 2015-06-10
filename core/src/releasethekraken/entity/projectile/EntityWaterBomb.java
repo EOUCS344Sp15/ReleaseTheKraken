@@ -5,6 +5,7 @@
  */
 package releasethekraken.entity.projectile;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -89,18 +90,35 @@ public class EntityWaterBomb extends EntityProjectile
     }
     
     @Override
+    public void onDespawn()
+    {
+        this.onImpact(); //Splash damage!
+    }
+    
+    @Override
     public void onImpact()
     {
-        //"Splash" with some water squirts!
-        /*int splashes = 12;
-        Vector2 splashVel = new Vector2(100, 0);
+        final EntityWaterBomb bomb = this; //Declare a final reference to this so that the anonymous class can use it
         
-        for (int i=0; i<splashes; i++)
+        //"Splash" with some water squirts!
+        this.world.addSpawnTask(new GameWorld.BodySpawnTask()
         {
-            new EntityWaterSquirt(this.world, this.getPos().x, this.getPos().y, splashVel.x, splashVel.y, this.owner, 1);
-            splashVel.rotate(((float)splashes/i)*360);
-        }
-        */ //TODO: This doesn't work, as you can't alter the body list during contacts.
+            @Override
+            protected void doTask()
+            {
+                int splashes = 12;
+                Vector2 splashVel = new Vector2(200, 0);
+
+                for (int i=0; i<splashes; i++)
+                {
+                    int damage = (int)(bomb.damage/25F); //Calculate damage based on bomb damage
+                    
+                    new EntityWaterSquirt(bomb.world, bomb.getPos().x, bomb.getPos().y, splashVel.x, splashVel.y, bomb.owner, damage, 30); //Short despawn time
+                    splashVel.rotate(((float)splashes/(i+1))*360);
+                }
+            }
+        });
+        
         super.onImpact();
     }
 }
