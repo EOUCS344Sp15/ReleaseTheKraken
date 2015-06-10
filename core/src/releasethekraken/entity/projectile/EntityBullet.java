@@ -26,6 +26,7 @@ public class EntityBullet extends EntityProjectile
         super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 8*60;
+        this.minVel = 4.0F;
     }
     
     

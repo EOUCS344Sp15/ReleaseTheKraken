@@ -22,6 +22,8 @@ public class EntityProjectile extends Entity
     protected int damage;
     /** How long, in ticks, the projectile has left before it "dies".  If set to -1, it will never die */
     protected long despawnTimer;
+    /** The minimum velocity of the projectile.  It will despawn when going less than this speed.  Units are m/s */
+    protected float minVel = 0.0F;
     
     /**
      * Constructs a new projectile
@@ -55,6 +57,9 @@ public class EntityProjectile extends Entity
         this.despawnTimer--; //Update despawn timer
         
         if (this.despawnTimer == 0) //Destroy the projectile if the timer reaches 0
+            this.onDespawn();
+        
+        if (this.getVel().len() < this.minVel) //Destroy the projectile if it goes slower than the minimum speed
             this.onDespawn();
     }
 

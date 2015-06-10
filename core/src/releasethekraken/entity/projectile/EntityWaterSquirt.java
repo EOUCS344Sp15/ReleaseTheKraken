@@ -26,6 +26,7 @@ public class EntityWaterSquirt extends EntityProjectile
         super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
+        this.minVel = 5.0F; //m/s
     }
     
     

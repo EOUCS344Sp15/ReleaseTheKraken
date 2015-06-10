@@ -27,6 +27,7 @@ public class EntityWaterBomb extends EntityProjectile
         super(world, xLoc, yLoc, xVel, yVel, owner, damage);
         this.spawnInWorld(xLoc, yLoc, xVel, yVel);
         this.despawnTimer = 16*60;
+        this.minVel = 3.0F;
     }
     
     
