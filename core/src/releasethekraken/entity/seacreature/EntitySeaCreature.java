@@ -142,6 +142,14 @@ public abstract class EntitySeaCreature extends EntityLiving
         this.currentPath = currentPath;
     }
     
+    /**
+     * 
+     * @param shapeRenderer
+     * @param delta
+     * @param runTime
+     * 
+     * @author DJ Flores
+     */
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
