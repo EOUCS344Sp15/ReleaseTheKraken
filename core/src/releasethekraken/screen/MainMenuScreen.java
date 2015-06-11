@@ -7,6 +7,7 @@ package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import releasethekraken.GameAssets;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiText;
@@ -122,6 +123,18 @@ public class MainMenuScreen extends AbstractScreen
         
         quitButton.setToolTip(new TextToolTip(this.renderer, "Exit the game"));
         this.renderer.uiObjects.add(quitButton);
+        
+        textWidth = 0.2F;
+        textHeight = 0.2F;
+        String text = "EOU CS 344 Spring 2015";
+        float textPixelWidth = GameAssets.fontMain.getSpaceWidth();
+        
+        this.renderer.uiObjects.add(new UiText(this.renderer,
+                scrWidth*0.0F + textPixelWidth*text.length()/2,
+                scrHeight*0.0F + GameAssets.fontMain.getLineHeight(),
+                textWidth,
+                textHeight,
+                text));
         
         this.renderer.uiObjects.sort(); //Sort the UI objects once they are all added
     }
