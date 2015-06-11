@@ -103,8 +103,8 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
                     {
                         super.onClick(mouseButton);
                         
-                        //Start the game by pushing the game screen
-                        rtk.popScreen();
+                        //Resume the game by popping this screen, and disposing it
+                        rtk.popScreen().dispose();
                     }
                 };
         
@@ -132,7 +132,7 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
                         // Pop until currently screen is the Main Menu
                         while(top != null && !(top instanceof MainMenuScreen)) 
                         {
-                            rtk.popScreen();
+                            rtk.popScreen().dispose();
                             top = rtk.peekScreen();
                         } // end while
                     }
@@ -222,12 +222,19 @@ public class PauseScreen extends AbstractScreen implements InputHandler.KeyListe
     }
     
     @Override
+    public void dispose()
+    {
+        super.dispose();
+        ReleaseTheKraken.inputHandler.unregisterKeyListener(this);
+    }
+    
+    @Override
     public void keyDown(int keycode)
     {
         switch (keycode)
         {
         case Input.Keys.ESCAPE:
-            this.rtk.popScreen(); //Pop the pause menu off of the stack
+            this.rtk.popScreen().dispose(); //Pop the pause menu off of the stack and dispose it
             break;
         }
     }

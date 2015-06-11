@@ -75,8 +75,8 @@ public class SettingsScreen extends AbstractScreen implements InputHandler.KeyLi
                     {
                         super.onClick(mouseButton);
                         
-                        //Start the game by pushing the game screen
-                        rtk.popScreen();
+                        //Go back by popping this screen, and disposing it
+                        rtk.popScreen().dispose();
                     }
                 };
         
@@ -112,7 +112,7 @@ public class SettingsScreen extends AbstractScreen implements InputHandler.KeyLi
                     }
                 };
         
-        screenSize.setToolTip(new TextToolTip(this.renderer, "Requires you to restart the game."));
+        screenSize.setToolTip(new TextToolTip(this.renderer, "Requires you to restart the game"));
         this.renderer.uiObjects.add(screenSize);
         
         
@@ -122,7 +122,12 @@ public class SettingsScreen extends AbstractScreen implements InputHandler.KeyLi
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a key listener
     }
     
-
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+        ReleaseTheKraken.inputHandler.unregisterKeyListener(this);
+    }
     
     @Override
     public void keyDown(int keycode)
@@ -130,7 +135,7 @@ public class SettingsScreen extends AbstractScreen implements InputHandler.KeyLi
         switch (keycode)
         {
         case Input.Keys.ESCAPE:
-            this.rtk.popScreen(); //Pop the pause menu off of the stack
+            this.rtk.popScreen().dispose(); //Pop the pause menu off of the stack
             break;
         }
     }

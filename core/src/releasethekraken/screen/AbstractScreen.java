@@ -90,6 +90,7 @@ public abstract class AbstractScreen implements Screen
     public void dispose()
     {
         Gdx.app.log(this.getClass().getSimpleName(), "dispose() called");
-        this.renderer.dispose();
+        if (this.renderer != null)
+            this.renderer.dispose();
     }
 }

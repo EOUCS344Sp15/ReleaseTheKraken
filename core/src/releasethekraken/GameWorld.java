@@ -54,6 +54,8 @@ public class GameWorld implements Disposable
     private float tiledMapUnitScale;
     /** The world's name */
     private String name;
+    /** The raw level name, without extension */
+    private final String levelName;
     
     /** The amount of power ups the player has.  Use EntityPowerUp.Ability.ordinal() as the index */
     private int[] powerUps;
@@ -83,13 +85,15 @@ public class GameWorld implements Disposable
      
     /**
      * Constructs a new GameWorld
+     * @param levelName The LevelName that the world was loaded from
      */
-    public GameWorld()
+    public GameWorld(String levelName)
     {
+        this.levelName = levelName;
         this.name = "DefaultWorldName";
         this.width = 0;
         this.height = 0;
-        this.points = 250; //TODO: Change this back to 0!
+        this.points = 0;
         
         Vector2 gravity = new Vector2(0, 0); //The world's gravity.  Since this is top down, it is 0
         this.physWorld = new World(gravity, true); //Create the physics world
@@ -295,6 +299,15 @@ public class GameWorld implements Disposable
     public String getName()
     {
         return this.name;
+    }
+    
+    /**
+     * Gets the world's level name
+     * @return The level name: the name of the file that this world was loaded from
+     */
+    public String getLevelName()
+    {
+        return this.levelName;
     }
 
     /**

@@ -59,7 +59,7 @@ public class LevelLoader
         Gdx.app.log("LevelLoader", "Loading level \"" + this.levelName + "\"");
         
         MapBodyManager mapBodyManager;
-        GameWorld newWorld = new GameWorld();
+        GameWorld newWorld = new GameWorld(this.levelName);
         
         //Make a new TiledMap
         TiledMap map = new TmxMapLoader().load(this.levelName + ".tmx");

@@ -6,14 +6,12 @@
 package releasethekraken.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import java.nio.ByteBuffer;
 import releasethekraken.GameAssets;
-import releasethekraken.InputHandler;
 import releasethekraken.ReleaseTheKraken;
 import releasethekraken.ui.UiButton;
 import releasethekraken.ui.UiText;
@@ -25,7 +23,7 @@ import releasethekraken.ui.tooltip.TextToolTip;
  * @author Lucas Schuetz
  * @author Mitch "Yosemite" Montchalin
  */
-public class GameOverScreen extends AbstractScreen implements InputHandler.KeyListener
+public class GameOverScreen extends AbstractScreen
 {
     /** The background texture */
     private static final Texture background;
@@ -53,9 +51,9 @@ public class GameOverScreen extends AbstractScreen implements InputHandler.KeyLi
         this.winCondition = winCondition;
         
         if(winCondition)
-            screenStr = "Win Placeholder";
+            screenStr = "Victory!";
         else
-            screenStr = "Loser Placeholer";
+            screenStr = "Defeat!";
         
         applyBackgroundEffect(pixmap); //Modify the screenshot to make it look different
         background.draw(pixmap, 0, 0); //Draw the pixmap to the texture
@@ -127,8 +125,37 @@ public class GameOverScreen extends AbstractScreen implements InputHandler.KeyLi
         mainMenuButton.setToolTip(new TextToolTip(this.renderer, "Return to Main Menu"));
         this.renderer.uiObjects.add(mainMenuButton);
         
-        
         buttonY = 0.3F;
+        
+        //Add the quit button
+        UiButton restartButton = new UiButton(this.renderer,
+                scrWidth/2 - (scrWidth*buttonWidth/2),
+                scrHeight*buttonY,
+                buttonWidth,
+                buttonHeight,
+                "Restart",
+                Color.GRAY)
+                {
+                    @Override
+                    public void onClick(int mouseButton)
+                    {
+                        super.onClick(mouseButton);
+                        
+                        rtk.popScreen().dispose(); //pop game over screen and dispose it
+                        
+                        //Get the level name of the world in the previous GameScreen
+                        GameScreen gameScreen = (GameScreen)rtk.peekScreen();
+                        String levelName = gameScreen.getLevelName();
+                        
+                        rtk.popScreen().dispose(); //pop game screen and dispose it
+                        rtk.pushScreen(new GameScreen(rtk, levelName)); //push new game screen
+                    }
+                };
+        
+        restartButton.setToolTip(new TextToolTip(this.renderer, "Restart the level"));
+        this.renderer.uiObjects.add(restartButton);
+        
+        buttonY = 0.2F;
         
         //Add the quit button
         UiButton quitButton = new UiButton(this.renderer,
@@ -152,8 +179,6 @@ public class GameOverScreen extends AbstractScreen implements InputHandler.KeyLi
         this.renderer.uiObjects.add(quitButton);
         
         this.renderer.uiObjects.sort(); //Sort the UI objects once they are all added
-        
-        ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a key listener
     }
     
     /**
@@ -184,19 +209,8 @@ public class GameOverScreen extends AbstractScreen implements InputHandler.KeyLi
     }
     
     @Override
-    public void keyDown(int keycode)
+    public void dispose()
     {
-        switch (keycode)
-        {
-        case Input.Keys.ESCAPE:
-            this.rtk.popScreen(); //Pop the pause menu off of the stack
-            break;
-        }
+        super.dispose();
     }
-
-    @Override
-    public void keyUp(int keycode) {}
-
-    @Override
-    public void keyHeld(int keycode) {}
 }

@@ -71,6 +71,15 @@ public class GameScreen extends AbstractScreen implements InputHandler.KeyListen
         this.world.update();
         this.renderer.render(delta);
     }
+    
+    /**
+     * Gets the level name of the screen's GameWorld
+     * @return The level name of the GameWorld
+     */
+    public String getLevelName()
+    {
+        return this.world.getLevelName();
+    }
 
     @Override
     public void dispose()
@@ -79,7 +88,8 @@ public class GameScreen extends AbstractScreen implements InputHandler.KeyListen
         
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
         this.world.dispose();
-        this.renderer.dispose();
+        //this.renderer.dispose(); super.dispose() does this
+        ReleaseTheKraken.inputHandler.unregisterKeyListener(this);
     }
 
     @Override
