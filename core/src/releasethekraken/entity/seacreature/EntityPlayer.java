@@ -59,6 +59,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         this.health = 40;
         this.maxHealth = 40;
         this.defaultMoveForce = 7500F;
+        this.moveForce = this.defaultMoveForce;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
@@ -70,6 +71,7 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         this.health = 40;
         this.maxHealth = 40;
         this.defaultMoveForce = 7500F;
+        this.moveForce = this.defaultMoveForce;
         ReleaseTheKraken.inputHandler.registerKeyListener(this); //Register as a KeyListener
     }
     
@@ -210,7 +212,8 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
         {
         case Input.Keys.SPACE: //Projectile firing
             int damage = 1;
-            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            //if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            if (this.getPowerUpTime(EntityPowerUp.Ability.ATTACKUP) > 0)
             {
                 damage*=2F;
             }
@@ -269,7 +272,8 @@ public class EntityPlayer extends EntitySeaCreature implements InputHandler.KeyL
             if (this.world.getWorldTime() % 15 == 0)
             {
                 int damage = 1;
-                if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+                //if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+                if (this.getPowerUpTime(EntityPowerUp.Ability.ATTACKUP) > 0)
                 {
                     damage*=2F;
                 }

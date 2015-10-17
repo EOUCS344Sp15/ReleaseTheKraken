@@ -3,12 +3,14 @@
  */
 package releasethekraken.entity.seacreature;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import releasethekraken.GameWorld;
 import releasethekraken.entity.EntityLiving;
@@ -37,11 +39,11 @@ public abstract class EntitySeaCreature extends EntityLiving
         addStat(EntityOrca.class, new SeaCreatureStats(80, 100, 20, 10*60, "Orca", "Large, slow, but has a powerful water attack."));
     }
     
-    /** The current power up applied; can be null */
-    protected EntityPowerUp.Ability appliedPowerUp = null;
-    
-    /** The amount of time left that the power up is applied for (ticks) */
-    protected int powerUpTime = 0;
+    /**
+     * A map that maps PowerUp Enum types to integers representing how long (in ticks)
+     * the powerup will last.  A value of 0 indicates that the powerup is not in effect.
+     */
+    protected EnumMap<EntityPowerUp.Ability, Integer> powerUps = new EnumMap<EntityPowerUp.Ability, Integer>(EntityPowerUp.Ability.class);
     
     /** The default move force */
     protected float defaultMoveForce = 0F;
@@ -80,36 +82,49 @@ public abstract class EntitySeaCreature extends EntityLiving
             this.physBody.applyForce(difference, this.getPos(), true);
         }
         
-        if (this.powerUpTime > 0)
+        //Gdx.app.log(this.getClass().getSimpleName(), "update(): this.powerUps.keySet(): " + Arrays.toString(this.powerUps.keySet().toArray()));
+        
+        for (EntityPowerUp.Ability ability : this.powerUps.keySet())
         {
-            this.powerUpTime--;
+            //Get the amount of time left for the powerup
+            Integer ticksLeft = this.getPowerUpTime(ability);
             
-            switch (this.appliedPowerUp)
+            //Gdx.app.log("...", "\tPowerUp: " + ability + ", time left (ticks): " + ticksLeft);
+            
+            if (ticksLeft > 0)
             {
-                case HEALUP:
-                    if(this instanceof EntityPlayer || this instanceof EntityFish)
-                        this.health = MathUtils.clamp(this.health+(this.maxHealth/2), 0, this.maxHealth);
-                    else if(this instanceof EntityTurtle)
-                        this.health = MathUtils.clamp(this.health+(this.maxHealth/4), 0, this.maxHealth);
-                     else
-                        this.health = MathUtils.clamp(this.health+(this.maxHealth/5), 0, this.maxHealth);
-                    break;
-                case SPEEDUP:
-                    this.moveForce = 2*this.defaultMoveForce;
-                    break;
+                ticksLeft--;
                 
+                switch (ability)
+                {
+                    case HEALUP:
+                        if(this instanceof EntityPlayer || this instanceof EntityFish)
+                            this.health = MathUtils.clamp(this.health+(this.maxHealth/2), 0, this.maxHealth);
+                        else if(this instanceof EntityTurtle)
+                            this.health = MathUtils.clamp(this.health+(this.maxHealth/4), 0, this.maxHealth);
+                         else
+                            this.health = MathUtils.clamp(this.health+(this.maxHealth/5), 0, this.maxHealth);
+                        break;
+                    case SPEEDUP:
+                        this.moveForce = 2*this.defaultMoveForce;
+                        break;
+
+                }
             }
+            else if (ability == EntityPowerUp.Ability.SPEEDUP && this.moveForce != this.defaultMoveForce)//after speed boost is done, set back to default speed
+                    this.moveForce = this.defaultMoveForce;
+            
+            this.powerUps.put(ability, ticksLeft); //Make sure the powerup time is updated
         }
-        else if (this.moveForce != this.defaultMoveForce)//after speed boost is done, set back to default speed
-            this.moveForce = this.defaultMoveForce;
     }
     
     
     @Override
     public boolean onDamage(int damage)
     {
-        if (this.appliedPowerUp == EntityPowerUp.Ability.DEFENSEUP)
+        if (this.getPowerUpTime(EntityPowerUp.Ability.DEFENSEUP) > 0)
             damage /= 2;
+        
         return super.onDamage(damage);
     }
     
@@ -120,8 +135,22 @@ public abstract class EntitySeaCreature extends EntityLiving
      */
     public void applyPowerUp(EntityPowerUp.Ability powerUp, int time)
     {
-        this.appliedPowerUp = powerUp;
-        this.powerUpTime = time;
+        Integer powerUpTime = this.getPowerUpTime(powerUp);
+        powerUpTime += time;
+        this.powerUps.put(powerUp, powerUpTime);
+        
+        //this.appliedPowerUp = powerUp;
+        //this.powerUpTime = time;
+    }
+    
+    /**
+     * Gets the amount of time remaining for the specified powerup, or 0 if the powerup is no longer active.
+     * @param powerUp The powerup to get the time for
+     * @return the amount of time remaining for the specified powerup
+     */
+    public int getPowerUpTime(EntityPowerUp.Ability powerUp)
+    {
+        return this.powerUps.getOrDefault(powerUp, 0);
     }
 
     /**
@@ -162,11 +191,19 @@ public abstract class EntitySeaCreature extends EntityLiving
             offset = 2f;
         }
         
-        if(this.powerUpTime > 0)
-        {
-            //Set the color to the power up's color
-            shapeRenderer.setColor(EntityPowerUp.getStats(this.appliedPowerUp).mainColor);
-            shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f + offset, 1f, .5f);
+        //TODO: Make this better
+        int activePowerUps = 0; //Keep track of active powerups so we can offset the render position
+        
+        for (EntityPowerUp.Ability powerUp : this.powerUps.keySet())
+        {            
+            if (this.getPowerUpTime(powerUp) > 0)
+            {
+                float localOffset = activePowerUps * 0.7F; //Calculate render offset
+                activePowerUps++; //Move the render offset for the next powerup
+                
+                shapeRenderer.setColor(EntityPowerUp.getStats(powerUp).mainColor);
+                shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f + offset + localOffset, 1f, .5f);
+            }
         }
         
         /*if (true) //Render target position  TODO: Comment this out

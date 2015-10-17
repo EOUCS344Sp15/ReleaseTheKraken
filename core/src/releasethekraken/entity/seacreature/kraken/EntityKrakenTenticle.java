@@ -43,6 +43,7 @@ public class EntityKrakenTenticle extends EntitySeaCreature
         this.health = 100;
         this.maxHealth = 100;
         this.defaultMoveForce = 4000F;
+        this.moveForce = this.defaultMoveForce;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
         
         //Spawn the other segments

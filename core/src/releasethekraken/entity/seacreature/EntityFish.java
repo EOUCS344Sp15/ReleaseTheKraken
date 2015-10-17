@@ -58,6 +58,7 @@ public class EntityFish extends EntitySeaCreature
         this.health = 10;
         this.maxHealth = 10;
         this.defaultMoveForce = 2500F;
+        this.moveForce = this.defaultMoveForce;
         this.color = COLORS[world.random.nextInt(COLORS.length)]; //Assign a random color
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
@@ -76,6 +77,7 @@ public class EntityFish extends EntitySeaCreature
         this.health = 10;
         this.maxHealth = 10;
         this.defaultMoveForce = 2500F;
+        this.moveForce = this.defaultMoveForce;
         this.color = COLORS[world.random.nextInt(COLORS.length)]; //Assign a random color
     }
     
@@ -103,7 +105,8 @@ public class EntityFish extends EntitySeaCreature
         if (this.world.getWorldTime() % 60 == 0)
         {
             int damage = 1;
-            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            //if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            if (this.getPowerUpTime(EntityPowerUp.Ability.ATTACKUP) > 0)
             {
                 damage*=1.5F;
             }

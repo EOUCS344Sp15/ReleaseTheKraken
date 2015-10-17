@@ -39,6 +39,7 @@ public class EntityOrca extends EntitySeaCreature
         this.health = 200;
         this.maxHealth = 200;
         this.defaultMoveForce = 10000F;
+        this.moveForce = this.defaultMoveForce;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -51,7 +52,8 @@ public class EntityOrca extends EntitySeaCreature
         //TODO: Change these
         this.health = 200;
         this.maxHealth = 200;
-        this.defaultMoveForce = 4000F;
+        this.defaultMoveForce = 10000F;
+        this.moveForce = this.defaultMoveForce;
     }
     
     
@@ -79,7 +81,8 @@ public class EntityOrca extends EntitySeaCreature
         if (this.world.getWorldTime() % (60*3) == 0)
         {
             int damage = 25;
-            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            //if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            if (this.getPowerUpTime(EntityPowerUp.Ability.ATTACKUP) > 0)
             {
                 damage*=1.5F;
             }

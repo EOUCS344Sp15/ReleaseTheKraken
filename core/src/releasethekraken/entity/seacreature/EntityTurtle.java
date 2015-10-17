@@ -43,6 +43,7 @@ public class EntityTurtle extends EntitySeaCreature
         this.health = 100;
         this.maxHealth = 100;
         this.defaultMoveForce = 1500F;
+        this.moveForce = this.defaultMoveForce;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
     
@@ -59,6 +60,7 @@ public class EntityTurtle extends EntitySeaCreature
         this.health = 100;
         this.maxHealth = 100;
         this.defaultMoveForce = 1500F;
+        this.moveForce = this.defaultMoveForce;
     }
     
     @Override
@@ -85,7 +87,8 @@ public class EntityTurtle extends EntitySeaCreature
         if (this.world.getWorldTime() % 120 == 0)
         {
             int damage = 1;
-            if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            //if (this.appliedPowerUp == EntityPowerUp.Ability.ATTACKUP)
+            if (this.getPowerUpTime(EntityPowerUp.Ability.ATTACKUP) > 0)
             {
                 damage*=1.5F;
             }

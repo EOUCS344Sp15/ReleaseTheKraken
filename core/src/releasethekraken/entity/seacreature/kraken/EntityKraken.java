@@ -38,6 +38,7 @@ public class EntityKraken extends EntitySeaCreature
         this.health = 500;
         this.maxHealth = 500;
         this.defaultMoveForce = 50000F;
+        this.moveForce = this.defaultMoveForce;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
         
         //The spawn points of the tenticles

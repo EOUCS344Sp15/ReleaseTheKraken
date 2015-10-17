@@ -39,6 +39,7 @@ public class EntityKrakenGripper extends EntitySeaCreature
         this.health = 200;
         this.maxHealth = 200;
         this.defaultMoveForce = 5000F;
+        this.moveForce = this.defaultMoveForce;
         this.spawnInWorld(xLocation, yLocation, 0, 0);
     }
 
