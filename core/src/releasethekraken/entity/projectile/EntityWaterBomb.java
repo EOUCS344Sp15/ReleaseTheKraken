@@ -98,7 +98,10 @@ public class EntityWaterBomb extends EntityProjectile
     @Override
     public void onImpact()
     {
-        final EntityWaterBomb bomb = this; //Declare a final reference to this so that the anonymous class can use it
+        final int bombDamage = this.damage;
+        final GameWorld bombWorld = this.world;
+        final Vector2 bombPos = this.physBody.getPosition().cpy();
+        final Entity bombOwner = this.owner; //TODO: This could be effected by the same bug as Issue #91.
         
         //"Splash" with some water squirts!
         this.world.addSpawnTask(new GameWorld.BodySpawnTask()
@@ -111,9 +114,9 @@ public class EntityWaterBomb extends EntityProjectile
 
                 for (int i=0; i<splashes; i++)
                 {
-                    int damage = (int)(bomb.damage/25F); //Calculate damage based on bomb damage
+                    int damage = (int)(bombDamage/25F); //Calculate damage based on bomb damage
                     
-                    new EntityWaterSquirt(bomb.world, bomb.getPos().x, bomb.getPos().y, splashVel.x, splashVel.y, bomb.owner, damage, 30); //Short despawn time
+                    new EntityWaterSquirt(bombWorld, bombPos.x, bombPos.y, splashVel.x, splashVel.y, bombOwner, damage, 30); //Short despawn time
                     splashVel.rotate(((float)splashes/(i+1))*360);
                 }
             }
