@@ -4,7 +4,11 @@
 package releasethekraken.entity.seacreature;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,7 +16,9 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
+import releasethekraken.GameAssets;
 import releasethekraken.GameWorld;
+import releasethekraken.ReleaseTheKraken;
 import releasethekraken.entity.EntityLiving;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.kraken.EntityKraken;
@@ -184,27 +190,70 @@ public abstract class EntitySeaCreature extends EntityLiving
     {
         super.renderShapes(shapeRenderer, delta, runTime);
         
-        float offset = 0;
+        if (this instanceof EntityKrakenTenticle)
+            if (((EntityKrakenTenticle)this).getParent() != null)
+                return; //Don't render the powerups
         
-        if(this instanceof EntityKraken)
+        if (this instanceof EntityKrakenGripper)
+            if (((EntityKrakenGripper)this).getParent() != null)
+                return; //Don't render the powerups
+        
+        //boolean drawTimeLeft = Gdx.input.isKeyPressed(Keys.ALT_LEFT);
+        
+        //if (drawTimeLeft)
         {
-            offset = 2f;
-        }
+            float yOffset = 0;
         
-        //TODO: Make this better
-        int activePowerUps = 0; //Keep track of active powerups so we can offset the render position
-        
-        for (EntityPowerUp.Ability powerUp : this.powerUps.keySet())
-        {            
-            if (this.getPowerUpTime(powerUp) > 0)
+            if (this instanceof EntityKraken)
+                yOffset = 2f;
+
+            //TODO: Make this better
+            int activePowerUps = 0; //Keep track of active powerups so we can yOffset the render position
+
+            for (EntityPowerUp.Ability powerUp : this.powerUps.keySet())
             {
-                float localOffset = activePowerUps * 0.7F; //Calculate render offset
-                activePowerUps++; //Move the render offset for the next powerup
+                int timeLeft = this.getPowerUpTime(powerUp);
                 
-                shapeRenderer.setColor(EntityPowerUp.getStats(powerUp).mainColor);
-                shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f + offset + localOffset, 1f, .5f);
+                if (timeLeft > 0)
+                {
+                    float xOffset = activePowerUps * 1.8F; //Calculate render xOffset
+                    activePowerUps++; //Move the render xOffset for the next powerup
+                    
+                    float defaultTime = EntityPowerUp.getStats(powerUp).duration;
+                    float percent = timeLeft/defaultTime;
+                    
+                    //Calculate a background color for the power up
+                    Color backgroundColor = Color.BLACK;
+                    Color bluishColor = new Color(0x007BFFFF); //None of the standard colors were close enough :P
+                    
+                    if (percent > 3)
+                        backgroundColor = bluishColor.cpy().lerp(Color.PURPLE, MathUtils.clamp(percent-3F, 0F, 1F));
+                    else if (percent > 2)
+                        backgroundColor = Color.GREEN.cpy().lerp(bluishColor, MathUtils.clamp(percent-2F, 0F, 1F));
+                    else if (percent > 1)
+                        backgroundColor = Color.YELLOW.cpy().lerp(Color.GREEN, MathUtils.clamp(percent-1F, 0F, 1F));
+                    else if (percent > 0)
+                        backgroundColor = Color.RED.cpy().lerp(Color.YELLOW, MathUtils.clamp(percent, 0F, 1F));
+                    
+                    shapeRenderer.setColor(backgroundColor);
+                    
+                    //Adjust the box height
+                    float boxPercent = percent % 1;
+                    if (percent > 4)
+                        boxPercent = 1F;
+                    
+                    shapeRenderer.rect(
+                            this.getPos().x - xOffset/2 + xOffset - 0.05F,
+                            this.getPos().y + 1.75F + yOffset - 0.05F,
+                            0.85F,
+                            0.85F * MathUtils.clamp(boxPercent, 0F, 1F));
+
+                    //shapeRenderer.setColor(EntityPowerUp.getStats(powerUp).mainColor);
+                    //shapeRenderer.rect(this.getPos().x, this.getPos().y + 1.75f + yOffset + xOffset, 1f, .5f);
+                }
             }
         }
+        
         
         /*if (true) //Render target position  TODO: Comment this out
         {
@@ -218,6 +267,48 @@ public abstract class EntitySeaCreature extends EntityLiving
     public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
         super.renderSprites(batch, delta, runTime);
+        
+        if (this instanceof EntityKrakenTenticle)
+            if (((EntityKrakenTenticle)this).getParent() != null)
+                return; //Don't render the powerups
+        
+        if (this instanceof EntityKrakenGripper)
+            if (((EntityKrakenGripper)this).getParent() != null)
+                return; //Don't render the powerups
+        
+        //boolean drawTimeLeft = Gdx.input.isKeyPressed(Keys.ALT_LEFT);
+        
+        float yOffset = 0;
+        
+        if (this instanceof EntityKraken)
+            yOffset = 2f;
+        
+        int activePowerUps = 0; //Keep track of active powerups so we can yOffset the render position
+        
+        for (EntityPowerUp.Ability powerUp : this.powerUps.keySet())
+        {
+            int timeLeft = this.getPowerUpTime(powerUp);
+            
+            if (timeLeft > 0)
+            {
+                float xOffset = activePowerUps * 1.8F; //Calculate render xOffset
+                activePowerUps++; //Move the render xOffset for the next powerup
+                
+                TextureRegion powerUpTexture = EntityPowerUp.getStats(powerUp).icon;
+                batch.draw(powerUpTexture, this.getPos().x - xOffset/2 + xOffset, this.getPos().y + 1.75F + yOffset, 0.75F, 0.75F);
+                
+                /* TODO: How can the font be drawn smaller?
+                if (drawTimeLeft)
+                {
+                    float timeLeftYOffset = 0.5F;
+                    
+                    String timeLeftString = timeLeft/ReleaseTheKraken.TICK_RATE + "s";
+                    
+                    GameAssets.fontWorldSmall.draw(batch, timeLeftString, this.getPos().x - xOffset/2 + xOffset, this.getPos().y + 1.75F + yOffset + timeLeftYOffset);
+                }
+                */
+            }
+        }
         
         /*if (true) //Render target position value  TODO: Comment this out
         {

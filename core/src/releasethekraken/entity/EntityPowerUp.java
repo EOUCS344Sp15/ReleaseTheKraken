@@ -35,10 +35,10 @@ public class EntityPowerUp extends Entity
     static //Add stats for each type of power up here
     {
         //TODO: adjust the values
-        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 15, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6"), Color.RED));
-        addStat(Ability.HEALUP, new PowerUpStats(1, 10, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F), Color.WHITE));
-        addStat(Ability.SPEEDUP, new PowerUpStats(60*15, 25, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F), Color.GREEN));
-        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 20, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F), Color.YELLOW));
+        addStat(Ability.ATTACKUP, new PowerUpStats(60*10, 15, "Damage\nBoost", "Increases the attack of the player and nearby allies.", Color.valueOf("FF6A00A6"), Color.RED, GameAssets.powerupTextures[0]));
+        addStat(Ability.HEALUP, new PowerUpStats(1, 10, "Heal", "Heals the player and nearby allies.", Color.CYAN.cpy().sub(0, 0, 0, 0.35F), Color.WHITE, GameAssets.powerupTextures[2]));
+        addStat(Ability.SPEEDUP, new PowerUpStats(60*15, 25, "Speed\nBoost", "Increases the speed of the player and nearby allies.", Color.WHITE.cpy().sub(0, 0, 0, 0.35F), Color.GREEN, GameAssets.powerupTextures[1]));
+        addStat(Ability.DEFENSEUP, new PowerUpStats(60*20, 20, "Defense\nBoost", "Increases the defense of the player and nearby allies.", Color.TEAL.cpy().sub(0, 0, 0, 0.35F), Color.YELLOW, GameAssets.powerupTextures[3]));
     }
     
     protected Ability type; //tracks the type of power up
@@ -159,24 +159,10 @@ public class EntityPowerUp extends Entity
     @Override
     public void renderSprites(SpriteBatch batch, float delta, float runTime)
     {
-        TextureRegion texture = null;
+        TextureRegion texture = getStats(this.type).icon;
         
-        switch (this.type) //Decide which texture to use
-        {
-        case ATTACKUP:
-            texture = GameAssets.powerupTextures[0];
-            break;
-        case SPEEDUP:
-            texture = GameAssets.powerupTextures[1];
-            break;
-        case HEALUP:
-            texture = GameAssets.powerupTextures[2];
-            break;
-        case DEFENSEUP:
-            texture = GameAssets.powerupTextures[3];
-            break;
-        }
-        assert (texture != null); //The texture should not be null
+        if (texture == null)
+            throw new NullPointerException("Attempted to render a power up with a null texture!");
         
         float spriteUnitWidth = 2F;
         batch.draw(texture,
@@ -250,6 +236,8 @@ public class EntityPowerUp extends Entity
         public final Color previewColor;
         /** The color of the power up.  Should be same as sprite */
         public final Color mainColor;
+        /** The power up's icon */
+        public final TextureRegion icon;
         
         /**
          * Constructs a new PowerUpStats object.  Register it with EntityPowerUp
@@ -260,7 +248,7 @@ public class EntityPowerUp extends Entity
          * @param previewColor The color of the radius preview, with transparency
          * @param mainColor The color of the power up.  Should be same as sprite
          */
-        public PowerUpStats(int duration, int radius, String name, String description, Color previewColor, Color mainColor)
+        public PowerUpStats(int duration, int radius, String name, String description, Color previewColor, Color mainColor, TextureRegion icon)
         {
             this.duration = duration;
             this.radius = radius;
@@ -268,6 +256,7 @@ public class EntityPowerUp extends Entity
             this.description = description;
             this.previewColor = previewColor;
             this.mainColor = mainColor;
+            this.icon = icon;
         }
     }
 }

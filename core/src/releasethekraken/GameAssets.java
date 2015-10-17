@@ -57,6 +57,7 @@ public class GameAssets extends AssetManager
     
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
+    public static BitmapFont fontWorldSmall;
     
     public static ShaderProgram pauseBackgroundShader;
     public static ShaderProgram tilemapShader;
@@ -77,9 +78,12 @@ public class GameAssets extends AssetManager
                 Gdx.files.internal("data/GameFont.fnt"), BitmapFont.class);
         AssetDescriptor fontDebugDesc = new AssetDescriptor(
                 Gdx.files.internal("data/DebugFont.fnt"), BitmapFont.class);
+        AssetDescriptor fontWorldSmallDesc = new AssetDescriptor(
+                Gdx.files.internal("data/WorldFontSmall.fnt"), BitmapFont.class);
         
         this.load(fontMainDesc);
         this.load(fontDebugDesc);
+        this.load(fontWorldSmallDesc);
         this.load("entities.png", Texture.class);
         this.load("hudSprites.png", Texture.class);
         
@@ -109,6 +113,10 @@ public class GameAssets extends AssetManager
         fontDebug = (BitmapFont) this.get(fontDebugDesc);
         fontDebug.getData().setScale(0.25F*textScaleMultiplier);
         fontDebug.getData().markupEnabled = true;
+        
+        fontWorldSmall = ((BitmapFont)this.get(fontWorldSmallDesc));
+        fontWorldSmall.getData().setScale(1.0F); //TODO: How can this be scaled small enough to be drawn in the world?
+        fontWorldSmall.getData().markupEnabled = true;
         
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityGunTowerTexture = new TextureRegion(entityTextures, 128, 0, 32, 32);

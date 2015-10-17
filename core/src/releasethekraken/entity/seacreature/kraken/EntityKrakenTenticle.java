@@ -148,8 +148,7 @@ public class EntityKrakenTenticle extends EntitySeaCreature
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer, float delta, float runTime)
     {
-        if (this.parent == null) //Only render the health bar if there is no body
-            super.renderShapes(shapeRenderer, delta, runTime);
+        
     }
     
     @Override
