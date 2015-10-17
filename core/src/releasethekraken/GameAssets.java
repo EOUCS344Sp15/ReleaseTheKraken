@@ -33,6 +33,8 @@ public class GameAssets extends AssetManager
     public static TextureRegion[] entityOrcaTextures;
     public static TextureRegion entityGunTowerTexture;
     public static TextureRegion entityPirateBaseTexture;
+    public static TextureRegion entityPirateCannonTexture;
+    public static TextureRegion entityShipCannonTexture;
     
     public static TextureRegion entityKrakenBodyTexture;
     public static TextureRegion entityKrakenTenticle1Texture;
@@ -43,6 +45,7 @@ public class GameAssets extends AssetManager
     public static TextureRegion waterSquirtTexture;
     public static TextureRegion waterBombTexture;
     public static TextureRegion cannonBallTexture;
+    public static TextureRegion bulletTexture;
     
     public static TextureRegion[] powerupTextures;
     public static TextureRegion coinTexture;
@@ -121,6 +124,8 @@ public class GameAssets extends AssetManager
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityGunTowerTexture = new TextureRegion(entityTextures, 128, 0, 32, 32);
         entityPirateBaseTexture = new TextureRegion(entityTextures, 96, 160, 160, 96);
+        entityPirateCannonTexture = new TextureRegion(entityTextures, 160, 0, 32, 32);
+        entityShipCannonTexture = new TextureRegion(entityTextures, 160, 192, 32, 16);
         
         entityKrakenBodyTexture = new TextureRegion(entityTextures, 256, 0, 112, 64);
         entityKrakenTenticle1Texture = new TextureRegion(entityTextures, 368, 0, 48, 16);
@@ -129,7 +134,8 @@ public class GameAssets extends AssetManager
         
         waterSquirtTexture = new TextureRegion(entityTextures, 0, 176, 16, 8);
         waterBombTexture = new TextureRegion(entityTextures, 0, 192, 32, 32);
-        cannonBallTexture = new TextureRegion(entityTextures, 16, 176, 16, 16);
+        bulletTexture = new TextureRegion(entityTextures, 16, 176, 16, 16);
+        cannonBallTexture = new TextureRegion(entityTextures, 32, 192, 16, 16);
         
         entityFishTextures = new TextureRegion[2];
         for (int i=0; i<entityFishTextures.length; i++)

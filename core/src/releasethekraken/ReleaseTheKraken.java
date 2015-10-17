@@ -9,6 +9,7 @@ import releasethekraken.entity.Entity;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.pirate.EntityGunTower;
 import releasethekraken.entity.pirate.EntityPirateBase;
+import releasethekraken.entity.pirate.EntityPirateCannon;
 import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityOrca;
 import releasethekraken.entity.seacreature.EntityPlayer;
@@ -38,6 +39,7 @@ public class ReleaseTheKraken extends Game
         registerEntity("EntityGunTower", EntityGunTower.class);
         registerEntity("EntityPirateBase", EntityPirateBase.class);
         registerEntity("EntityPlayer", EntityPlayer.class);
+        registerEntity("EntityPirateCannon", EntityPirateCannon.class);
     }
     
     private GameAssets gameAssets;
