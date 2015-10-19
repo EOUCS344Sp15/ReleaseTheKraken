@@ -1,5 +1,6 @@
 package releasethekraken.entity.projectile;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -29,6 +30,11 @@ public class EntityExplosion extends EntityProjectile
         this.minVel = 0.0F;
         this.radius = radius;
         this.spawnInWorld(xLoc, yLoc, 0, 0);
+        
+        //Spawn the explosion particle effect
+        PooledEffect effect = GameAssets.effectExplosionCannonBallPool.obtain();
+        effect.setPosition(xLoc, yLoc);
+        this.world.addParticleEffect(effect);
     }
     
     @Override
@@ -68,26 +74,5 @@ public class EntityExplosion extends EntityProjectile
         
         //Dispose of the hitbox shape, which is no longer needed
         hitbox.dispose();
-    }
-    
-    @Override
-    public void renderSprites(SpriteBatch batch, float delta, float runTime)
-    {
-        super.renderSprites(batch, delta, runTime);
-        
-        float spriteUnitWidth = this.radius*2;
-        float spriteUnitHeight = this.radius*2;
-        batch.draw(GameAssets.waterBombTexture, //TODO: Epic explosion effects!
-                this.physBody.getPosition().x - spriteUnitWidth/2,
-                this.physBody.getPosition().y - spriteUnitHeight/2,
-                this.radius, //X point to rotate around
-                this.radius, //Y point to rotate around
-                spriteUnitWidth,
-                spriteUnitHeight,
-                0.65F*this.radius, //X scale
-                0.65F*this.radius, //Y scale
-                this.world.getWorldTime()*4); //Make it rapidly rotate for now
-                //(float) this.physBody.getLinearVelocity().angle());
-        
     }
 }

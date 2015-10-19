@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -265,6 +266,25 @@ public class GameRenderer extends UiRenderer
             Object object = body.getUserData();
             if (object instanceof Entity)
                 ((Entity)object).renderSprites(this.worldSpriteBatch, delta, this.runTime);
+        }
+        
+        //Draw particle effects
+        Array<PooledEffect> effects = this.world.getParticleEffects();
+        
+        /*
+         *  Iterate backwards so that we can remove finished particle effects while iterating. 
+         *  See https://github.com/libgdx/libgdx/wiki/2d-particle-effects
+         */
+        for (int i = effects.size - 1; i >= 0; i--)
+        {
+            PooledEffect effect = effects.get(i);
+            effect.draw(this.worldSpriteBatch, delta);
+            
+            if (effect.isComplete())
+            {
+                effect.free();
+                effects.removeIndex(i);
+            }
         }
         
         this.worldSpriteBatch.end();

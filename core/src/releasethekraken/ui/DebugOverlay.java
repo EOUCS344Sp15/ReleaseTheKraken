@@ -7,6 +7,8 @@ package releasethekraken.ui;
 
 import releasethekraken.ui.renderer.GameRenderer;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -30,6 +32,8 @@ public class DebugOverlay extends UiObject
     private static final DebugEntry worldStats1; //DebugEntry to hold the world stats
     private static final DebugEntry worldStats2; //DebugEntry to hold the world stats
     private static final DebugEntry worldStats3; //DebugEntry to hold the world stats
+    private static final DebugEntry worldStats4; //DebugEntry to hold the world stats
+    private static final DebugEntry worldStats5; //DebugEntry to hold the world stats
     private static final DebugEntry devPos; //DebugEntry to hold the developer position point
     private static final DebugEntry playerStats1; //DebugEntry to hold the player stats
     private static final DebugEntry playerStats2; //DebugEntry to hold the player stats
@@ -50,6 +54,8 @@ public class DebugOverlay extends UiObject
         debugData.add(worldStats1 = new DebugEntry());
         debugData.add(worldStats2 = new DebugEntry());
         debugData.add(worldStats3 = new DebugEntry());
+        debugData.add(worldStats4 = new DebugEntry());
+        debugData.add(worldStats5 = new DebugEntry());
         debugData.add(devPos = new DebugEntry());
         debugData.add(playerStats1 = new DebugEntry());
         debugData.add(playerStats2 = new DebugEntry());
@@ -97,6 +103,16 @@ public class DebugOverlay extends UiObject
                 worldStats1.data = "Level: " + world.getName();
                 worldStats2.data = String.format("%-12.12s : %-6s", "World Time", world.getWorldTime());
                 worldStats3.data = String.format("%-12.12s : %-6s", "Phys Bodies", world.getPhysBodies().size);
+                worldStats4.data = String.format("%-12.12s : %-6s", "Part.Effects", world.getParticleEffects().size);
+                
+                //Count the particles
+                int particles = 0;
+                for (PooledEffect effect : this.world.getParticleEffects())
+                    for (ParticleEmitter emitter : effect.getEmitters())
+                        particles += emitter.getActiveCount();
+                
+                worldStats5.data = String.format("%-12.12s : %-6s", "Particles", particles);
+                
                 devPos.data = String.format("Dev Pos: x:%-3.0f y:%-3.0f", InputHandler.DEV_POS.x, InputHandler.DEV_POS.y);
                 
                 if (world.getPlayer() != null)

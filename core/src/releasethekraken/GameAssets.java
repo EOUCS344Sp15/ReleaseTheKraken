@@ -12,6 +12,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
@@ -65,6 +67,10 @@ public class GameAssets extends AssetManager
     public static ShaderProgram pauseBackgroundShader;
     public static ShaderProgram tilemapShader;
     
+    public static ParticleEffect effectExplosionCannonBall;
+    
+    public static ParticleEffectPool effectExplosionCannonBallPool;
+    
     //Constructor
     public GameAssets()
     {
@@ -91,6 +97,11 @@ public class GameAssets extends AssetManager
         this.load("hudSprites.png", Texture.class);
         
         this.finishLoading(); //Waits until all assets are loaded
+        
+        effectExplosionCannonBall = new ParticleEffect();
+        effectExplosionCannonBall.load(Gdx.files.internal("effects/Explosion.p"), Gdx.files.internal("effects"));
+        
+        effectExplosionCannonBallPool = new ParticleEffectPool(effectExplosionCannonBall, 1, 20);
         
         pauseBackgroundShader = loadShader("pause"); //Load the pause background shaders
         

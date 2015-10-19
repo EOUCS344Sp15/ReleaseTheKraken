@@ -6,6 +6,8 @@
 package releasethekraken;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
@@ -46,6 +48,8 @@ public class GameWorld implements Disposable
     private Array<Body> physBodiesToRemove;
     /** The array of spawn tasks that need to be executed as soon as it is safe to do so */
     private Array<BodySpawnTask> spawnTasks;
+    /** An array of the pooled particle effects in the world */
+    private Array<PooledEffect> particleEffects;
     /** The world time, in ticks */
     private long worldTime = 0L;
     /** The world's TiledMap */
@@ -101,6 +105,7 @@ public class GameWorld implements Disposable
         this.physBodies = new Array<Body>();
         this.physBodiesToRemove = new Array<Body>();
         this.spawnTasks = new Array<BodySpawnTask>();
+        this.particleEffects = new Array<PooledEffect>();
         
         //Initialize the array of power up counts
         this.powerUps = new int[4];
@@ -284,6 +289,44 @@ public class GameWorld implements Disposable
     }
     
     /**
+     * Adds the particle effect to the world.  Make sure you get the particle effect
+     * from one of the particle effect pools in GameAssets.  Also make sure you
+     * configure it before passing it to this method.
+     * @param effect The ParticleEffect to spawn
+     */
+    public void addParticleEffect(PooledEffect effect)
+    {
+        this.particleEffects.add(effect);
+    }
+    
+    /**
+     * Removes the particle effect from the world.
+     * @param effect The particle effect to remove
+     */
+    public void removeParticleEffect(PooledEffect effect)
+    {
+        this.particleEffects.removeValue(effect, true);
+    }
+    
+    /**
+     * Removes the particle effect from the world by its index.
+     * @param effectIndex The particle effect's index
+     */
+    public void removeParticleEffect(int effectIndex)
+    {
+        this.particleEffects.removeIndex(effectIndex);
+    }
+    
+    /**
+     * Gets the list of particle effects currently in the world.
+     * @return the list of particle effects currently in the world
+     */
+    public Array<PooledEffect> getParticleEffects()
+    {
+        return this.particleEffects;
+    }
+    
+    /**
      * Gets the world time in ticks
      * @return long: The world time, in ticks
      */
@@ -400,6 +443,11 @@ public class GameWorld implements Disposable
                 ((Entity)body.getUserData()).dispose();
         //Dispose of any LibGDX disposeable stuff here to avoid memory leaks
         this.physWorld.dispose();
+        
+        //Return particle effects to the pool
+        for (PooledEffect effect : this.particleEffects)
+            effect.free();
+        this.particleEffects.clear(); //Empty the array to make sure we aren't holding onto the references
     }
     
     @Override

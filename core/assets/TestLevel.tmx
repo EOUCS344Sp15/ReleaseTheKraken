@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="132">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="133">
  <properties>
   <property name="krakenpoints" value="250"/>
   <property name="levelname" value="Test Level"/>
@@ -103,7 +103,7 @@
   <object id="12" gid="32" x="1394.67" y="1389.33" width="32" height="32"/>
   <object id="13" gid="32" x="1449.5" y="1048.33" width="32" height="32"/>
   <object id="14" gid="32" x="1322.67" y="608" width="32" height="32"/>
-  <object id="15" gid="32" x="562.667" y="534.667" width="32" height="32"/>
+  <object id="15" gid="32" x="432.667" y="649.667" width="32" height="32"/>
   <object id="19" gid="32" x="1061" y="764" width="32" height="32"/>
   <object id="94" gid="129" x="1056" y="336" width="32" height="32"/>
   <object id="120" gid="32" x="324.5" y="782.5" width="32" height="32"/>
@@ -111,11 +111,11 @@
   <object id="124" gid="32" x="700.5" y="346.5" width="32" height="32"/>
   <object id="125" gid="32" x="673.5" y="831" width="32" height="32"/>
   <object id="126" gid="32" x="956.5" y="808.5" width="32" height="32"/>
-  <object id="127" gid="32" x="798.5" y="126.5" width="32" height="32"/>
+  <object id="127" gid="32" x="771" y="133.5" width="32" height="32"/>
   <object id="128" gid="32" x="1504" y="1088.5" width="32" height="32"/>
-  <object id="129" gid="33" x="621" y="479.5" width="32" height="32"/>
-  <object id="130" gid="33" x="403" y="676.5" width="32" height="32"/>
+  <object id="129" gid="33" x="589" y="512.5" width="32" height="32"/>
   <object id="131" gid="33" x="1042" y="679.5" width="32" height="32"/>
+  <object id="132" gid="33" x="831.5" y="130" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="physics">
   <object id="22" x="160" y="960">
