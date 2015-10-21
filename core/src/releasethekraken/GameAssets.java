@@ -37,6 +37,7 @@ public class GameAssets extends AssetManager
     public static TextureRegion entityPirateBaseTexture;
     public static TextureRegion entityPirateCannonTexture;
     public static TextureRegion entityShipCannonTexture;
+    public static TextureRegion[][] entitySharkTextures;
     
     public static TextureRegion entityKrakenBodyTexture;
     public static TextureRegion entityKrakenTenticle1Texture;
@@ -59,6 +60,9 @@ public class GameAssets extends AssetManager
     public static Animation entityFishLayer2Animation;
     public static Animation entityTurtleAnimation;
     public static Animation entityOrcaAnimation;
+    public static Animation entitySharkMoveAnimation;
+    public static Animation entitySharkAttackAnimation;
+    public static Animation entitySharkAttackMoveAnimation;
     
     public static BitmapFont fontMain;
     public static BitmapFont fontDebug;
@@ -98,11 +102,13 @@ public class GameAssets extends AssetManager
         
         this.finishLoading(); //Waits until all assets are loaded
         
+        //Load Particle Effects
         effectExplosionCannonBall = new ParticleEffect();
         effectExplosionCannonBall.load(Gdx.files.internal("effects/Explosion.p"), Gdx.files.internal("effects"));
         
         effectExplosionCannonBallPool = new ParticleEffectPool(effectExplosionCannonBall, 1, 20);
         
+        //Load Shaders
         pauseBackgroundShader = loadShader("pause"); //Load the pause background shaders
         
         ShaderProgram.pedantic = false; //TODO: Change back
@@ -114,24 +120,29 @@ public class GameAssets extends AssetManager
         tilemapShader.setUniformi("u_mask", 1);
         tilemapShader.end();
         
+        //Load Main Texture Files
         entityTextures = this.get("entities.png", Texture.class);
         uiTextures = this.get("hudSprites.png", Texture.class);
         
         //The multiplier to determine the scale for the text
         float textScaleMultiplier = Gdx.graphics.getWidth()/1280.0F;
         
+        //Main Font
         fontMain = (BitmapFont) this.get(fontMainDesc);
         fontMain.getData().setScale(0.5F*textScaleMultiplier);
         fontMain.getData().markupEnabled = true;
         
+        //Debug Screen Font
         fontDebug = (BitmapFont) this.get(fontDebugDesc);
         fontDebug.getData().setScale(0.25F*textScaleMultiplier);
         fontDebug.getData().markupEnabled = true;
         
+        //World Font (unused)
         fontWorldSmall = ((BitmapFont)this.get(fontWorldSmallDesc));
         fontWorldSmall.getData().setScale(1.0F); //TODO: How can this be scaled small enough to be drawn in the world?
         fontWorldSmall.getData().markupEnabled = true;
         
+        //Basic Entity Textures
         entityPlayerTexture = new TextureRegion(entityTextures, 0, 0, 32, 32);
         entityGunTowerTexture = new TextureRegion(entityTextures, 128, 0, 32, 32);
         entityPirateBaseTexture = new TextureRegion(entityTextures, 96, 160, 160, 96);
@@ -148,38 +159,76 @@ public class GameAssets extends AssetManager
         bulletTexture = new TextureRegion(entityTextures, 16, 176, 16, 16);
         cannonBallTexture = new TextureRegion(entityTextures, 32, 192, 16, 16);
         
+        //Fish Textures and Animation
         entityFishTextures = new TextureRegion[2];
         for (int i=0; i<entityFishTextures.length; i++)
             entityFishTextures[i] = new TextureRegion(entityTextures, i*32, 48, 32, 16);
         entityFishAnimation = new Animation(0.1F, entityFishTextures);
         entityFishAnimation.setPlayMode(Animation.PlayMode.LOOP);
         
+        //Fish Textures and Animation 2
         entityFishLayer2Textures = new TextureRegion[2];
         for (int i=0; i<entityFishLayer2Textures.length; i++)
             entityFishLayer2Textures[i] = new TextureRegion(entityTextures, 64 + i*32, 48, 32, 16);
         entityFishLayer2Animation = new Animation(0.1F, entityFishLayer2Textures);
         entityFishLayer2Animation.setPlayMode(Animation.PlayMode.LOOP);
         
+        //Turtle Textures and Animation
         entityTurtleTextures = new TextureRegion[2];
         for (int i=0; i<entityTurtleTextures.length; i++)
             entityTurtleTextures[i] = new TextureRegion(entityTextures, i*32, 64, 32, 32);
         entityTurtleAnimation = new Animation(0.2F, entityTurtleTextures);
         entityTurtleAnimation.setPlayMode(Animation.PlayMode.LOOP);
         
+        //Orca Textures and Animation
         entityOrcaTextures = new TextureRegion[2];
         for (int i=0; i<entityOrcaTextures.length; i++)
             entityOrcaTextures[i] = new TextureRegion(entityTextures, i*112, 96, 112, 64);
         entityOrcaAnimation = new Animation(0.5F, entityOrcaTextures);
         entityOrcaAnimation.setPlayMode(Animation.PlayMode.LOOP);
         
+        //Shark Textures
+        entitySharkTextures = new TextureRegion[2][2];
+        
+        for (int i=0; i<entitySharkTextures.length; i++)
+            for (int j=0; j<entitySharkTextures[0].length; j++)
+                entitySharkTextures[i][j] = new TextureRegion(entityTextures, 224 + i*80, 96 + j*32, 80, 32);
+        
+        //Shark Move Animation
+        TextureRegion[] entitySharkMoveFrames = new TextureRegion[entitySharkTextures.length];
+        for (int i=0; i < entitySharkMoveFrames.length; i++)
+            entitySharkMoveFrames[i] = entitySharkTextures[i][0];
+        
+        entitySharkMoveAnimation = new Animation(0.25F, entitySharkMoveFrames);
+        entitySharkMoveAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        
+        //Shark Attack Animation
+        TextureRegion[] entitySharkAttackFrames = new TextureRegion[entitySharkTextures.length];
+        for (int i=0; i < entitySharkAttackFrames.length; i++)
+            entitySharkAttackFrames[i] = entitySharkTextures[i][1];
+        
+        entitySharkAttackAnimation = new Animation(0.25F, entitySharkAttackFrames);
+        entitySharkAttackAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        
+        //Shark Move and Attack Animation
+        TextureRegion[] entitySharkAttackMoveFrames = new TextureRegion[entitySharkTextures.length*2];
+        for (int i=0; i < entitySharkAttackMoveFrames.length; i++)
+            entitySharkAttackMoveFrames[i] = entitySharkTextures[(int)(i/2F % 2)][i % 2]; //Magically use all 4 frames
+        
+        entitySharkAttackMoveAnimation = new Animation(0.125F, entitySharkAttackMoveFrames);
+        entitySharkAttackMoveAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        
+        //Sea Shell Textures
         seaShellTextures = new TextureRegion[6];
         for (int i=0; i<seaShellTextures.length; i++)
             seaShellTextures[i] = new TextureRegion(entityTextures, 32 + i*8, 176, 8, 8);
         
+        //Powerup Textures
         powerupTextures = new TextureRegion[4];
         for (int i=0; i<powerupTextures.length; i++)
             powerupTextures[i] = new TextureRegion(uiTextures, i*32, 0, 32, 32);
         
+        //UI Icon Textures
         coinTexture = new TextureRegion(uiTextures, 0, 32, 16, 16);
         heartTexture = new TextureRegion(uiTextures, 16, 32, 16, 16);
         strengthTexture = new TextureRegion(uiTextures, 32, 32, 16, 16);

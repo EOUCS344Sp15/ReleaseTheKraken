@@ -43,6 +43,7 @@ public abstract class EntitySeaCreature extends EntityLiving
         addStat(EntityFish.class, new SeaCreatureStats(10, 10, 5, 2*60, "Fish", "Small, fast attacker. Doesn't have much health though."));
         addStat(EntityTurtle.class, new SeaCreatureStats(50, 50, 3, 5*60, "Turtle", "The turtle is tanky but his damage is a little low."));
         addStat(EntityOrca.class, new SeaCreatureStats(80, 100, 20, 10*60, "Orca", "Large, slow, but has a powerful water attack."));
+        addStat(EntityShark.class, new SeaCreatureStats(60, 80, 10, 6*60, "Shark", "Fast with a deadly bite attack. Has to move off the path to attack."));
     }
     
     /**
@@ -80,7 +81,7 @@ public abstract class EntitySeaCreature extends EntityLiving
         super.update();
         
         //Make the sea creatures move
-        if (!(this instanceof EntityPlayer) & !(this instanceof EntityKrakenTenticle) && !(this instanceof EntityKrakenGripper) && !(this instanceof EntityKraken))
+        if (!(this instanceof EntityPlayer) & !(this instanceof EntityKrakenTenticle) && !(this instanceof EntityKrakenGripper) && !(this instanceof EntityKraken) && !(this instanceof EntityShark))
         {        
             Vector2 targetPos = this.world.getPathTargetPos(this);
             Vector2 difference = targetPos.sub(this.getPos());

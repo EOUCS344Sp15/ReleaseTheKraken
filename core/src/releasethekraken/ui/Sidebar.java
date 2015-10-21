@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Array;
 import releasethekraken.entity.EntityPowerUp;
 import releasethekraken.entity.seacreature.EntityFish;
 import releasethekraken.entity.seacreature.EntityOrca;
+import releasethekraken.entity.seacreature.EntitySeaCreature;
+import releasethekraken.entity.seacreature.EntityShark;
 import releasethekraken.entity.seacreature.EntityTurtle;
 import releasethekraken.entity.seacreature.kraken.EntityKraken;
 import releasethekraken.ui.tooltip.TextToolTip;
@@ -60,7 +62,7 @@ public class Sidebar extends UiObject
             EntityFish.class,
             EntityTurtle.class,
             EntityOrca.class,
-            EntityFish.class
+            EntityShark.class
         };
         
         
